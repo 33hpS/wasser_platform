@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в аккаунт - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        .logo-img {
+            max-height: 50px;
+        }
+
+        .form-input {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-login">0</span>
+                    </a>
+                    <a href="login.html" class="text-sky-600 font-semibold px-3 py-2 rounded-md text-sm transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-login">0</span>
+                    </a>
+                    <button id="mobile-menu-button-login" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-login" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="index.html#about" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block bg-sky-600 hover:bg-sky-700 text-white text-center px-4 py-3 text-sm font-medium transition-colors duration-150 mx-4 my-2 rounded-md">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center"><a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700 font-medium">Вход в аккаунт</span></li>
+            </ol>
+        </nav>
+
+        <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-xl">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Вход в аккаунт</h1>
+
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="login-email" class="form-label">Email<span class="text-red-500">*</span></label>
+                    <input type="email" name="email" id="login-email" class="form-input" required autocomplete="email">
+                    <p class="error-message hidden" id="login-email-error">Пожалуйста, введите корректный email.</p>
+                </div>
+
+                <div>
+                    <label for="login-password" class="form-label">Пароль<span class="text-red-500">*</span></label>
+                    <input type="password" name="password" id="login-password" class="form-input" required autocomplete="current-password">
+                    <p class="error-message hidden" id="login-password-error">Пожалуйста, введите пароль.</p>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-sky-600 border-gray-300 rounded focus:ring-sky-500">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">Запомнить меня</label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#forgot-password" class="font-medium text-sky-600 hover:text-sky-500">Забыли пароль?</a>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" id="login-submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                        Войти
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Или войдите с помощью</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 gap-3">
+                    <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Войти через Google</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.0002 5.24916C12.0002 5.24916 15.2493 5.24906 17.8127 7.8124C20.376 10.3757 20.376 13.6249 17.8127 16.1882C15.2493 18.7515 12.0002 18.7515 12.0002 18.7515C12.0002 18.7515 8.75103 18.7515 6.1877 16.1882C3.62436 13.6249 3.62436 10.3757 6.1877 7.8124C8.75103 5.24906 12.0002 5.24916 12.0002 5.24916ZM12.0002 3.00001C7.02963 3.00001 3.00001 7.02963 3.00001 12C3.00001 16.9704 7.02963 21 12.0002 21C16.9706 21 21.0002 16.9704 21.0002 12C21.0002 7.02963 16.9706 3.00001 12.0002 3.00001ZM11.9062 8.34375C10.2055 8.34375 8.84375 9.70553 8.84375 11.4062C8.84375 12.4394 9.36884 13.3536 10.1889 13.8809L10.1875 13.8828V16.3125H13.8125V13.8789C14.6322 13.3491 15.1562 12.4352 15.1562 11.4062C15.1562 9.70553 13.7945 8.34375 12.0938 8.34375H11.9062Z" clip-rule="evenodd"></path></svg>
+                        <span class="ml-2">Google</span>
+                    </button>
+                </div>
+            </div>
+
+            <p class="mt-8 text-center text-sm text-gray-600">
+                Ещё нет аккаунта?
+                <a href="register.html" class="font-medium text-sky-600 hover:text-sky-500">Зарегистрироваться</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="index.html#about" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearLogin"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Обновление счетчика корзины в шапке
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+            // Мобильное меню
+            const mobileMenuButtonLogin = document.getElementById('mobile-menu-button-login');
+            const mobileMenuLogin = document.getElementById('mobile-menu-login');
+            if(mobileMenuButtonLogin && mobileMenuLogin) {
+                mobileMenuButtonLogin.addEventListener('click', () => {
+                    mobileMenuLogin.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearLoginEl = document.getElementById('currentYearLogin');
+            if (currentYearLoginEl) {
+                currentYearLoginEl.textContent = new Date().getFullYear();
+            }
+
+            // Логика формы входа (пока только базовая валидация и имитация)
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let isValid = true;
+                    const emailInput = document.getElementById('login-email');
+                    const passwordInput = document.getElementById('login-password');
+                    const emailError = document.getElementById('login-email-error');
+                    const passwordError = document.getElementById('login-password-error');
+
+                    // Проверка email
+                    if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                        emailInput.classList.add('border-red-500');
+                        emailError.classList.remove('hidden');
+                        isValid = false;
+                    } else {
+                        emailInput.classList.remove('border-red-500');
+                        emailError.classList.add('hidden');
+                    }
+
+                    // Проверка пароля
+                    if (!passwordInput.value.trim()) {
+                        passwordInput.classList.add('border-red-500');
+                        passwordError.classList.remove('hidden');
+                        isValid = false;
+                    } else {
+                        passwordInput.classList.remove('border-red-500');
+                        passwordError.classList.add('hidden');
+                    }
+
+                    if (isValid) {
+                        // Имитация успешного входа
+                        alert('Вход выполнен успешно! (Имитация)');
+                        // В реальном приложении здесь будет запрос на сервер,
+                        // сохранение токена сессии и перенаправление в личный кабинет.
+                        // Например: window.location.href = 'account.html';
+                        // Пока перенаправим на главную
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Согласование Техкарты и Цены - МебельПрайсПро Админ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .admin-sidebar {
+            transition: width 0.3s ease-in-out;
+        }
+        .admin-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .form-input, .form-select, .form-textarea {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .table th { @apply px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50; }
+        .table td { @apply px-4 py-2 whitespace-nowrap text-sm text-gray-600; }
+        .table tbody tr:nth-child(even) { @apply bg-gray-50; }
+        .btn { @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150; }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-700; }
+        .btn-success { @apply bg-green-600 hover:bg-green-700 text-white; }
+        .btn-danger { @apply bg-red-600 hover:bg-red-700 text-white; }
+        .btn-warning { @apply bg-yellow-500 hover:bg-yellow-600 text-white; }
+        .component-not-found td {
+            @apply bg-red-50 text-red-700;
+        }
+        .component-not-found .price-placeholder {
+            @apply font-semibold;
+        }
+        .comparison-card { @apply bg-white p-4 rounded-md shadow; }
+        .nav-item-count { @apply ml-auto text-xs bg-sky-500 text-white rounded-full px-1.5 py-0.5; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside id="admin-sidebar" class="admin-sidebar w-64 bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <a href="admin_dashboard.html" class="text-2xl font-semibold text-white">Мебель<span class="text-orange-400">Прайс</span>Админ</a>
+        </div>
+        <nav class="flex-grow px-3 py-4 space-y-1.5">
+            <a href="admin_dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Дашборд
+            </a>
+            <a href="admin_products.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                 <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                Товары
+            </a>
+            <a href="admin_techcard_list.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.153 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM10.5 16.5h3.75m-3.75 0h3.75" /></svg>
+                Техкарты (Редактор)
+            </a>
+            <a href="admin_approval_tasks.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-gray-900 text-sky-400"> <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Согласование Техкарт <span class="nav-item-count" id="nav-approval-count-sidebar">3</span>
+            </a>
+            <a href="admin_raw_materials.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3M12 15h.008m-7.008 0h14.016m0 0A48.108 48.108 0 0012 15c-2.282 0-4.441.68-6.267 1.875M7.5 7.5h9M3.75 7.5A2.25 2.25 0 016 5.25h12a2.25 2.25 0 012.25 2.25m0 0A2.25 2.25 0 0019.5 6c-.023 0-.046.002-.069.004l-.01.002-.008.001-.002.001-.002 0a.002.002 0 01-.002 0l-.002.001-.008.001-.01.002A2.232 2.232 0 0019.5 6c-1.24 0-2.25.985-2.25 2.188V7.5M3.75 7.5c0 .067.003.132.008.196M12 15c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125h0c-.621 0-1.125.504-1.125 1.125v4.5c0 .621.504 1.125 1.125 1.125h0z" /></svg>
+                Сырьё и Цены
+            </a>
+             <a href="admin_dealers_list.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345h5.518a.562.562 0 01.329 1.004l-4.243 2.97a.563.563 0 00-.178.643l2.125 5.111a.563.563 0 01-.83.632l-4.243-2.97a.563.563 0 00-.652 0l-4.243 2.97a.563.563 0 01-.83-.632l2.125-5.111a.563.563 0 00-.178-.643l-4.243-2.97a.562.562 0 01.329-1.004h5.518a.563.563 0 00.475-.345L11.48 3.5z" />
+                </svg>
+                Дилеры и Оптовики
+            </a>
+            <a href="admin_users.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                Пользователи
+            </a>
+            <a href="../html/index.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 text-red-400 hover:text-red-300 mt-auto">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+                Выход (на сайт)
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 md:hidden">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-3" id="page-main-title">Согласование Техкарты и Цены</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-600 mr-3">Иванов И.И. (Руководитель)</span>
+                        <img class="h-8 w-8 rounded-full object-cover" src="https://placehold.co/100x100/a0aec0/ffffff?text=User" alt="[Фото пользователя]">
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 sm:p-6">
+            <div class="container mx-auto">
+                <div class="mb-6 p-4 sm:p-6 bg-white rounded-lg border shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            Задача на согласование: <span class="text-sky-600" id="product-name-title-detail">Тумба "Фест" 60 с раковиной</span>
+                        </h2>
+                        <a href="admin_approval_tasks.html" class="text-sm text-sky-600 hover:underline mt-2 sm:mt-0">&larr; К списку задач</a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                        <p><strong>Артикул товара:</strong> <span id="product-sku-info-detail" class="text-gray-700">WS-FST60-WHT</span></p>
+                        <p><strong>Инициатор:</strong> <span id="editor-name-info-detail" class="text-gray-700">Петров П.П.</span></p>
+                        <p><strong>Дата поступления:</strong> <span id="submission-date-info-detail" class="text-gray-700">18.05.2025 10:30</span></p>
+                        <p><strong>Тип изменения:</strong> <span id="change-type-info-detail" class="text-gray-700">Новая техкарта</span></p>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-sm"><strong>Комментарий редактора:</strong></p>
+                        <div id="editor-comment-display-detail" class="text-sm p-3 border rounded bg-gray-50 max-h-28 overflow-y-auto mt-1">
+                            Первичная загрузка техкарты для нового изделия. Прошу проверить расчеты и корректность подбора материалов. Особое внимание на кромку.
+                        </div>
+                    </div>
+                </div>
+
+                <div id="techcard-comparison-block-detail" class="grid md:grid-cols-2 gap-6 mb-6 hidden">
+                    <div class="comparison-card">
+                        <h3 class="text-lg font-medium text-gray-700 mb-2">Текущая техкарта (Утверждена: <span id="current-techcard-date-detail">10.01.2025</span>)</h3>
+                        <p class="text-sm mt-1">Себестоимость (материалы): <span class="font-semibold" id="current-material-cost-detail">480.00 сом</span></p>
+                        <p class="text-sm">Текущая розничная цена: <span class="font-semibold" id="current-retail-price-display-detail">1200.00 сом</span></p>
+                        <a href="#" id="download-current-techcard-link-detail" target="_blank" class="mt-2 text-xs text-sky-600 hover:underline inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            Скачать текущий XLSX
+                        </a>
+                    </div>
+                    <div class="comparison-card bg-sky-50 border-sky-200">
+                        <h3 class="text-lg font-medium text-sky-700 mb-2">Новая техкарта (Загружена: <span id="new-techcard-upload-date-detail">18.05.2025</span>)</h3>
+                         <a href="#" id="download-new-techcard-link-detail" target="_blank" class="mt-2 text-xs text-sky-600 hover:underline inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            Скачать новый XLSX (на утверждение)
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-sm mb-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Компоненты по новой техкарте:</h3>
+                    <div class="max-h-80 overflow-y-auto border border-gray-200 rounded-md">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th>№</th>
+                                    <th>Артикул (файл)</th>
+                                    <th>Наименование (файл)</th>
+                                    <th>Кол-во</th>
+                                    <th>Ед.изм.</th>
+                                    <th>Цена сырья (БД)</th>
+                                    <th>Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody id="new-parsed-components-table-body-detail" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <p class="text-sm">Количество позиций: <span class="font-semibold" id="new-components-count-detail">0</span></p>
+                        <p class="text-sm text-red-500 hidden" id="new-missing-prices-warning-detail">Внимание! Для <span id="new-missing-prices-count-detail">0</span> компонент(а/ов) не найдены цены в справочнике.</p>
+                        <p class="text-md mt-1">Общая себестоимость материалов (по новой техкарте): <strong class="text-xl text-blue-700" id="new-total-material-cost-detail">0.00 сом</strong></p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Установление Розничной Цены</h3>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="p-4 bg-gray-50 rounded-md border">
+                            <p class="text-sm text-gray-600">Текущая розничная цена в каталоге:</p>
+                            <p class="text-2xl font-bold text-gray-500" id="current-retail-price-info-detail">0.00 сом</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-md border border-blue-200">
+                            <p class="text-sm text-blue-700">Рекомендуемая розничная цена <br class="hidden sm:inline">(себестоимость <span class="font-bold" id="new-cost-for-recommendation-detail">0.00 сом</span>, наценка <span id="markup-percentage-info-detail">0%</span>):</p>
+                            <p class="text-2xl font-bold text-blue-600" id="recommended-retail-price-detail">0.00 сом</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="final-retail-price-detail" class="form-label text-lg font-medium">Установить новую розничную цену:<span class="text-red-500">*</span></label>
+                        <div class="flex items-center">
+                            <input type="number" id="final-retail-price-detail" value="" class="form-input text-xl py-2 w-full md:w-1/2 lg:w-1/3" step="0.01" min="0">
+                            <span class="ml-2 text-lg text-gray-700">сом</span>
+                        </div>
+                        <p id="price-validation-error-detail" class="text-red-500 text-xs mt-1 hidden">Цена должна быть положительным числом.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="supervisor-comment-detail" class="form-label">Комментарий/Обоснование решения (обязательно при отклонении):</label>
+                        <textarea id="supervisor-comment-detail" class="form-textarea w-full" rows="3" placeholder="Например, причина отклонения или детали утверждения..."></textarea>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end border-t border-gray-200 pt-6">
+                        <button id="reject-changes-btn-detail" type="button" class="btn btn-danger w-full sm:w-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline -ml-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                            Отклонить
+                        </button>
+                        <button id="approve-changes-btn-detail" type="button" class="btn btn-success w-full sm:w-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline -ml-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                            Утвердить и Обновить Цену
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Моковый JS для страницы admin_techcard_approval_detail.html
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const adminSidebar = document.getElementById('admin-sidebar');
+            if (sidebarToggle && adminSidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    adminSidebar.classList.toggle('w-64');
+                    adminSidebar.classList.toggle('w-16');
+                });
+            }
+
+            const approvalCountBadge = document.getElementById('nav-approval-count-sidebar');
+            if (approvalCountBadge) {
+                approvalCountBadge.textContent = '3'; // Пример
+            }
+
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const taskId = urlParams.get('id') || '1';
+
+            const mockRawMaterialPrices = {
+                "ЛДСП-Б-16": { name: "ЛДСП Белый гладкий 16мм", price: 350.00, unit: "кв.м" },
+                "ZER-AGC-04": { name: "Зеркало 4мм AGC влагостойкое (старый)", price: 1150.00, unit: "кв.м" },
+                "KR-PVC-0.4": { name: "Кромка ПВХ 0.4мм Белая", price: 12.00, unit: "м.п." },
+                "RUCHKA-01": { name: "Ручка мебельная скоба", price: 85.00, unit: "шт." },
+                "ZER-AGC-04-NEW": { name: "Зеркало 4мм AGC (Новый поставщик)", price: 1050.00, unit: "кв.м" }
+            };
+
+            const tasks = {
+                '1': {
+                    productName: 'Тумба "Фест" 60 с раковиной', productSku: 'WS-FST60-WHT', editorName: 'Петров П.П.',
+                    submissionDate: '18.05.2025 10:30', changeType: 'Новая техкарта',
+                    editorComment: 'Первичная загрузка техкарты для нового изделия. Прошу проверить расчеты и корректность подбора материалов. Особое внимание на кромку.',
+                    currentRetailPrice: null, isUpdate: false,
+                    newTechCardComponents: [
+                        { num: 1, article: "ЛДСП-Б-16", name: "ЛДСП Белый гладкий 16мм", quantity: 1.25, unit: "кв.м" },
+                        { num: 2, article: "ZER-AGC-04-NEW", name: "Зеркало 4мм AGC (Новый поставщик)", quantity: 0.48, unit: "кв.м" },
+                        { num: 3, article: "KR-PVC-0.4", name: "Кромка ПВХ 0.4мм Белая", quantity: 5.6, unit: "м.п." },
+                        { num: 4, article: "NO-PRICE-YET", name: "Фурнитура XYZ (без цены)", quantity: 1, unit: "компл." },
+                    ]
+                },
+                '2': {
+                    productName: 'Зеркало "Орион" 80 LED', productSku: 'WS-ZER80-LED', editorName: 'Сидорова А.А.',
+                    submissionDate: '17.05.2025 16:15', changeType: 'Обновление техкарты',
+                    editorComment: 'Замена материала подсветки на более энергоэффективный. Себестоимость немного изменилась.',
+                    currentRetailPrice: 12000.00, isUpdate: true,
+                    currentTechCardInfo: { date: '10.01.2025', materialCost: 4800.00, retailPrice: 12000.00, fileName: 'techcard_orion80_v1.xlsx' },
+                    newTechCardComponents: [
+                        { num: 1, article: "ZER-AGC-04", name: "Зеркало 4мм AGC", quantity: 0.96, unit: "кв.м" },
+                        { num: 2, article: "LED-STRIP-NEW", name: "LED лента (новая, экономичная)", quantity: 2.5, unit: "м.п." },
+                    ]
+                },
+                '3': {
+                    productName: 'Пенал "Линеа"', productSku: 'WS-PEN-LIN', editorName: 'Система (изм. цен сырья)',
+                    submissionDate: '16.05.2025 09:00', changeType: 'Запрос на пересчет цены',
+                    editorComment: 'Изменилась закупочная цена на "ЛДСП-Б-16". Требуется пересмотр розничной цены.',
+                    currentRetailPrice: 9500.00, isUpdate: false,
+                    newTechCardComponents: [
+                        { num: 1, article: "ЛДСП-Б-16", name: "ЛДСП Белый гладкий 16мм", quantity: 2.1, unit: "кв.м" },
+                        { num: 2, article: "RUCHKA-01", name: "Ручка мебельная", quantity: 2, unit: "шт." },
+                    ]
+                }
+            };
+
+            const taskData = tasks[taskId] || tasks['1'];
+
+            document.getElementById('page-main-title').textContent = `Согласование: ${taskData.productName}`;
+            document.getElementById('product-name-title-detail').textContent = taskData.productName;
+            document.getElementById('product-sku-info-detail').textContent = taskData.productSku;
+            document.getElementById('editor-name-info-detail').textContent = taskData.editorName;
+            document.getElementById('submission-date-info-detail').textContent = taskData.submissionDate;
+            document.getElementById('change-type-info-detail').textContent = taskData.changeType;
+            document.getElementById('editor-comment-display-detail').textContent = taskData.editorComment;
+            document.getElementById('current-retail-price-info-detail').textContent = taskData.currentRetailPrice !== null ? formatCurrency(taskData.currentRetailPrice) : "Не установлена";
+
+            const comparisonBlock = document.getElementById('techcard-comparison-block-detail');
+            if (taskData.isUpdate && taskData.currentTechCardInfo && comparisonBlock) {
+                document.getElementById('current-techcard-date-detail').textContent = taskData.currentTechCardInfo.date;
+                document.getElementById('current-material-cost-detail').textContent = formatCurrency(taskData.currentTechCardInfo.materialCost);
+                document.getElementById('current-retail-price-display-detail').textContent = formatCurrency(taskData.currentTechCardInfo.retailPrice);
+                document.getElementById('download-current-techcard-link-detail').href = `#download-archive/${taskData.currentTechCardInfo.fileName}`;
+                document.getElementById('new-techcard-upload-date-detail').textContent = taskData.submissionDate;
+                document.getElementById('download-new-techcard-link-detail').href = `#download-pending/new_techcard_for_${taskData.productSku}.xlsx`;
+                comparisonBlock.classList.remove('hidden');
+            }
+
+            const newComponentsTableBody = document.getElementById('new-parsed-components-table-body-detail');
+            let newTotalMaterialCost = 0;
+            let newMissingPricesCount = 0;
+            newComponentsTableBody.innerHTML = '';
+
+            taskData.newTechCardComponents.forEach((comp, index) => {
+                const row = newComponentsTableBody.insertRow();
+                row.insertCell().textContent = comp.num || (index + 1);
+                row.insertCell().textContent = comp.article;
+                row.insertCell().textContent = comp.name;
+                row.insertCell().textContent = comp.quantity;
+                row.insertCell().textContent = comp.unit;
+
+                const priceInfo = mockRawMaterialPrices[comp.article];
+                let unitPrice = 0;
+                let componentCost = 0;
+                let priceCellContent = '<span class="text-red-600 font-semibold">Не найдено!</span>';
+                let costCellContent = '<span class="text-red-600">-</span>';
+
+                if (priceInfo) {
+                    unitPrice = priceInfo.price;
+                    componentCost = comp.quantity * unitPrice;
+                    newTotalMaterialCost += componentCost;
+                    priceCellContent = formatCurrency(unitPrice);
+                    costCellContent = formatCurrency(componentCost);
+                } else {
+                    newMissingPricesCount++;
+                    row.classList.add('component-not-found');
+                }
+
+                row.insertCell().innerHTML = priceCellContent;
+                row.insertCell().innerHTML = costCellContent;
+            });
+
+            document.getElementById('new-components-count-detail').textContent = taskData.newTechCardComponents.length;
+            document.getElementById('new-total-material-cost-detail').textContent = formatCurrency(newTotalMaterialCost);
+            document.getElementById('new-cost-for-recommendation-detail').textContent = formatCurrency(newTotalMaterialCost);
+
+            const newMissingPricesWarning = document.getElementById('new-missing-prices-warning-detail');
+            if (newMissingPricesCount > 0) {
+                document.getElementById('new-missing-prices-count-detail').textContent = newMissingPricesCount;
+                newMissingPricesWarning.classList.remove('hidden');
+            } else {
+                newMissingPricesWarning.classList.add('hidden');
+            }
+
+            const markupPercentage = 120;
+            document.getElementById('markup-percentage-info-detail').textContent = `${markupPercentage}%`;
+            const recommendedPrice = newTotalMaterialCost * (1 + markupPercentage / 100);
+            document.getElementById('recommended-retail-price-detail').textContent = formatCurrency(recommendedPrice);
+            document.getElementById('final-retail-price-detail').value = recommendedPrice > 0 ? recommendedPrice.toFixed(2) : '';
+
+
+            const approveBtn = document.getElementById('approve-changes-btn-detail');
+            const rejectBtn = document.getElementById('reject-changes-btn-detail');
+            const finalPriceInput = document.getElementById('final-retail-price-detail');
+            const supervisorCommentInput = document.getElementById('supervisor-comment-detail');
+            const priceValidationError = document.getElementById('price-validation-error-detail');
+
+            function validatePrice() {
+                const price = parseFloat(finalPriceInput.value);
+                if (isNaN(price) || price <= 0) {
+                    priceValidationError.classList.remove('hidden');
+                    finalPriceInput.classList.add('border-red-500');
+                    return false;
+                }
+                priceValidationError.classList.add('hidden');
+                finalPriceInput.classList.remove('border-red-500');
+                return true;
+            }
+
+            finalPriceInput.addEventListener('input', validatePrice);
+
+            if (approveBtn) {
+                approveBtn.addEventListener('click', () => {
+                    if (!validatePrice()) return;
+                    if (newMissingPricesCount > 0 && !confirm("Внимание! Для некоторых компонентов не найдены цены в справочнике. Себестоимость и рекомендуемая цена могут быть неточными. Всё равно утвердить?")) {
+                        return;
+                    }
+                    console.log("Утверждено:", { taskId: taskId, finalPrice: parseFloat(finalPriceInput.value), supervisorComment: supervisorCommentInput.value });
+                    alert(`Задача #${taskId} для "${taskData.productName}" утверждена. Новая цена: ${formatCurrency(parseFloat(finalPriceInput.value))}`);
+                    window.location.href = 'admin_approval_tasks.html';
+                });
+            }
+
+            if (rejectBtn) {
+                rejectBtn.addEventListener('click', () => {
+                    if (!supervisorCommentInput.value.trim()) {
+                        alert("Пожалуйста, укажите причину отклонения в комментарии.");
+                        supervisorCommentInput.focus();
+                        return;
+                    }
+                    console.log("Отклонено:", { taskId: taskId, supervisorComment: supervisorCommentInput.value });
+                    alert(`Задача #${taskId} для "${taskData.productName}" отклонена.`);
+                    window.location.href = 'admin_approval_tasks.html';
+                });
+            }
+        });
+
+        function formatCurrency(amount) {
+            if (amount === null || typeof amount === 'undefined' || isNaN(amount)) return "0.00 сом";
+            return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'KGS', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount).replace(/\s?сом$/, ' сом');
+        }
+    </script>
+</body>
+</html>

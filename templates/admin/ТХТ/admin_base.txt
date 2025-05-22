@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}РђРґРјРёРЅ-РїР°РЅРµР»СЊ{% endblock %} - РњРµР±РµР»СЊРџСЂР°Р№СЃРџСЂРѕ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Tailwind gray-100 */
+        }
+        .admin-sidebar {
+            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateX(0); 
+        }
+        /* РЎС‚РёР»Рё РґР»СЏ СЃРІРµСЂРЅСѓС‚РѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅР° РґРµСЃРєС‚РѕРїРµ */
+        .admin-sidebar.collapsed-desktop { 
+            width: 4rem; /* 64px */
+        }
+        .admin-sidebar.collapsed-desktop .sidebar-text,
+        .admin-sidebar.collapsed-desktop .nav-item-count,
+        .admin-sidebar.collapsed-desktop .logo-full {
+            display: none;
+        }
+        .admin-sidebar.collapsed-desktop .logo-icon {
+            display: inline-block; /* РџРѕРєР°Р·С‹РІР°РµРј РёРєРѕРЅРєСѓ Р»РѕРіРѕС‚РёРїР° */
+        }
+        .admin-sidebar.collapsed-desktop .nav-link i {
+            margin-right: 0; /* РЈР±РёСЂР°РµРј РѕС‚СЃС‚СѓРї Сѓ РёРєРѕРЅРѕРє */
+        }
+        .admin-sidebar.collapsed-desktop .nav-link {
+            justify-content: center; /* Р¦РµРЅС‚СЂРёСЂСѓРµРј РёРєРѕРЅРєСѓ */
+        }
+
+        /* РЎС‚РёР»Рё РґР»СЏ РјРѕР±РёР»СЊРЅРѕРіРѕ СЃРєСЂС‹С‚РёСЏ/РїРѕРєР°Р·Р° */
+        @media (max-width: 767px) { /* РњРµРЅСЊС€Рµ md Р±СЂРµР№РєРїРѕРёРЅС‚Р° Tailwind */
+            .admin-sidebar {
+                position: fixed; /* Р¤РёРєСЃРёСЂСѓРµРј РґР»СЏ РІС‹РµР·Р¶Р°РЅРёСЏ */
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh; /* Р’Р°Р¶РЅРѕ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕРіРѕ СЃРєСЂРѕР»Р»Р° РЅР° РјРѕР±РёР»СЊРЅС‹С… */
+                z-index: 40; /* Р’С‹С€Рµ РѕРІРµСЂР»РµСЏ */
+                transform: translateX(-100%); /* РР·РЅР°С‡Р°Р»СЊРЅРѕ СЃРєСЂС‹С‚ Р·Р° СЌРєСЂР°РЅРѕРј */
+            }
+            .admin-sidebar.mobile-visible {
+                transform: translateX(0); /* РџРѕРєР°Р·С‹РІР°РµРј */
+            }
+            /* РЎР±СЂР°СЃС‹РІР°РµРј РґРµСЃРєС‚РѕРїРЅС‹Рµ СЃС‚РёР»Рё РґР»СЏ СЃРІРµСЂРЅСѓС‚РѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅР° РјРѕР±РёР»СЊРЅС‹С… */
+            .admin-sidebar.collapsed-desktop, 
+            .admin-sidebar.mobile-visible.collapsed-desktop { 
+                width: 16rem; /* Р’РѕР·РІСЂР°С‰Р°РµРј РїРѕР»РЅСѓСЋ С€РёСЂРёРЅСѓ РЅР° РјРѕР±РёР»СЊРЅС‹С… */
+            }
+            .admin-sidebar.mobile-visible .sidebar-text,
+            .admin-sidebar.mobile-visible .nav-item-count,
+            .admin-sidebar.mobile-visible .logo-full {
+                display: inline-block; /* РџРѕРєР°Р·С‹РІР°РµРј С‚РµРєСЃС‚ РЅР° РјРѕР±РёР»СЊРЅС‹С… */
+            }
+            .admin-sidebar.mobile-visible .logo-icon {
+                display: none; /* РЎРєСЂС‹РІР°РµРј РёРєРѕРЅРєСѓ Р»РѕРіРѕ РЅР° РјРѕР±РёР»СЊРЅС‹С… */
+            }
+             .admin-sidebar.mobile-visible .nav-link i {
+                margin-right: 0.75rem; /* Р’РѕР·РІСЂР°С‰Р°РµРј РѕС‚СЃС‚СѓРї */
+            }
+            .admin-sidebar.mobile-visible .nav-link {
+                justify-content: flex-start; /* Р’РѕР·РІСЂР°С‰Р°РµРј РІС‹СЂР°РІРЅРёРІР°РЅРёРµ */
+            }
+            .admin-content {
+                 margin-left: 0 !important; /* РЈР±РёСЂР°РµРј РѕС‚СЃС‚СѓРї РєРѕРЅС‚РµРЅС‚Р° РЅР° РјРѕР±РёР»СЊРЅС‹С…, РєРѕРіРґР° СЃР°Р№РґР±Р°СЂ РІС‹РµР·Р¶Р°РµС‚ */
+            }
+        }
+
+        .admin-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .form-input, .form-select, .form-textarea {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .btn {
+            @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150 ease-in-out;
+        }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-800; }
+        .btn-success { @apply bg-green-500 hover:bg-green-600 text-white; }
+        .btn-danger { @apply bg-red-500 hover:bg-red-600 text-white; }
+        
+        .nav-item-count { 
+            @apply ml-auto text-xs bg-sky-500 text-white rounded-full px-1.5 py-0.5; 
+        }
+        #notification-container { 
+            @apply fixed top-4 right-4 z-[1050] space-y-2; 
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .notification-item { 
+            animation: fadeIn 0.3s ease-out, slideIn 0.3s ease-out; 
+        }
+        .notification-item.fade-out { 
+            opacity: 0; 
+            transform: translateX(100%); 
+            transition: opacity 0.3s ease-in, transform 0.3s ease-in; 
+        }
+        .table th { @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50; }
+        .table td { @apply px-4 py-3 whitespace-nowrap text-sm text-gray-700; }
+        .table tbody tr:nth-child(even) { @apply bg-gray-50; }
+
+        .sidebar-logo-container {
+            @apply px-4 py-4 border-b border-gray-700 flex items-center justify-center;
+            min-height: 4rem; /* Р’С‹СЃРѕС‚Р° С…РµРґРµСЂР° */
+        }
+        .logo-icon { display: none; } /* РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃРєСЂС‹С‚, Р±СѓРґРµС‚ РїРѕРєР°Р·Р°РЅ РІ collapsed-desktop */
+
+    </style>
+    {% block head_styles %}{% endblock %}
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside id="admin-sidebar" class="admin-sidebar w-64 bg-gray-800 text-gray-100 flex flex-col print:hidden md:relative md:translate-x-0">
+        <div class="sidebar-logo-container">
+            <a href="{{ url_for('admin_dashboard') }}" class="text-2xl font-semibold text-white">
+                <span class="logo-full">РњРµР±РµР»СЊ<span class="text-orange-400">РџСЂР°Р№СЃ</span>РђРґРјРёРЅ</span>
+                <i class="fas fa-store-alt logo-icon text-2xl text-orange-400"></i> </a>
+        </div>
+        <nav class="flex-grow px-3 py-4 space-y-1.5 overflow-y-auto">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint == 'admin_dashboard' %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i> <span class="sidebar-text">Р”Р°С€Р±РѕСЂРґ</span>
+            </a>
+            <a href="{{ url_for('admin_products') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-box-open w-5 h-5 mr-3"></i> <span class="sidebar-text">РўРѕРІР°СЂС‹</span>
+            </a>
+            <a href="{{ url_for('admin_techcard_list') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint == 'admin_techcard_list' %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-clipboard-list w-5 h-5 mr-3"></i> <span class="sidebar-text">РўРµС…РєР°СЂС‚С‹</span>
+            </a>
+            <a href="{{ url_for('admin_approval_tasks') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint in ['admin_approval_tasks', 'admin_approval_task_detail'] %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-tasks w-5 h-5 mr-3"></i> <span class="sidebar-text">РЎРѕРіР»Р°СЃРѕРІР°РЅРёРµ</span> <span class="nav-item-count sidebar-text" id="nav-approval-count-sidebar-base">{{ pending_approvals_count if pending_approvals_count > 0 else '' }}</span>
+            </a>
+            <a href="{{ url_for('admin_raw_materials') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint == 'admin_raw_materials' %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-cubes w-5 h-5 mr-3"></i> <span class="sidebar-text">РЎС‹СЂСЊС‘ Рё Р¦РµРЅС‹</span>
+            </a>
+            <a href="{{ url_for('admin_dealers_list') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint == 'admin_dealers_list' %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-handshake w-5 h-5 mr-3"></i> <span class="sidebar-text">Р”РёР»РµСЂС‹</span>
+            </a>
+            <a href="{{ url_for('admin_users') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 {% if request.endpoint == 'admin_users' %}bg-gray-700 text-sky-400{% else %}text-gray-300 hover:text-sky-300{% endif %}">
+                <i class="fas fa-users-cog w-5 h-5 mr-3"></i> <span class="sidebar-text">РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</span>
+            </a>
+            
+            <div class="mt-auto pt-4 border-t border-gray-700">
+                 <a href="{{ url_for('index') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-400 hover:bg-gray-700 hover:text-sky-300">
+                    <i class="fas fa-home w-5 h-5 mr-3"></i> <span class="sidebar-text">РќР° СЃР°Р№С‚</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-link flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-400 hover:bg-gray-700 hover:text-red-400">
+                    <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i> <span class="sidebar-text">Р’С‹С…РѕРґ</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+
+    <div class="flex-1 flex flex-col overflow-hidden admin-content">
+        <header class="bg-white shadow-sm print:hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle-main" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500">
+                            <span class="sr-only">РћС‚РєСЂС‹С‚СЊ/Р—Р°РєСЂС‹С‚СЊ РјРµРЅСЋ</span>
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-3">
+                            {% block page_header %}{{ page_title | default('Р”Р°С€Р±РѕСЂРґ') }}{% endblock %}
+                        </h1>
+                    </div>
+                    <div class="flex items-center">
+                        {% if current_user %}
+                        <span class="text-sm text-gray-600 mr-3 hidden sm:inline">
+                            {{ current_user.first_name or current_user.username }} ({{ current_user.role }})
+                        </span> 
+                        <img class="h-8 w-8 rounded-full object-cover" 
+                             src="https://placehold.co/100x100/7dd3fc/0c4a6e?text={{ current_user.username[0].upper() if current_user.username else 'A' }}" 
+                             alt="Р¤РѕС‚Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ {{ current_user.username }}">
+                        {% else %}
+                        <span class="text-sm text-gray-600 mr-3">Р“РѕСЃС‚СЊ</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-auto overflow-y-auto bg-gray-100 p-4 sm:p-6">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="container mx-auto mb-4">
+                    {% for category, message in messages %}
+                        <div class="p-3 rounded-md text-sm
+                            {% if category == 'success' %} bg-green-100 text-green-700 border border-green-200
+                            {% elif category == 'danger' %} bg-red-100 text-red-700 border border-red-200
+                            {% elif category == 'warning' %} bg-yellow-100 text-yellow-700 border border-yellow-200
+                            {% else %} bg-sky-100 text-sky-700 border border-sky-200 {% endif %}"
+                             role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+        
+        <footer class="bg-white border-t border-gray-200 p-4 text-center text-sm text-gray-500 print:hidden">
+            &copy; {{ now().year }} РњРµР±РµР»СЊРџСЂР°Р№СЃРџСЂРѕ. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹.
+        </footer>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script>
+        const adminSidebar = document.getElementById('admin-sidebar');
+        const sidebarToggleMain = document.getElementById('sidebar-toggle-main');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mainContentArea = document.querySelector('.admin-content');
+
+        function applyDesktopSidebarState() {
+            const isCollapsed = localStorage.getItem('adminSidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                adminSidebar.classList.add('collapsed-desktop');
+                if (mainContentArea) mainContentArea.style.marginLeft = '4rem';
+            } else {
+                adminSidebar.classList.remove('collapsed-desktop');
+                if (mainContentArea) mainContentArea.style.marginLeft = '16rem';
+            }
+        }
+
+        function toggleMobileSidebar() {
+            adminSidebar.classList.toggle('mobile-visible');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const isMobile = () => window.innerWidth < 768;
+
+            if (sidebarToggleMain && adminSidebar) {
+                sidebarToggleMain.addEventListener('click', () => {
+                    if (isMobile()) {
+                        toggleMobileSidebar();
+                    } else {
+                        adminSidebar.classList.toggle('collapsed-desktop');
+                        localStorage.setItem('adminSidebarCollapsed', adminSidebar.classList.contains('collapsed-desktop') ? 'true' : 'false');
+                        applyDesktopSidebarState(); // РџСЂРёРјРµРЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ, С‡С‚РѕР±С‹ СЃРґРІРёРЅСѓС‚СЊ РєРѕРЅС‚РµРЅС‚
+                    }
+                });
+            }
+            
+            if (!isMobile()) {
+                applyDesktopSidebarState();
+            } else {
+                 adminSidebar.classList.remove('collapsed-desktop'); // РЈР±РёСЂР°РµРј РґРµСЃРєС‚РѕРїРЅРѕРµ СЃРІРѕСЂР°С‡РёРІР°РЅРёРµ
+                 adminSidebar.classList.add('transform', '-translate-x-full'); // РР·РЅР°С‡Р°Р»СЊРЅРѕ СЃРєСЂС‹С‚ РЅР° РјРѕР±РёР»СЊРЅС‹С…
+                 if (mainContentArea) mainContentArea.style.marginLeft = '0';
+            }
+            
+            window.addEventListener('resize', () => {
+                if (!isMobile()) {
+                    adminSidebar.classList.remove('mobile-visible'); // РЎРєСЂС‹РІР°РµРј РјРѕР±РёР»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                    sidebarOverlay.classList.add('hidden'); // РЎРєСЂС‹РІР°РµРј РѕРІРµСЂР»РµР№
+                    applyDesktopSidebarState(); // РџСЂРёРјРµРЅСЏРµРј РґРµСЃРєС‚РѕРїРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                } else {
+                    // Р•СЃР»Рё РЅР° РјРѕР±РёР»СЊРЅРѕРј, РЅРѕ СЃР°Р№РґР±Р°СЂ Р±С‹Р» РѕС‚РєСЂС‹С‚ С‡РµСЂРµР· РґРµСЃРєС‚РѕРїРЅС‹Р№ toggle,
+                    // Рё РЅРµ Р±С‹Р» СЏРІРЅРѕ СЃРєСЂС‹С‚ РјРѕР±РёР»СЊРЅС‹Рј toggle, РѕРЅ РјРѕР¶РµС‚ РѕСЃС‚Р°С‚СЊСЃСЏ РІРёРґРёРјС‹Рј.
+                    // РџРѕСЌС‚РѕРјСѓ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїСЂРёРјРµРЅСЏРµРј РѕС‚СЃС‚СѓРї РєРѕРЅС‚РµРЅС‚Р° 0.
+                    if (mainContentArea) mainContentArea.style.marginLeft = '0';
+                    if (!adminSidebar.classList.contains('mobile-visible')) {
+                         adminSidebar.classList.add('transform', '-translate-x-full');
+                    }
+                }
+            });
+
+            const approvalCountBadgeBase = document.getElementById('nav-approval-count-sidebar-base');
+            if (approvalCountBadgeBase) {
+                 const mockCount = parseInt("{{ pending_approvals_count | default(0) }}");
+                 if (mockCount > 0) {
+                    approvalCountBadgeBase.textContent = mockCount;
+                    approvalCountBadgeBase.classList.remove('hidden'); // РџРѕРєР°Р·С‹РІР°РµРј, РµСЃР»Рё РµСЃС‚СЊ Р·Р°РґР°С‡Рё
+                 } else {
+                    approvalCountBadgeBase.textContent = ''; // РћС‡РёС‰Р°РµРј, РµСЃР»Рё 0
+                    approvalCountBadgeBase.classList.add('hidden'); // РЎРєСЂС‹РІР°РµРј, РµСЃР»Рё 0
+                 }
+            }
+        });
+
+        function showNotification(message, type = 'info', duration = 3500) {
+            const notificationContainer = document.getElementById('notification-container');
+            if (!notificationContainer) {
+                console.warn("РљРѕРЅС‚РµР№РЅРµСЂ СѓРІРµРґРѕРјР»РµРЅРёР№ #notification-container РЅРµ РЅР°Р№РґРµРЅ.");
+                alert(message); 
+                return;
+            }
+            const notif = document.createElement('div');
+            notif.className = `notification-item max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden m-2
+                ${ type === 'success' ? 'border-green-500' : 
+                   type === 'error'   ? 'border-red-500'   : 
+                   type === 'warning' ? 'border-yellow-500': 'border-sky-500' }`;
+            let iconHtml = '';
+            let textColor = 'text-gray-900';
+            if (type === 'success') {
+                iconHtml = '<i class="fas fa-check-circle text-green-500"></i>';
+                textColor = 'text-green-700';
+            } else if (type === 'error') {
+                iconHtml = '<i class="fas fa-exclamation-triangle text-red-500"></i>';
+                textColor = 'text-red-700';
+            } else if (type === 'warning') {
+                iconHtml = '<i class="fas fa-exclamation-circle text-yellow-500"></i>';
+                textColor = 'text-yellow-700';
+            } else { 
+                iconHtml = '<i class="fas fa-info-circle text-sky-500"></i>';
+                textColor = 'text-sky-700';
+            }
+            notif.innerHTML = `
+                <div class="p-4">
+                  <div class="flex items-start">
+                    <div class="flex-shrink-0">${iconHtml}</div>
+                    <div class="ml-3 w-0 flex-1 pt-0.5"><p class="text-sm font-medium ${textColor}">${message}</p></div>
+                    <div class="ml-4 flex-shrink-0 flex">
+                      <button type="button" class="inline-flex bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500" onclick="this.closest('.notification-item').remove()">
+                        <span class="sr-only">Р—Р°РєСЂС‹С‚СЊ</span><i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>`;
+            notificationContainer.appendChild(notif);
+            setTimeout(() => {
+                notif.classList.add('fade-out');
+                setTimeout(() => notif.remove(), 300); 
+            }, duration);
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

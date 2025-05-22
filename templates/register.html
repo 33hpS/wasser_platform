@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .logo-img {
+            max-height: 50px;
+        }
+        .form-input {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .password-strength-meter {
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+        .strength-weak { background-color: #ef4444; width: 33%; } /* red-500 */
+        .strength-medium { background-color: #f59e0b; width: 66%; } /* amber-500 */
+        .strength-strong { background-color: #22c55e; width: 100%; } /* green-500 */
+
+        .password-requirement {
+            @apply text-xs flex items-center;
+        }
+        .password-requirement.met {
+            @apply text-green-600;
+        }
+        .password-requirement.unmet {
+            @apply text-red-500;
+        }
+        .password-requirement svg { /* Стили для SVG иконки внутри .password-requirement */
+            @apply w-3 h-3 mr-1.5 flex-shrink-0; /* Tailwind классы для размера и отступа */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-register">0</span>
+                    </a>
+                    <a href="login.html" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                     <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-register">0</span>
+                    </a>
+                    <button id="mobile-menu-button-register" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-register" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="index.html#about" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block bg-sky-600 hover:bg-sky-700 text-white text-center px-4 py-3 text-sm font-medium transition-colors duration-150 mx-4 my-2 rounded-md">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center"><a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700 font-medium">Регистрация</span></li>
+            </ol>
+        </nav>
+
+        <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-xl">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Создание аккаунта</h1>
+            
+            <form id="register-form" class="space-y-6">
+                <div>
+                    <label for="register-full-name" class="form-label">Ф.И.О.<span class="text-red-500">*</span></label>
+                    <input type="text" name="full-name" id="register-full-name" class="form-input" required autocomplete="name">
+                    <p class="error-message hidden" id="register-full-name-error">Пожалуйста, укажите ваше Ф.И.О.</p>
+                </div>
+
+                <div>
+                    <label for="register-email" class="form-label">Email (будет вашим логином)<span class="text-red-500">*</span></label>
+                    <input type="email" name="email" id="register-email" class="form-input" required autocomplete="email">
+                    <p class="error-message hidden" id="register-email-error">Пожалуйста, введите корректный email.</p>
+                </div>
+
+                <div>
+                    <label for="register-password" class="form-label">Пароль<span class="text-red-500">*</span></label>
+                    <input type="password" name="password" id="register-password" class="form-input" required autocomplete="new-password">
+                    <div class="mt-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="password-strength-bar" class="password-strength-meter"></div>
+                    </div>
+                    <div id="password-requirements" class="mt-2 space-y-1">
+                        <p class="password-requirement unmet" id="req-length">Минимум 10 символов</p>
+                        <p class="password-requirement unmet" id="req-uppercase">Одна заглавная буква</p>
+                        <p class="password-requirement unmet" id="req-lowercase">Одна строчная буква</p>
+                        <p class="password-requirement unmet" id="req-number">Одна цифра</p>
+                        <p class="password-requirement unmet" id="req-special">Один спецсимвол (e.g. !@#$%^&*)</p>
+                    </div>
+                    <p class="error-message hidden" id="register-password-error">Пароль не соответствует требованиям.</p>
+                </div>
+
+                <div>
+                    <label for="register-password-confirm" class="form-label">Подтвердите пароль<span class="text-red-500">*</span></label>
+                    <input type="password" name="password-confirm" id="register-password-confirm" class="form-input" required autocomplete="new-password">
+                    <p class="error-message hidden" id="register-password-confirm-error">Пароли не совпадают.</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="agree-terms" name="agree-terms" type="checkbox" class="h-4 w-4 text-sky-600 border-gray-300 rounded focus:ring-sky-500" required>
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="agree-terms" class="font-medium text-gray-700">Я согласен с <a href="#terms-of-service" class="text-sky-600 hover:text-sky-500">условиями обработки персональных данных</a><span class="text-red-500">*</span></label>
+                        </div>
+                    </div>
+                     <p class="error-message hidden" id="agree-terms-error">Необходимо принять условия.</p>
+
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="agree-newsletter" name="agree-newsletter" type="checkbox" class="h-4 w-4 text-sky-600 border-gray-300 rounded focus:ring-sky-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="agree-newsletter" class="font-medium text-gray-700">Я хочу получать информацию об акциях и новинках</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <button type="submit" id="register-submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Или зарегистрируйтесь с помощью</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 gap-3"> 
+                    <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Регистрация через Google</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.0002 5.24916C12.0002 5.24916 15.2493 5.24906 17.8127 7.8124C20.376 10.3757 20.376 13.6249 17.8127 16.1882C15.2493 18.7515 12.0002 18.7515 12.0002 18.7515C12.0002 18.7515 8.75103 18.7515 6.1877 16.1882C3.62436 13.6249 3.62436 10.3757 6.1877 7.8124C8.75103 5.24906 12.0002 5.24916 12.0002 5.24916ZM12.0002 3.00001C7.02963 3.00001 3.00001 7.02963 3.00001 12C3.00001 16.9704 7.02963 21 12.0002 21C16.9706 21 21.0002 16.9704 21.0002 12C21.0002 7.02963 16.9706 3.00001 12.0002 3.00001ZM11.9062 8.34375C10.2055 8.34375 8.84375 9.70553 8.84375 11.4062C8.84375 12.4394 9.36884 13.3536 10.1889 13.8809L10.1875 13.8828V16.3125H13.8125V13.8789C14.6322 13.3491 15.1562 12.4352 15.1562 11.4062C15.1562 9.70553 13.7945 8.34375 12.0938 8.34375H11.9062Z" clip-rule="evenodd"></path></svg>
+                        <span class="ml-2">Google</span>
+                    </button>
+                    </div>
+            </div>
+
+            <p class="mt-8 text-center text-sm text-gray-600">
+                Уже есть аккаунт?
+                <a href="login.html" class="font-medium text-sky-600 hover:text-sky-500">Войти</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="index.html#about" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearRegister"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+            const mobileMenuButtonRegister = document.getElementById('mobile-menu-button-register');
+            const mobileMenuRegister = document.getElementById('mobile-menu-register');
+            if (mobileMenuButtonRegister && mobileMenuRegister) {
+                mobileMenuButtonRegister.addEventListener('click', () => {
+                    mobileMenuRegister.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearRegisterEl = document.getElementById('currentYearRegister');
+            if (currentYearRegisterEl) {
+                currentYearRegisterEl.textContent = new Date().getFullYear();
+            }
+
+            const passwordInput = document.getElementById('register-password');
+            const passwordConfirmInput = document.getElementById('register-password-confirm');
+            const strengthBar = document.getElementById('password-strength-bar');
+            const requirements = {
+                length: { el: document.getElementById('req-length'), text: "Минимум 10 символов" },
+                uppercase: { el: document.getElementById('req-uppercase'), text: "Одна заглавная буква" },
+                lowercase: { el: document.getElementById('req-lowercase'), text: "Одна строчная буква" },
+                number: { el: document.getElementById('req-number'), text: "Одна цифра" },
+                special: { el: document.getElementById('req-special'), text: "Один спецсимвол (e.g. !@#$%^&*)" },
+            };
+            const metIcon = '<svg class="w-3 h-3 mr-1.5 flex-shrink-0" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
+            const unmetIcon = '<svg class="w-3 h-3 mr-1.5 flex-shrink-0" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+
+            for (const key in requirements) {
+                if (requirements[key] && requirements[key].el) {
+                    requirements[key].el.innerHTML = unmetIcon + requirements[key].text;
+                }
+            }
+
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function () {
+                    const value = this.value;
+                    let strength = 0;
+                    let reqMetCount = 0;
+
+                    if (value.length >= 10) { requirements.length.el.classList.replace('unmet', 'met'); requirements.length.el.innerHTML = metIcon + requirements.length.text; strength++; reqMetCount++; }
+                    else { requirements.length.el.classList.replace('met', 'unmet'); requirements.length.el.innerHTML = unmetIcon + requirements.length.text; }
+
+                    if (/[A-ZА-Я]/.test(value)) { requirements.uppercase.el.classList.replace('unmet', 'met'); requirements.uppercase.el.innerHTML = metIcon + requirements.uppercase.text; strength++; reqMetCount++; }
+                    else { requirements.uppercase.el.classList.replace('met', 'unmet'); requirements.uppercase.el.innerHTML = unmetIcon + requirements.uppercase.text; }
+
+                    if (/[a-zа-я]/.test(value)) { requirements.lowercase.el.classList.replace('unmet', 'met'); requirements.lowercase.el.innerHTML = metIcon + requirements.lowercase.text; strength++; reqMetCount++; }
+                    else { requirements.lowercase.el.classList.replace('met', 'unmet'); requirements.lowercase.el.innerHTML = unmetIcon + requirements.lowercase.text; }
+
+                    if (/[0-9]/.test(value)) { requirements.number.el.classList.replace('unmet', 'met'); requirements.number.el.innerHTML = metIcon + requirements.number.text; strength++; reqMetCount++; }
+                    else { requirements.number.el.classList.replace('met', 'unmet'); requirements.number.el.innerHTML = unmetIcon + requirements.number.text; }
+
+                    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) { requirements.special.el.classList.replace('unmet', 'met'); requirements.special.el.innerHTML = metIcon + requirements.special.text; strength++; reqMetCount++; }
+                    else { requirements.special.el.classList.replace('met', 'unmet'); requirements.special.el.innerHTML = unmetIcon + requirements.special.text; }
+
+                    strengthBar.className = 'password-strength-meter';
+                    if (value.length > 0) {
+                        if (reqMetCount <= 2) strengthBar.classList.add('strength-weak');
+                        else if (reqMetCount <= 4) strengthBar.classList.add('strength-medium');
+                        else strengthBar.classList.add('strength-strong');
+                    }
+                });
+            }
+
+            const registerForm = document.getElementById('register-form');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    let isValid = true;
+
+                    const fullNameInput = document.getElementById('register-full-name');
+                    const emailInput = document.getElementById('register-email');
+                    const agreeTermsCheckbox = document.getElementById('agree-terms');
+
+                    const fullNameError = document.getElementById('register-full-name-error');
+                    const emailError = document.getElementById('register-email-error');
+                    const passwordError = document.getElementById('register-password-error');
+                    const passwordConfirmError = document.getElementById('register-password-confirm-error');
+                    const agreeTermsError = document.getElementById('agree-terms-error');
+
+                    [fullNameInput, emailInput, passwordInput, passwordConfirmInput].forEach(input => input.classList.remove('border-red-500'));
+                    [fullNameError, emailError, passwordError, passwordConfirmError, agreeTermsError].forEach(err => err.classList.add('hidden'));
+
+                    if (!fullNameInput.value.trim()) {
+                        fullNameInput.classList.add('border-red-500');
+                        fullNameError.classList.remove('hidden');
+                        isValid = false;
+                    }
+                    if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                        emailInput.classList.add('border-red-500');
+                        emailError.classList.remove('hidden');
+                        isValid = false;
+                    }
+
+                    let passwordReqMetCount = 0;
+                    if (passwordInput.value.length >= 10) passwordReqMetCount++;
+                    if (/[A-ZА-Я]/.test(passwordInput.value)) passwordReqMetCount++;
+                    if (/[a-zа-я]/.test(passwordInput.value)) passwordReqMetCount++;
+                    if (/[0-9]/.test(passwordInput.value)) passwordReqMetCount++;
+                    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(passwordInput.value)) passwordReqMetCount++;
+
+                    if (passwordReqMetCount < 5) {
+                        passwordInput.classList.add('border-red-500');
+                        passwordError.classList.remove('hidden');
+                        isValid = false;
+                    }
+
+                    if (passwordInput.value !== passwordConfirmInput.value) {
+                        passwordConfirmInput.classList.add('border-red-500');
+                        passwordConfirmError.classList.remove('hidden');
+                        isValid = false;
+                    }
+                    if (passwordConfirmInput.value.trim() === '' && passwordInput.value.trim() !== '') {
+                        passwordConfirmInput.classList.add('border-red-500');
+                        passwordConfirmError.textContent = 'Пожалуйста, подтвердите пароль.';
+                        passwordConfirmError.classList.remove('hidden');
+                        isValid = false;
+                    }
+
+                    if (!agreeTermsCheckbox.checked) {
+                        agreeTermsError.classList.remove('hidden');
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        alert('Регистрация успешна! (Имитация). Теперь вы можете войти.');
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

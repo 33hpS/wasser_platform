@@ -1,0 +1,425 @@
+﻿
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Товарами - МебельПрайсПро Админ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .admin-sidebar {
+            transition: width 0.3s ease-in-out;
+        }
+
+        .admin-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .form-input, .form-select {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+
+        .table th.sortable-header { 
+            @apply cursor-pointer hover:bg-gray-100 relative; 
+        }
+
+        .table th .sort-icon-container { 
+            @apply inline-flex items-center justify-center ml-1.5 align-middle;
+            width: 1em; 
+            height: 1em;
+        }
+
+        .table th svg.sort-icon {
+            @apply h-full w-full;
+        }
+
+        .table th svg.sort-icon.neutral { @apply text-gray-400; }
+        .table th svg.sort-icon.asc, .table th svg.sort-icon.desc { @apply text-sky-600; }
+        
+        .table td { @apply px-4 py-3 whitespace-nowrap text-sm text-gray-700; }
+        .table tbody tr:nth-child(even) { @apply bg-gray-50; }
+        .btn { @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150; }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-700; }
+        .btn-success { @apply bg-green-500 hover:bg-green-600 text-white; }
+        .btn-danger { @apply bg-red-500 hover:bg-red-600 text-white; }
+        .btn-icon { @apply p-1.5; }
+
+        .status-badge { @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full; }
+        .status-in-stock { @apply bg-green-100 text-green-800; }
+        .status-out-of-stock { @apply bg-red-100 text-red-800; }
+        .status-on-order { @apply bg-yellow-100 text-yellow-800; }
+        .nav-item-count { @apply ml-auto text-xs bg-sky-500 text-white rounded-full px-1.5 py-0.5; }
+        .product-thumbnail { @apply h-10 w-10 object-cover rounded-md border border-gray-200; }
+        .form-checkbox { @apply rounded text-sky-600 focus:ring-sky-500; }
+
+        .icon-button {
+            @apply transition-transform duration-300 ease-in-out transform hover:scale-110;
+        }
+
+        .icon-edit {
+            @apply text-sky-600 hover:text-sky-800;
+        }
+
+        .icon-view {
+            @apply text-green-600 hover:text-green-800;
+        }
+
+        .icon-delete {
+            @apply text-red-600 hover:text-red-800;
+        }
+
+        .svg-shadow {
+            filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
+        }
+
+        /* Общие стили кнопок и иконок */
+        .icon {
+            width: 24px;
+            height: 24px;
+            transition: color 0.3s ease; /* Плавный переход к цвету */
+        }
+
+        /* Анимация при наведении */
+        .icon:hover {
+            transform: scale(1.1); /* Увеличение иконки */
+        }
+    </style>
+</head>
+<body class="flex h-screen">
+    <aside id="admin-sidebar" class="admin-sidebar w-64 bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <a href="admin_dashboard.html" class="text-2xl font-semibold text-white">Мебель<span class="text-orange-400">Прайс</span>Админ</a>
+        </div>
+        <nav class="flex-grow px-3 py-4 space-y-1.5">
+            <a href="admin_dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Дашборд
+            </a>
+            <a href="admin_products.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-gray-900 text-sky-400"> 
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                Товары
+            </a>
+            <!-- Остальные ссылки меню -->
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 md:hidden">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-3">Управление Товарами</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-600 mr-3">Администратор</span>
+                        <img class="h-8 w-8 rounded-full object-cover" src="https://placehold.co/100x100/7dd3fc/0c4a6e?text=A" alt="[Фото пользователя]">
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <div class="container mx-auto">
+                <div class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Список Товаров (<span id="total-products-count">0</span>)</h2>
+                    <div class="flex flex-wrap gap-3">
+                        <button id="export-pricelist-btn" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline -ml-1 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                            Экспорт прайс-листа (XLS)
+                        </button>
+                        <a href="admin_product_edit.html" class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline -ml-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                            Добавить новый товар
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-md shadow mb-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-3 items-end">
+                        <div class="xl:col-span-2">
+                            <label for="filter-product-search-main" class="form-label">Поиск:</label>
+                            <input type="text" id="filter-product-search-main" placeholder="Артикул, название..." class="form-input w-full">
+                        </div>
+                        <div>
+                            <label for="filter-category" class="form-label">Категория:</label>
+                            <select id="filter-category" class="form-select w-full">
+                                <option value="">Все категории</option>
+                                <option value="tumbi">Тумбы с раковиной</option>
+                                <option value="zerkala">Зеркала и шкафы</option>
+                                <option value="penali">Пеналы</option>
+                                <option value="komplekti">Комплекты мебели</option>
+                                <option value="aksessuari">Аксессуары</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-availability" class="form-label">Наличие:</label>
+                            <select id="filter-availability" class="form-select w-full">
+                                <option value="">Все</option>
+                                <option value="in_stock">В наличии</option>
+                                <option value="on_order">Под заказ</option>
+                                <option value="out_of_stock">Нет в наличии</option>
+                            </select>
+                        </div>
+                        <div class="xl:col-start-1"> 
+                            <label for="filter-techcard-status" class="form-label">Статус техкарты:</label>
+                            <select id="filter-techcard-status" class="form-select w-full">
+                                <option value="">Все</option>
+                                <option value="no_card">Отсутствует</option>
+                                <option value="draft">Черновик</option>
+                                <option value="pending">На согласовании</option>
+                                <option value="approved">Утверждена</option>
+                                <option value="rejected">Отклонена</option>
+                            </select>
+                        </div>
+                        <div class="flex space-x-2 items-end md:col-start-2 lg:col-start-3 xl:col-start-2 mt-4 sm:mt-0">
+                            <button id="apply-filter-btn" class="btn btn-primary w-full sm:w-auto">Применить</button>
+                            <button id="reset-filter-btn" class="btn btn-secondary w-full sm:w-auto">Сбросить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 table" id="products-table">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Выбрать</th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="id">ID <span class="sort-icon-container"></span></th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Фото</th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="sku">Артикул <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="name">Наименование <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="category">Категория <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="price">Цена (сом) <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="availability">Наличие <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50" data-sort-by="techcard_status">Техкарта <span class="sort-icon-container"></span></th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Динамическое наполнение -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <nav id="pagination-container" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <!-- Динамическая пагинация -->
+                    </nav>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        class ProductManagement {
+            constructor() {
+                this.products = [];
+                this.filteredProducts = [];
+                this.currentPage = 1;
+                this.itemsPerPage = 10;
+                this.totalPages = 0;
+
+                this.initializeDOM();
+                this.setupEventListeners();
+            }
+
+            initializeDOM() {
+                this.filterSearchInput = document.getElementById('filter-product-search-main');
+                this.filterCategorySelect = document.getElementById('filter-category');
+                this.filterAvailabilitySelect = document.getElementById('filter-availability');
+                this.filterTechcardStatus = document.getElementById('filter-techcard-status');
+                this.applyFilterButton = document.getElementById('apply-filter-btn');
+                this.resetFilterButton = document.getElementById('reset-filter-btn');
+                this.productsTableBody = document.getElementById('products-table-body');
+                this.paginationContainer = document.getElementById('pagination-container');
+                this.totalProductsCount = document.getElementById('total-products-count');
+            }
+
+            setupEventListeners() {
+                this.applyFilterButton.addEventListener('click', () => this.applyFilters());
+                this.resetFilterButton.addEventListener('click', () => this.resetFilters());
+            }
+
+            async fetchProducts() {
+                // Симуляция получения данных
+                this.products = [
+                    { id: 1, sku: 'WS-MOD75-ANT', name: 'Тумба "Modern" 75см, антрацит', category: 'tumbi', price: 28500, availability: 'in_stock', techcardStatus: 'approved', thumbnailUrl: 'https://placehold.co/40x40/e0f2fe/0c4a6e?text=Фото1' },
+                    { id: 2, sku: 'WS-ZER-ORL', name: 'Зеркало "Orion" с LED подсветкой', category: 'zerkala', price: 12900, availability: 'on_order', techcardStatus: 'pending', thumbnailUrl: 'https://placehold.co/40x40/fef9c3/713f12?text=Фото2' },
+                    { id: 3, sku: 'WS-PEN-LIN', name: 'Пенал "Linea Slim" дуб крафт', category: 'penali', price: 17300, availability: 'out_of_stock', techcardStatus: 'no_card', thumbnailUrl: 'https://placehold.co/40x40/ecfccb/365314?text=Фото3' }
+                ];
+
+                this.filteredProducts = [...this.products];
+                this.renderProducts();
+                this.renderPagination();
+                this.totalProductsCount.textContent = this.products.length;
+            }
+
+            applyFilters() {
+                const searchTerm = this.filterSearchInput.value.toLowerCase();
+                const category = this.filterCategorySelect.value;
+                const availability = this.filterAvailabilitySelect.value;
+                const techcardStatus = this.filterTechcardStatus.value;
+
+                this.filteredProducts = this.products.filter(product => {
+                    const matchSearch = !searchTerm || 
+                        product.sku.toLowerCase().includes(searchTerm) || 
+                        product.name.toLowerCase().includes(searchTerm);
+
+                    const matchCategory = !category || product.category === category;
+                    const matchAvailability = !availability || product.availability === availability;
+                    const matchTechcardStatus = !techcardStatus || product.techcardStatus === techcardStatus;
+
+                    return matchSearch && matchCategory && matchAvailability && matchTechcardStatus;
+                });
+
+                this.currentPage = 1;
+                this.renderProducts();
+                this.renderPagination();
+                this.totalProductsCount.textContent = this.filteredProducts.length;
+            }
+
+            resetFilters() {
+                this.filterSearchInput.value = '';
+                this.filterCategorySelect.value = '';
+                this.filterAvailabilitySelect.value = '';
+                this.filterTechcardStatus.value = '';
+                this.filteredProducts = [...this.products];
+                this.currentPage = 1;
+                this.renderProducts();
+                this.renderPagination();
+                this.totalProductsCount.textContent = this.products.length;
+            }
+
+            renderProducts() {
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                const endIndex = startIndex + this.itemsPerPage;
+                const pageProducts = this.filteredProducts.slice(startIndex, endIndex);
+
+                this.productsTableBody.innerHTML = pageProducts.map(product => `
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-checkbox h-4 w-4 text-sky-600">
+                        </td>
+                        <td>${product.id}</td>
+                        <td><img src="${product.thumbnailUrl}" alt="[Фото товара]" class="product-thumbnail"></td>
+                        <td>${product.sku}</td>
+                        <td>${product.name}</td>
+                        <td>${product.category}</td>
+                        <td>${product.price.toLocaleString('ru-RU')} сом</td>
+                        <td><span class="status-badge status-${product.availability}">${this.getAvailabilityLabel(product.availability)}</span></td>
+                        <td><span class="status-badge status-${product.techcardStatus}">${this.getTechcardStatusLabel(product.techcardStatus)}</span></td>
+                        <td class="flex items-center space-x-1 py-3">
+                            ${this.renderIconButtons(product)}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            renderIconButtons(product) {
+                return `
+                    <div class="flex items-center space-x-2">
+                        <a href="admin_product_edit.html?id=${product.id}" class="icon-button icon-edit" title="Редактировать">
+                            <i data-lucide="edit-3" class="icon svg-shadow"></i>
+                        </a>
+                        <a href="../html/product-detail.html?id=${product.id}" target="_blank" class="icon-button icon-view" title="Просмотреть">
+                            <i data-lucide="eye" class="icon svg-shadow"></i>
+                        </a>
+                        <button onclick="confirmDelete('${product.sku}')" class="icon-button icon-delete" title="Удалить">
+                            <i data-lucide="trash-2" class="icon svg-shadow"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            getAvailabilityLabel(availability) {
+                const labels = {
+                    'in_stock': 'В наличии',
+                    'on_order': 'Под заказ',
+                    'out_of_stock': 'Нет в наличии'
+                };
+                return labels[availability] || availability;
+            }
+
+            getTechcardStatusLabel(status) {
+                const labels = {
+                    'no_card': 'Нет техкарты',
+                    'draft': 'Черновик',
+                    'pending': 'На согласовании',
+                    'approved': 'Утверждена',
+                    'rejected': 'Отклонена'
+                };
+                return labels[status] || status;
+            }
+
+            renderPagination() {
+                this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+                this.paginationContainer.innerHTML = '';
+
+                for (let i = 1; i <= this.totalPages; i++) {
+                    const pageButton = document.createElement('a');
+                    pageButton.href = '#';
+                    pageButton.textContent = i;
+                    pageButton.classList.add(
+                        'relative', 'inline-flex', 'items-center', 'px-4', 'py-2', 
+                        'border', 'text-sm', 'font-medium',
+                        this.currentPage === i ? 'bg-sky-50 border-sky-500 text-sky-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                    );
+                    pageButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.currentPage = i;
+                        this.renderProducts();
+                        this.renderPagination();
+                    });
+                    this.paginationContainer.appendChild(pageButton);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const productManagement = new ProductManagement();
+            productManagement.fetchProducts();
+
+            lucide.createIcons(); // Инициализация иконок
+        });
+
+        function confirmDelete(sku) {
+            Swal.fire({
+                title: 'Подтверждение удаления',
+                text: `Вы действительно хотите удалить товар ${sku}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Да, удалить!',
+                cancelButtonText: 'Отмена',
+                background: '#f3f4f6',
+                customClass: {
+                    popup: 'rounded-lg shadow-2xl',
+                    title: 'text-xl font-bold text-gray-800',
+                    text: 'text-gray-600'
+                },
+                animation: true,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInUp'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutDown'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Удалено!',
+                        text

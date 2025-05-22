@@ -1,0 +1,353 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сырьё и Закупочные Цены - МебельПрайсПро Админ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .admin-sidebar {
+            transition: width 0.3s ease-in-out;
+        }
+        .admin-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .form-input, .form-select, .form-textarea {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .table th.sortable-header { 
+            @apply cursor-pointer hover:bg-gray-100 relative; 
+        }
+        .table th .sort-icon-container { 
+            @apply inline-flex items-center justify-center ml-1.5 align-middle;
+            width: 1em; 
+            height: 1em;
+        }
+        .table th svg.sort-icon {
+            @apply h-full w-full;
+        }
+        .table th svg.sort-icon.neutral { @apply text-gray-400; }
+        .table th svg.sort-icon.asc, .table th svg.sort-icon.desc { @apply text-sky-600; }
+        
+        .table td { @apply px-4 py-3 whitespace-nowrap text-sm text-gray-700; }
+        .table tbody tr:nth-child(even) { @apply bg-gray-50; }
+        .btn { @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150; }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-700; }
+        .btn-success { @apply bg-green-500 hover:bg-green-600 text-white; }
+        .btn-danger { @apply bg-red-500 hover:bg-red-600 text-white; }
+        .btn-warning { @apply bg-yellow-500 hover:bg-yellow-600 text-white; }
+        .btn-icon { @apply p-1.5; }
+        .nav-item-count { @apply ml-auto text-xs bg-sky-500 text-white rounded-full px-1.5 py-0.5; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside id="admin-sidebar" class="admin-sidebar w-64 bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <a href="admin_dashboard.html" class="text-2xl font-semibold text-white">Мебель<span class="text-orange-400">Прайс</span>Админ</a>
+        </div>
+        <nav class="flex-grow px-3 py-4 space-y-1.5">
+            <a href="admin_dashboard.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Дашборд
+            </a>
+            <a href="admin_products.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                 <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                Товары
+            </a>
+            <a href="admin_techcard_list.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.153 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM10.5 16.5h3.75m-3.75 0h3.75" /></svg>
+                Техкарты (Редактор)
+            </a>
+            <a href="admin_approval_tasks.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                 <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Согласование Техкарт <span class="nav-item-count" id="nav-approval-count-sidebar">3</span>
+            </a>
+            <a href="admin_raw_materials.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-gray-900 text-sky-400"> <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3M12 15h.008m-7.008 0h14.016m0 0A48.108 48.108 0 0012 15c-2.282 0-4.441.68-6.267 1.875M7.5 7.5h9M3.75 7.5A2.25 2.25 0 016 5.25h12a2.25 2.25 0 012.25 2.25m0 0A2.25 2.25 0 0019.5 6c-.023 0-.046.002-.069.004l-.01.002-.008.001-.002.001-.002 0a.002.002 0 01-.002 0l-.002.001-.008.001-.01.002A2.232 2.232 0 0019.5 6c-1.24 0-2.25.985-2.25 2.188V7.5M3.75 7.5c0 .067.003.132.008.196M12 15c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125h0c-.621 0-1.125.504-1.125 1.125v4.5c0 .621.504 1.125 1.125 1.125h0z" /></svg>
+                Сырьё и Цены
+            </a>
+             <a href="admin_dealers_list.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345h5.518a.562.562 0 01.329 1.004l-4.243 2.97a.563.563 0 00-.178.643l2.125 5.111a.563.563 0 01-.83.632l-4.243-2.97a.563.563 0 00-.652 0l-4.243 2.97a.563.563 0 01-.83-.632l2.125-5.111a.563.563 0 00-.178-.643l-4.243-2.97a.562.562 0 01.329-1.004h5.518a.563.563 0 00.475-.345L11.48 3.5z" />
+                </svg>
+                Дилеры и Оптовики
+            </a>
+            <a href="admin_users.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                Пользователи
+            </a>
+            <a href="../html/index.html" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 text-red-400 hover:text-red-300 mt-auto">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+                Выход (на сайт)
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 md:hidden">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-3">Сырьё и Закупочные Цены</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-600 mr-3">Администратор</span>
+                        <img class="h-8 w-8 rounded-full object-cover" src="https://placehold.co/100x100/7dd3fc/0c4a6e?text=A" alt="[Фото пользователя]">
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <div class="container mx-auto">
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Справочник Сырья (<span id="total-materials-count">78</span>)</h2>
+                    <button id="add-new-material-btn" class="btn btn-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline -ml-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                        Добавить новый материал
+                    </button>
+                </div>
+                
+                <div class="bg-white p-4 rounded-md shadow mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label for="filter-material-search" class="form-label">Поиск по сырью:</label>
+                            <input type="text" id="filter-material-search" placeholder="Артикул, название..." class="form-input w-full">
+                        </div>
+                        <div>
+                            <label for="filter-material-supplier" class="form-label">Поставщик:</label>
+                            <select id="filter-material-supplier" class="form-select w-full">
+                                <option value="">Все поставщики</option>
+                                <option value="supplier1">Поставщик А</option>
+                                <option value="supplier2">Поставщик Б</option>
+                                </select>
+                        </div>
+                        <div class="flex space-x-2 items-end">
+                            <button class="btn btn-primary w-full sm:w-auto">Применить</button>
+                            <button class="btn btn-secondary w-full sm:w-auto">Сбросить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 table" id="materials-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable-header" data-sort-by="id">ID <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="sku">Артикул <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="name">Наименование материала <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="unit">Ед. изм. <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="price">Закуп. цена (сом) <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="supplier">Поставщик <span class="sort-icon-container"></span></th>
+                                <th class="sortable-header" data-sort-by="last_update">Дата изм. цены <span class="sort-icon-container"></span></th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td>1</td>
+                                <td>ЛДСП-Б-16</td>
+                                <td>ЛДСП Белый гладкий 16мм</td>
+                                <td>кв.м</td>
+                                <td class="text-right">350.00</td>
+                                <td>Поставщик А</td>
+                                <td>15.05.2025</td>
+                                <td class="flex items-center space-x-1 py-3">
+                                    <button class="btn btn-primary btn-icon edit-material-btn" data-id="1" title="Редактировать">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                    <button class="btn btn-secondary btn-icon view-price-history-btn" data-id="1" title="История цен">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0Z" /></svg>
+                                    </button>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>2</td>
+                                <td>KR-PVC-0.4</td>
+                                <td>Кромка ПВХ 0.4мм Белая</td>
+                                <td>м.п.</td>
+                                <td class="text-right">12.00</td>
+                                <td>Поставщик Б</td>
+                                <td>10.05.2025</td>
+                                <td class="flex items-center space-x-1 py-3">
+                                    <button class="btn btn-primary btn-icon edit-material-btn" data-id="2" title="Редактировать">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                    <button class="btn btn-secondary btn-icon view-price-history-btn" data-id="2" title="История цен">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0Z" /></svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 flex justify-center">
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          <span class="sr-only">Предыдущая</span>
+                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#" aria-current="page" class="z-10 bg-sky-50 border-sky-500 text-sky-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          <span class="sr-only">Следующая</span>
+                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                        </a>
+                      </nav>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="material-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="material-modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full p-6">
+                <div class="flex justify-between items-center pb-3">
+                    <h3 class="text-lg font-medium text-gray-900" id="material-modal-title">Добавить новый материал</h3>
+                    <button onclick="closeMaterialModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <form id="material-form" class="space-y-4">
+                    <input type="hidden" id="material-id" name="material-id">
+                    <div>
+                        <label for="material-sku" class="form-label">Артикул <span class="text-red-500">*</span></label>
+                        <input type="text" id="material-sku" name="material-sku" class="form-input w-full" required>
+                    </div>
+                    <div>
+                        <label for="material-name" class="form-label">Наименование материала <span class="text-red-500">*</span></label>
+                        <input type="text" id="material-name" name="material-name" class="form-input w-full" required>
+                    </div>
+                    <div>
+                        <label for="material-unit" class="form-label">Единица измерения <span class="text-red-500">*</span></label>
+                        <select id="material-unit" name="material-unit" class="form-select w-full" required>
+                            <option value="">Выберите...</option>
+                            <option value="шт.">шт. (штуки)</option>
+                            <option value="кг">кг (килограммы)</option>
+                            <option value="г">г (граммы)</option>
+                            <option value="м">м (метры)</option>
+                            <option value="см">см (сантиметры)</option>
+                            <option value="мм">мм (миллиметры)</option>
+                            <option value="кв.м">кв.м (квадратные метры)</option>
+                            <option value="м.п.">м.п. (метры погонные)</option>
+                            <option value="л">л (литры)</option>
+                            <option value="мл">мл (миллилитры)</option>
+                            <option value="компл.">компл. (комплекты)</option>
+                            <option value="пар">пар (пары)</option>
+                            <option value="рул.">рул. (рулоны)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="material-price" class="form-label">Закупочная цена (сом) <span class="text-red-500">*</span></label>
+                        <input type="number" id="material-price" name="material-price" class="form-input w-full" step="0.01" min="0" required>
+                    </div>
+                    <div>
+                        <label for="material-supplier" class="form-label">Поставщик</label>
+                        <input type="text" id="material-supplier" name="material-supplier" class="form-input w-full">
+                    </div>
+                    <div class="pt-4 flex justify-end space-x-2">
+                        <button type="button" onclick="closeMaterialModal()" class="btn btn-secondary">Отмена</button>
+                        <button type="submit" class="btn btn-success">Сохранить материал</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('admin-sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('w-64');
+                    sidebar.classList.toggle('w-16');
+                });
+            }
+
+            const approvalCountBadge = document.getElementById('nav-approval-count-sidebar');
+            if (approvalCountBadge) {
+                approvalCountBadge.textContent = '3';
+            }
+
+            const sortableHeaders = document.querySelectorAll('#materials-table th.sortable-header');
+            let currentSort = { column: null, direction: 'none' };
+            const sortIconAsc = `<svg class="sort-icon asc" viewBox="0 0 20 20" fill="currentColor"><polygon points="10 4 4.5 13 15.5 13"></polygon></svg>`;
+            const sortIconDesc = `<svg class="sort-icon desc" viewBox="0 0 20 20" fill="currentColor"><polygon points="10 16 4.5 7 15.5 7"></polygon></svg>`;
+            const sortIconNeutral = `<svg class="sort-icon neutral" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path></svg>`;
+
+            sortableHeaders.forEach(header => {
+                const sortIconContainer = header.querySelector('.sort-icon-container');
+                if (sortIconContainer) sortIconContainer.innerHTML = sortIconNeutral;
+                header.addEventListener('click', () => { /* ... логика сортировки ... */ });
+            });
+
+            const materialModal = document.getElementById('material-modal');
+            const materialModalTitle = document.getElementById('material-modal-title');
+            const materialForm = document.getElementById('material-form');
+            const materialIdInput = document.getElementById('material-id');
+
+            document.getElementById('add-new-material-btn').addEventListener('click', () => {
+                materialModalTitle.textContent = 'Добавить новый материал';
+                materialForm.reset();
+                materialIdInput.value = '';
+                materialModal.classList.remove('hidden');
+            });
+
+            document.querySelectorAll('.edit-material-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const materialId = event.currentTarget.dataset.id;
+                    materialModalTitle.textContent = `Редактировать материал (ID: ${materialId})`;
+                    materialForm.reset();
+                    materialIdInput.value = materialId;
+                    if (materialId === "1") {
+                        document.getElementById('material-sku').value = "ЛДСП-Б-16";
+                        document.getElementById('material-name').value = "ЛДСП Белый гладкий 16мм";
+                        document.getElementById('material-unit').value = "кв.м";
+                        document.getElementById('material-price').value = "350.00";
+                        document.getElementById('material-supplier').value = "Поставщик А";
+                    } else if (materialId === "2") {
+                        document.getElementById('material-sku').value = "KR-PVC-0.4";
+                        document.getElementById('material-name').value = "Кромка ПВХ 0.4мм Белая";
+                        document.getElementById('material-unit').value = "м.п.";
+                        document.getElementById('material-price').value = "12.00";
+                        document.getElementById('material-supplier').value = "Поставщик Б";
+                    }
+                    materialModal.classList.remove('hidden');
+                });
+            });
+
+            if (materialForm) {
+                materialForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(materialForm);
+                    const data = Object.fromEntries(formData.entries());
+                    console.log('Сохранение материала:', data);
+                    alert(`Материал "${data['material-name']}" сохранен (имитация).`);
+                    closeMaterialModal();
+                });
+            }
+        });
+
+        function closeMaterialModal() {
+            const materialModal = document.getElementById('material-modal');
+            if (materialModal) materialModal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

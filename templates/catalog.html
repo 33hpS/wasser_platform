@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - Wasser - Мебель для ванной (МебельПрайсПро)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        .logo-img {
+            max-height: 50px;
+        }
+
+        .view-control-btn.active {
+            background-color: #0284c7; /* sky-600 */
+            color: white;
+        }
+
+        .view-control-btn:not(.active) {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #374151; /* gray-700 */
+        }
+
+            .view-control-btn:not(.active):hover {
+                background-color: #d1d5db; /* gray-300 */
+            }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        /* Стили для кнопки "В список желаний" на карточке товара */
+        .wishlist-btn-card-bottom {
+            @apply p-2 border border-gray-300 rounded-md text-gray-500 hover:text-red-500 hover:border-red-400 transition-all duration-200;
+        }
+
+            .wishlist-btn-card-bottom.in-wishlist svg {
+                fill: #ef4444; /* red-500 */
+                stroke: #ef4444; /* red-500 */
+            }
+
+            .wishlist-btn-card-bottom.in-wishlist {
+                color: #ef4444; /* red-500 */
+                border-color: #f87171; /* red-400 */
+            }
+
+            .wishlist-btn-card-bottom svg {
+                @apply w-5 h-5;
+            }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-sky-600 font-semibold px-3 py-2 rounded-md text-sm transition-colors duration-150">Каталог</a>
+                    <a href="about.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="#search" class="text-gray-600 hover:text-sky-600 p-2 rounded-md transition-colors duration-150" aria-label="Поиск">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                        </svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop">0</span>
+                    </a>
+                    <a href="login.html" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                        </svg>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile">0</span>
+                    </a>
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-sky-600 bg-gray-100 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="about.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="#search" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Поиск</a>
+            <a href="login.html" class="block bg-sky-600 hover:bg-sky-700 text-white text-center px-4 py-3 text-sm font-medium transition-colors duration-150 mx-4 my-2 rounded-md">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center">
+                    <a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a>
+                </li>
+                <li class="flex items-center">
+                    <svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                    <span class="text-gray-700 font-medium">Каталог</span>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Каталог мебели для ванной</h1>
+
+        <div class="lg:flex lg:gap-8">
+            <aside class="lg:w-1/4 bg-white p-6 rounded-lg shadow-lg h-fit sticky top-28" id="filters-sidebar">
+                <h2 class="text-xl font-semibold mb-6 text-gray-700">Фильтры</h2>
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium mb-3 text-gray-600">Цена, сом</h3>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <input type="number" placeholder="От" class="w-full border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm p-2" id="price-from">
+                        <span class="text-gray-500">-</span>
+                        <input type="number" placeholder="До" class="w-full border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm p-2" id="price-to">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium mb-3 text-gray-600">Категория</h3>
+                    <ul class="space-y-2 text-sm" id="category-filter">
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="checkbox" name="category" value="tumbi" class="filter-checkbox rounded border-gray-300 text-sky-600 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50"> <span>Тумбы с раковиной</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="checkbox" name="category" value="zerkala" class="filter-checkbox rounded border-gray-300 text-sky-600 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50"> <span>Зеркала и зеркальные шкафы</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="checkbox" name="category" value="penali" class="filter-checkbox rounded border-gray-300 text-sky-600 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50"> <span>Пеналы и шкафы</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="checkbox" name="category" value="komplekti" class="filter-checkbox rounded border-gray-300 text-sky-600 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50"> <span>Комплекты мебели</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="checkbox" name="category" value="aksesuari" class="filter-checkbox rounded border-gray-300 text-sky-600 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50"> <span>Аксессуары</span></label></li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium mb-3 text-gray-600">Наличие</h3>
+                    <ul class="space-y-2 text-sm" id="availability-filter">
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="radio" name="availability" value="all" class="filter-radio text-sky-600 focus:ring-sky-500" checked> <span>Все</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="radio" name="availability" value="in_stock" class="filter-radio text-sky-600 focus:ring-sky-500"> <span>В наличии</span></label></li>
+                        <li><label class="flex items-center space-x-2 hover:text-sky-600 cursor-pointer"><input type="radio" name="availability" value="on_order" class="filter-radio text-sky-600 focus:ring-sky-500"> <span>Под заказ</span></label></li>
+                    </ul>
+                </div>
+                <button id="apply-filters-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-4 rounded-md transition-colors duration-150 text-sm">
+                    Применить фильтры
+                </button>
+                <button id="reset-filters-btn" class="w-full mt-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2.5 px-4 rounded-md transition-colors duration-150 text-sm">
+                    Сбросить все
+                </button>
+            </aside>
+
+            <div class="lg:w-3/4">
+                <div class="bg-white p-4 rounded-lg shadow-md mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <p class="text-sm text-gray-600 whitespace-nowrap">Найдено: <span class="font-semibold" id="products-count">0</span> товаров</p>
+                    <div class="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto justify-between sm:justify-end">
+                        <div class="flex items-center space-x-1" id="view-controls">
+                            <button class="view-control-btn p-2 rounded-md" data-view="grid-compact" aria-label="Компактная плитка">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                            </button>
+                            <button class="view-control-btn p-2 rounded-md active" data-view="grid-standard" aria-label="Стандартная плитка">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h5M4 12h5M4 18h5M10 6h10M10 12h10M10 18h10" />
+                                </svg>
+                            </button>
+                            <button class="view-control-btn p-2 rounded-md" data-view="list" aria-label="Список">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600 hidden xs:inline">Сортировать:</span>
+                            <select id="sort-by" class="border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 text-sm p-2 pr-7">
+                                <option value="popularity">Популярности</option>
+                                <option value="price_asc">Цене (дешевле)</option>
+                                <option value="price_desc">Цене (дороже)</option>
+                                <option value="newest">Новизне</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="product-grid" class="gap-6">
+                </div>
+
+                <nav id="pagination-container" class="mt-10 flex justify-center" aria-label="Pagination">
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="about.html" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearCatalog"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script src="../js/wishlist-logic.js"></script>
+    <script>
+        // --- ДАННЫЕ О ТОВАРАХ (МОК) ---
+        const allProducts = [
+            { id: 1, name: 'Тумба "Modern" 75см', description: 'С раковиной, 2 ящика, антрацит', price: 28500, category: 'tumbi', availability: 'in_stock', image: 'https://placehold.co/400x300/e0f2fe/0c4a6e?text=Тумба+Modern+75', tag: 'Хит', oldPrice: null, popularity: 50, dateAdded: '2024-01-15' },
+            { id: 2, name: 'Зеркало "Orion" с LED', description: '80x60см, сенсорное включение', price: 12900, category: 'zerkala', availability: 'in_stock', image: 'https://placehold.co/400x300/fef9c3/713f12?text=Зеркало+Orion+LED', tag: 'Новинка', oldPrice: null, popularity: 45, dateAdded: '2024-03-01' },
+            { id: 3, name: 'Пенал "Linea Slim"', description: 'Подвесной, 30x150см, дуб крафт', price: 17300, category: 'penali', availability: 'on_order', image: 'https://placehold.co/400x300/ecfccb/365314?text=Пенал+Linea+Slim', tag: null, oldPrice: null, popularity: 30, dateAdded: '2024-02-10' },
+            { id: 4, name: 'Тумба "Classic" 90см', description: 'Напольная, 3 ящика, белый матовый', price: 32000, category: 'tumbi', availability: 'in_stock', image: 'https://placehold.co/400x300/fee2e2/9f1239?text=Тумба+Classic+90', tag: null, oldPrice: null, popularity: 40, dateAdded: '2023-12-01' },
+            { id: 5, name: 'Шкаф зеркальный "Comfort"', description: '70x70см, с полками, подсветка', price: 18900, category: 'zerkala', availability: 'in_stock', image: 'https://placehold.co/400x300/dcfce7/166534?text=Зеркальный+шкаф+Comfort', tag: 'Скидка 10%', oldPrice: 21000, popularity: 35, dateAdded: '2024-01-20' },
+            { id: 6, name: 'Комплект "Elegance"', description: 'Тумба 100см, пенал, зеркало', price: 55700, category: 'komplekti', availability: 'on_order', image: 'https://placehold.co/400x300/e0e7ff/3730a3?text=Комплект+Elegance', tag: null, oldPrice: null, popularity: 25, dateAdded: '2024-02-25' },
+            { id: 7, name: 'Тумба "Minimal" 60см', description: 'Подвесная, 1 ящик, графит', price: 22500, category: 'tumbi', availability: 'in_stock', image: 'https://placehold.co/400x300/6b7280/e5e7eb?text=Тумба+Minimal+60', tag: 'Новинка', oldPrice: null, popularity: 48, dateAdded: '2024-03-05' },
+            { id: 8, name: 'Зеркало "Aura" круглое', description: 'Диаметр 70см, без подсветки', price: 8500, category: 'zerkala', availability: 'in_stock', image: 'https://placehold.co/400x300/9ca3af/f3f4f6?text=Зеркало+Aura', tag: null, oldPrice: null, popularity: 20, dateAdded: '2023-11-10' },
+            { id: 9, name: 'Аксессуар "Мыльница Stone"', description: 'Натуральный камень, серый', price: 1200, category: 'aksesuari', availability: 'in_stock', image: 'https://placehold.co/400x300/a1a1aa/f4f4f5?text=Мыльница+Stone', tag: null, oldPrice: null, popularity: 15, dateAdded: '2024-01-01' },
+            { id: 10, name: 'Тумба "Woodline" 80см', description: 'Массив дуба, столешница камень', price: 42000, category: 'tumbi', availability: 'on_order', image: 'https://placehold.co/400x300/d2b48c/f5f5dc?text=Тумба+Woodline', tag: null, oldPrice: null, popularity: 38, dateAdded: '2024-02-18' },
+        ];
+
+        // --- ЭЛЕМЕНТЫ DOM ---
+        const productGrid = document.getElementById('product-grid');
+        const productsCountEl = document.getElementById('products-count');
+        const priceFromInput = document.getElementById('price-from');
+        const priceToInput = document.getElementById('price-to');
+        const categoryCheckboxes = document.querySelectorAll('#category-filter input[type="checkbox"]');
+        const availabilityRadios = document.querySelectorAll('#availability-filter input[name="availability"]');
+        const applyFiltersBtn = document.getElementById('apply-filters-btn');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+        const sortBySelect = document.getElementById('sort-by');
+        const viewControls = document.getElementById('view-controls');
+
+        let currentViewMode = 'grid-standard';
+
+        function applyCurrentViewMode() {
+            productGrid.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4', 'xl:grid-cols-3', 'xl:grid-cols-4', 'flex', 'flex-col');
+
+            const productCards = productGrid.querySelectorAll('.product-card-item');
+            productCards.forEach(card => {
+                card.classList.remove('sm:flex-row', 'sm:h-48');
+                const imgContainer = card.querySelector('.product-image-container');
+                if (imgContainer) imgContainer.classList.remove('sm:w-1/3', 'sm:h-full');
+                const detailsContainer = card.querySelector('.product-details-container');
+                if (detailsContainer) detailsContainer.classList.remove('sm:w-2/3', 'sm:pl-4');
+            });
+
+            if (currentViewMode === 'grid-compact') {
+                productGrid.classList.add('grid', 'grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4');
+            } else if (currentViewMode === 'grid-standard') {
+                productGrid.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'xl:grid-cols-3');
+            } else if (currentViewMode === 'list') {
+                productGrid.classList.add('flex', 'flex-col');
+            }
+            filterAndSortProducts();
+        }
+
+        function displayProducts(productsToDisplay) {
+            productGrid.innerHTML = '';
+
+            if (productsToDisplay.length === 0) {
+                productGrid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">По вашему запросу ничего не найдено. Попробуйте изменить параметры фильтра.</p>';
+                if (productsCountEl) productsCountEl.textContent = '0';
+                return;
+            }
+
+            productsToDisplay.forEach(product => {
+                const isInWishlist = typeof isProductInWishlist === 'function' ? isProductInWishlist(product.id) : false;
+                const wishlistIconClass = isInWishlist ? 'in-wishlist' : '';
+                const wishlistTitle = isInWishlist ? 'Удалить из списка желаний' : 'Добавить в список желаний';
+                const wishlistIconSVG = isInWishlist
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>';
+
+                let productCardHTML = '';
+                // Кнопка "В список желаний" теперь будет в блоке с кнопкой "В корзину"
+                const wishlistButtonHTML = `
+                        <button class="wishlist-btn-card-bottom wishlist-toggle-button ${wishlistIconClass}" data-product-id="${product.id}" title="${wishlistTitle}">
+                            ${wishlistIconSVG}
+                        </button>
+                    `;
+
+                if (currentViewMode === 'list') {
+                    productCardHTML = `
+                            <div class="product-card-item bg-white rounded-lg shadow-lg overflow-hidden group flex flex-col sm:flex-row mb-6">
+                                <a href="product-detail.html?id=${product.id}" class="block sm:w-1/3 product-image-container relative">
+                                    <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/cccccc/969696?text=Image+Not+Found';" class="w-full h-48 sm:h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    ${product.tag ? `<div class="absolute top-2 left-2 ${product.tag.includes('Скидка') ? 'bg-red-500' : 'bg-green-500'} text-white text-xs font-semibold px-2 py-1 rounded-md">${product.tag}</div>` : ''}
+                                </a>
+                                <div class="p-4 flex flex-col flex-grow sm:w-2/3 product-details-container">
+                                    <a href="product-detail.html?id=${product.id}" class="block">
+                                        <h3 class="text-lg font-semibold mb-1 text-gray-800 group-hover:text-sky-600 transition-colors">${product.name}</h3>
+                                        <p class="text-sm text-gray-500 mb-2 flex-grow">${product.description}</p>
+                                    </a>
+                                    <div class="flex items-center justify-between mt-auto pt-2">
+                                        <div>
+                                            <p class="text-xl font-bold text-sky-600">${product.price.toLocaleString('ru-RU')} сом</p>
+                                            ${product.oldPrice ? `<p class="text-sm text-gray-400 line-through">${product.oldPrice.toLocaleString('ru-RU')} сом</p>` : ''}
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            ${wishlistButtonHTML}
+                                            <button class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md font-semibold transition-colors duration-150 text-sm add-to-cart-btn whitespace-nowrap" data-product-id="${product.id}">В корзину</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                } else {
+                    productCardHTML = `
+                            <div class="product-card-item bg-white rounded-lg shadow-lg overflow-hidden group flex flex-col">
+                                <a href="product-detail.html?id=${product.id}" class="block flex-grow">
+                                    <div class="relative product-image-container">
+                                        <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/cccccc/969696?text=Image+Not+Found';" class="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105">
+                                        ${product.tag ? `<div class="absolute top-2 left-2 ${product.tag.includes('Скидка') ? 'bg-red-500' : 'bg-green-500'} text-white text-xs font-semibold px-2 py-1 rounded-md">${product.tag}</div>` : ''}
+                                    </div>
+                                    <div class="p-4 flex-grow flex flex-col product-details-container">
+                                        <h3 class="text-lg font-semibold mb-1 text-gray-800 group-hover:text-sky-600 transition-colors">${product.name}</h3>
+                                        <p class="text-sm text-gray-500 mb-2 flex-grow">${product.description}</p>
+                                        <div class="flex items-center justify-between mt-auto">
+                                            <p class="text-xl font-bold text-sky-600">${product.price.toLocaleString('ru-RU')} сом</p>
+                                            ${product.oldPrice ? `<p class="text-sm text-gray-400 line-through">${product.oldPrice.toLocaleString('ru-RU')} сом</p>` : ''}
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="p-4 border-t border-gray-200 flex items-center gap-2">
+                                    <button class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md font-semibold transition-colors duration-150 text-sm add-to-cart-btn" data-product-id="${product.id}">В корзину</button>
+                                    ${wishlistButtonHTML}
+                                </div>
+                            </div>
+                        `;
+                }
+                productGrid.innerHTML += productCardHTML;
+            });
+            if (productsCountEl) productsCountEl.textContent = productsToDisplay.length;
+            addEventListenersToCatalogCartButtons();
+            addEventListenersToCatalogWishlistButtons();
+        }
+
+        function filterAndSortProducts() {
+            let filteredProducts = [...allProducts];
+
+            const priceFrom = parseFloat(priceFromInput.value) || 0;
+            const priceTo = parseFloat(priceToInput.value) || Infinity;
+            filteredProducts = filteredProducts.filter(p => p.price >= priceFrom && p.price <= priceTo);
+
+            const selectedCategories = Array.from(categoryCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            if (selectedCategories.length > 0) {
+                filteredProducts = filteredProducts.filter(p => selectedCategories.includes(p.category));
+            }
+
+            const selectedAvailabilityElement = document.querySelector('#availability-filter input[name="availability"]:checked');
+            if (selectedAvailabilityElement) {
+                const selectedAvailability = selectedAvailabilityElement.value;
+                if (selectedAvailability !== 'all') {
+                    filteredProducts = filteredProducts.filter(p => p.availability === selectedAvailability);
+                }
+            }
+
+
+            const sortBy = sortBySelect.value;
+            switch (sortBy) {
+                case 'price_asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+                    break;
+                case 'popularity':
+                default:
+                    filteredProducts.sort((a, b) => b.popularity - a.popularity);
+                    break;
+            }
+
+            displayProducts(filteredProducts);
+        }
+
+        function addEventListenersToCatalogCartButtons() {
+            const addToCartButtons = productGrid.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+
+                newButton.addEventListener('click', (event) => {
+                    const productId = parseInt(event.target.dataset.productId);
+                    if (productId && typeof addToCart === 'function') {
+                        addToCart(productId, 1);
+                    } else {
+                        console.error("Ошибка: productId не найден или функция addToCart не определена.");
+                    }
+                });
+            });
+        }
+
+        function addEventListenersToCatalogWishlistButtons() {
+            const wishlistButtons = productGrid.querySelectorAll('.wishlist-toggle-button');
+            wishlistButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+
+                newButton.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    const productId = parseInt(this.dataset.productId);
+                    if (!isNaN(productId) && typeof toggleWishlist === 'function') {
+                        toggleWishlist(productId);
+                        updateWishlistButtonOnCard(this, productId);
+                    }
+                });
+            });
+        }
+
+        function updateWishlistButtonOnCard(buttonElement, productId) {
+            if (!buttonElement || typeof isProductInWishlist !== 'function') return;
+            const isInWishlist = isProductInWishlist(productId);
+            const iconSVG = isInWishlist
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>';
+
+            buttonElement.innerHTML = iconSVG;
+            buttonElement.title = isInWishlist ? 'Удалить из списка желаний' : 'Добавить в список желаний';
+            if (isInWishlist) {
+                buttonElement.classList.add('in-wishlist');
+            } else {
+                buttonElement.classList.remove('in-wishlist');
+            }
+        }
+
+        // Эта функция будет вызываться из wishlist-logic.js, если она там определена и если нужно обновить UI глобально.
+        // Либо можно вызывать ее здесь при необходимости (например, после загрузки страницы).
+        function updateWishlistButtonsUI() {
+            document.querySelectorAll('.wishlist-toggle-button').forEach(button => {
+                const productId = parseInt(button.dataset.productId);
+                if (!isNaN(productId)) {
+                    updateWishlistButtonOnCard(button, productId);
+                }
+            });
+        }
+
+        if (applyFiltersBtn) applyFiltersBtn.addEventListener('click', filterAndSortProducts);
+        if (resetFiltersBtn) {
+            resetFiltersBtn.addEventListener('click', () => {
+                if (priceFromInput) priceFromInput.value = '';
+                if (priceToInput) priceToInput.value = '';
+                if (categoryCheckboxes) categoryCheckboxes.forEach(cb => cb.checked = false);
+                const allAvailabilityRadio = document.querySelector('#availability-filter input[value="all"]');
+                if (allAvailabilityRadio) allAvailabilityRadio.checked = true;
+                if (sortBySelect) sortBySelect.value = 'popularity';
+                currentViewMode = 'grid-standard';
+                applyCurrentViewMode();
+                if (viewControls) {
+                    viewControls.querySelectorAll('.view-control-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.dataset.view === currentViewMode) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        if (sortBySelect) sortBySelect.addEventListener('change', filterAndSortProducts);
+
+        if (viewControls) {
+            viewControls.addEventListener('click', (event) => {
+                const targetButton = event.target.closest('.view-control-btn');
+                if (!targetButton) return;
+
+                const newView = targetButton.dataset.view;
+                if (newView && newView !== currentViewMode) {
+                    currentViewMode = newView;
+                    viewControls.querySelectorAll('.view-control-btn').forEach(btn => btn.classList.remove('active'));
+                    targetButton.classList.add('active');
+                    applyCurrentViewMode();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyCurrentViewMode();
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+            if (typeof updateWishlistButtonsUI === 'function') {
+                updateWishlistButtonsUI();
+            }
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearCatalogEl = document.getElementById('currentYearCatalog');
+            if (currentYearCatalogEl) {
+                currentYearCatalogEl.textContent = new Date().getFullYear();
+            }
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const hrefAttribute = this.getAttribute('href');
+                    if (hrefAttribute === '#' || hrefAttribute.startsWith('#!') || hrefAttribute.startsWith('#modal')) return;
+                    const targetElement = document.querySelector(hrefAttribute);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden') && this.closest('#mobile-menu')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

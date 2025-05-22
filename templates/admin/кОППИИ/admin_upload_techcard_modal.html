@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обработка Техкарты - Админ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Для демонстрации модального окна */
+            /* background-color: #e5e7eb; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; */
+        }
+        .form-input, .form-textarea {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .modal-overlay {
+            @apply fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity;
+        }
+        .modal-content {
+            @apply bg-white rounded-lg shadow-xl transform transition-all sm:max-w-3xl w-full p-6; /* Увеличил ширину */
+        }
+        .table th { @apply px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50; }
+        .table td { @apply px-4 py-2 whitespace-nowrap text-sm text-gray-600; }
+        .table tbody tr:nth-child(even) { @apply bg-gray-50; }
+        .btn { @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150; }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-700; }
+        .btn-success { @apply bg-green-500 hover:bg-green-600 text-white; }
+        .btn-warning { @apply bg-yellow-500 hover:bg-yellow-600 text-white; }
+        .btn-danger { @apply bg-red-500 hover:bg-red-600 text-white; }
+        .component-not-found td {
+            @apply bg-red-50 text-red-700;
+        }
+        .component-not-found .price-placeholder {
+            @apply font-semibold;
+        }
+    </style>
+</head>
+<body class="bg-gray-100"> <div class="p-10 text-center">
+        <button onclick="openTechCardModal('Тумба Фест 60', '000011', 'new')" class="btn btn-primary">Загрузить техкарту для Тумбы Фест</button>
+        <button onclick="openTechCardModal('Зеркало Орион', 'ZR-002', 'edit_draft')" class="btn btn-warning ml-4">Редактировать черновик Зеркала Орион</button>
+    </div>
+
+
+    <div id="techCardModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="modal-overlay" aria-hidden="true"></div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div class="modal-content inline-block align-bottom sm:align-middle sm:my-8 text-left">
+                <div>
+                    <div class="flex justify-between items-center pb-3 border-b mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800" id="modal-title">
+                            Загрузка Техкарты
+                        </h3>
+                        <button onclick="closeTechCardModal()" class="text-gray-400 hover:text-gray-600">
+                            <span class="sr-only">Закрыть</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <div id="modal-product-info" class="text-sm text-gray-600 mb-4">
+                        </div>
+
+                    <div id="upload-block" class="mb-6">
+                        <label class="form-label" for="techcard-file-input-modal">Файл техкарты (XLSX):</label>
+                        <div id="drop-area-modal" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-sky-500 bg-gray-50">
+                            <svg class="mx-auto h-10 w-10 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            <p class="mt-1 text-sm text-gray-600">
+                                Перетащите XLSX файл сюда или
+                                <label for="techcard-file-input-modal" class="font-medium text-sky-600 hover:text-sky-500 cursor-pointer">выберите файл</label>
+                            </p>
+                            <input type="file" id="techcard-file-input-modal" class="hidden" accept=".xlsx">
+                            <p class="text-xs text-gray-500 mt-1">Только XLSX, макс. размер 10МБ</p>
+                        </div>
+                        <div id="file-info-modal" class="mt-2 text-sm text-gray-700 hidden">
+                            Загружен файл: <span class="font-medium" id="loaded-file-name"></span> (<span id="loaded-file-size"></span>)
+                            <button id="remove-file-btn-modal" class="text-red-500 hover:text-red-700 ml-2 text-xs font-semibold">(удалить)</button>
+                        </div>
+                    </div>
+
+                    <div id="parsed-components-block" class="mb-6 hidden">
+                        <h4 class="text-md font-semibold text-gray-700 mb-2">Компоненты из техкарты:</h4>
+                        <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-md">
+                            <table class="min-w-full divide-y divide-gray-200 text-sm table">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">№</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Артикул (файл)</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Наименование (файл)</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Кол-во</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ед.изм.</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена сырья (БД)</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Стоимость</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parsed-components-table-body" class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-3 py-2">1</td>
+                                        <td class="px-3 py-2">ЛДСП-Б-16</td>
+                                        <td class="px-3 py-2">ЛДСП Белый гладкий 16мм</td>
+                                        <td class="px-3 py-2">1.25</td>
+                                        <td class="px-3 py-2">кв.м</td>
+                                        <td class="px-3 py-2">350.00 сом</td>
+                                        <td class="px-3 py-2">437.50 сом</td>
+                                    </tr>
+                                    <tr class="component-not-found">
+                                        <td class="px-3 py-2">2</td>
+                                        <td class="px-3 py-2">ZER-AGC-04</td>
+                                        <td class="px-3 py-2">Зеркало 4мм AGC влагостойкое</td>
+                                        <td class="px-3 py-2">0.48</td>
+                                        <td class="px-3 py-2">кв.м</td>
+                                        <td class="px-3 py-2 price-placeholder">Не найдено!</td>
+                                        <td class="px-3 py-2">-</td>
+                                    </tr>
+                                     <tr>
+                                        <td class="px-3 py-2">3</td>
+                                        <td class="px-3 py-2">KR-PVC-0.4</td>
+                                        <td class="px-3 py-2">Кромка ПВХ 0.4мм Белая</td>
+                                        <td class="px-3 py-2">5.6</td>
+                                        <td class="px-3 py-2">м.п.</td>
+                                        <td class="px-3 py-2">12.00 сом</td>
+                                        <td class="px-3 py-2">67.20 сом</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <p class="text-sm">Количество позиций: <span class="font-semibold" id="components-count">3</span></p>
+                            <p class="text-sm text-red-500 hidden" id="missing-prices-warning">Внимание! Для <span id="missing-prices-count">1</span> компонент(а/ов) не найдены цены в справочнике.</p>
+                            <p class="text-md mt-1">Общая себестоимость (материалы): <strong class="text-lg text-blue-700" id="total-material-cost">504.70 сом</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="editor-comment-modal" class="form-label">Комментарий для руководителя:</label>
+                        <textarea id="editor-comment-modal" class="form-textarea w-full" rows="3" placeholder="Например, укажите причину обновления или на что обратить внимание..."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                    <button type="button" onclick="closeTechCardModal()" class="btn btn-secondary w-full sm:w-auto">Отмена</button>
+                    <button type="button" id="save-draft-techcard-modal" class="btn btn-warning w-full sm:w-auto">Сохранить черновик</button>
+                    <button type="button" id="submit-techcard-for-approval-modal" class="btn btn-primary w-full sm:w-auto">Отправить на согласование</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/cart-logic.js"></script> <script>
+                                                    const techCardModal = document.getElementById('techCardModal');
+                                                    const modalTitleEl = document.getElementById('modal-title');
+                                                    const modalProductInfoEl = document.getElementById('modal-product-info');
+                                                    const uploadBlockEl = document.getElementById('upload-block');
+                                                    const dropAreaModalEl = document.getElementById('drop-area-modal');
+                                                    const fileInputModalEl = document.getElementById('techcard-file-input-modal');
+                                                    const fileInfoModalEl = document.getElementById('file-info-modal');
+                                                    const loadedFileNameEl = document.getElementById('loaded-file-name');
+                                                    const loadedFileSizeEl = document.getElementById('loaded-file-size');
+                                                    const removeFileBtnModalEl = document.getElementById('remove-file-btn-modal');
+                                                    const parsedComponentsBlockEl = document.getElementById('parsed-components-block');
+                                                    const parsedComponentsTableBodyEl = document.getElementById('parsed-components-table-body');
+                                                    const componentsCountEl = document.getElementById('components-count');
+                                                    const missingPricesWarningEl = document.getElementById('missing-prices-warning');
+                                                    const missingPricesCountEl = document.getElementById('missing-prices-count');
+                                                    const totalMaterialCostEl = document.getElementById('total-material-cost');
+                                                    const editorCommentModalEl = document.getElementById('editor-comment-modal');
+                                                    const saveDraftBtnModal = document.getElementById('save-draft-techcard-modal');
+                                                    const submitForApprovalBtnModal = document.getElementById('submit-techcard-for-approval-modal');
+
+                                                    let currentTechCardFile = null;
+                                                    let currentParsedData = null; // Для хранения распарсенных данных
+
+                                                    // --- Мок-данные для справочника цен на сырье ---
+                                                    const mockRawMaterialPrices = {
+                                                        "ЛДСП-Б-16": { name: "ЛДСП Белый гладкий 16мм", price: 350.00, unit: "кв.м" },
+                                                        "ЗРК-001": { name: "Зеркало 4мм AGC влагостойкое", price: 1200.00, unit: "кв.м" }, // Пример: цена есть
+                                                        "KR-PVC-0.4": { name: "Кромка ПВХ 0.4мм Белая", price: 12.00, unit: "м.п." },
+                                                        "RUCHKA-01": { name: "Ручка мебельная скоба", price: 85.00, unit: "шт." },
+                                                        // "ZER-AGC-04" - этого артикула нет, чтобы симулировать ненайденную цену
+                                                    };
+
+                                                    function openTechCardModal(productName, productSku, mode = 'new', techCardData = null) {
+                                                        if (!techCardModal) return;
+                                                        modalProductInfoEl.innerHTML = `Товар: <strong class="font-medium">${productName}</strong> (Артикул: <strong class="font-medium">${productSku}</strong>)`;
+
+                                                        currentTechCardFile = null;
+                                                        currentParsedData = null;
+                                                        fileInputModalEl.value = ''; // Сброс input file
+                                                        fileInfoModalEl.classList.add('hidden');
+                                                        parsedComponentsBlockEl.classList.add('hidden');
+                                                        editorCommentModalEl.value = '';
+
+                                                        if (mode === 'new') {
+                                                            modalTitleEl.textContent = `Загрузка техкарты для: ${productName}`;
+                                                            uploadBlockEl.classList.remove('hidden');
+                                                            saveDraftBtnModal.disabled = true;
+                                                            submitForApprovalBtnModal.disabled = true;
+                                                        } else if (mode === 'edit_draft' || mode === 'edit_rejected') {
+                                                            modalTitleEl.textContent = `Редактирование техкарты: ${productName}`;
+                                                            if (techCardData && techCardData.fileName) { // Предполагаем, что черновик/отклоненная карта имеет имя файла
+                                                                currentTechCardFile = { name: techCardData.fileName, size: techCardData.fileSize || 0 }; // Имитация файла
+                                                                loadedFileNameEl.textContent = techCardData.fileName;
+                                                                loadedFileSizeEl.textContent = techCardData.fileSize ? `${(techCardData.fileSize / 1024).toFixed(2)} KB` : '';
+                                                                fileInfoModalEl.classList.remove('hidden');
+                                                                uploadBlockEl.classList.add('hidden'); // Скрываем блок загрузки, показываем кнопку "Заменить файл" (не реализовано в этом макете)
+                                                                // или делаем его видимым, если хотим разрешить замену файла
+
+                                                                // Имитируем парсинг, если есть данные
+                                                                if (techCardData.components) {
+                                                                    currentParsedData = techCardData.components;
+                                                                    displayParsedComponents(currentParsedData);
+                                                                    parsedComponentsBlockEl.classList.remove('hidden');
+                                                                }
+                                                                editorCommentModalEl.value = techCardData.editorComment || '';
+
+                                                                saveDraftBtnModal.disabled = false;
+                                                                submitForApprovalBtnModal.disabled = false;
+                                                            } else {
+                                                                // Если нет данных для черновика, ведем себя как при новой загрузке
+                                                                uploadBlockEl.classList.remove('hidden');
+                                                                saveDraftBtnModal.disabled = true;
+                                                                submitForApprovalBtnModal.disabled = true;
+                                                            }
+                                                        }
+                                                        techCardModal.classList.remove('hidden');
+                                                    }
+
+                                                    function closeTechCardModal() {
+                                                        if (techCardModal) techCardModal.classList.add('hidden');
+                                                    }
+
+                                                    function handleFileSelect(files) {
+                                                        if (files.length === 0) return;
+                                                        const file = files[0];
+                                                        if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                                                            alert("Пожалуйста, выберите файл в формате XLSX.");
+                                                            fileInputModalEl.value = '';
+                                                            return;
+                                                        }
+                                                        if (file.size > 10 * 1024 * 1024) { // 10MB
+                                                            alert("Файл слишком большой. Максимальный размер 10МБ.");
+                                                            fileInputModalEl.value = '';
+                                                            return;
+                                                        }
+                                                        currentTechCardFile = file;
+                                                        loadedFileNameEl.textContent = file.name;
+                                                        loadedFileSizeEl.textContent = `${(file.size / 1024).toFixed(2)} KB`;
+                                                        fileInfoModalEl.classList.remove('hidden');
+                                                        saveDraftBtnModal.disabled = false;
+                                                        submitForApprovalBtnModal.disabled = false;
+
+                                                        // Имитация парсинга и отображения
+                                                        // В реальном приложении здесь будет вызов функции парсинга XLSX
+                                                        simulateParsingAndDisplay(file);
+                                                    }
+
+                                                    function simulateParsingAndDisplay(file) {
+                                                        // Имитация: через 1 секунду показываем моковые распарсенные данные
+                                                        console.log("Имитация парсинга файла:", file.name);
+                                                        parsedComponentsBlockEl.classList.remove('hidden'); // Показываем блок
+
+                                                        // Пример моковых данных, которые могли бы быть получены из XLSX
+                                                        currentParsedData = [
+                                                            { num: 1, article: "ЛДСП-Б-16", name: "ЛДСП Белый гладкий 16мм", quantity: 1.25, unit: "кв.м" },
+                                                            { num: 2, article: "ZER-AGC-04", name: "Зеркало 4мм AGC влагостойкое", quantity: 0.48, unit: "кв.м" },
+                                                            { num: 3, article: "KR-PVC-0.4", name: "Кромка ПВХ 0.4мм Белая", quantity: 5.6, unit: "м.п." },
+                                                            { num: 4, article: "NO-PRICE-ITEM", name: "Супер-винт эксклюзивный", quantity: 10, unit: "шт." },
+                                                        ];
+                                                        displayParsedComponents(currentParsedData);
+                                                    }
+
+                                                    function displayParsedComponents(components) {
+                                                        if (!parsedComponentsTableBodyEl) return;
+                                                        parsedComponentsTableBodyEl.innerHTML = '';
+                                                        let overallMaterialCost = 0;
+                                                        let missingPriceCount = 0;
+
+                                                        components.forEach((comp, index) => {
+                                                            const row = parsedComponentsTableBodyEl.insertRow();
+                                                            row.insertCell().textContent = comp.num || (index + 1);
+                                                            row.insertCell().textContent = comp.article;
+                                                            row.insertCell().textContent = comp.name;
+                                                            row.insertCell().textContent = comp.quantity;
+                                                            row.insertCell().textContent = comp.unit;
+
+                                                            const priceInfo = mockRawMaterialPrices[comp.article];
+                                                            let unitPrice = 0;
+                                                            let componentCost = 0;
+                                                            let priceCellContent = '<span class="text-red-600 font-semibold">Не найдено!</span>';
+                                                            let costCellContent = '<span class="text-red-600">-</span>';
+
+                                                            if (priceInfo) {
+                                                                unitPrice = priceInfo.price;
+                                                                componentCost = comp.quantity * unitPrice;
+                                                                overallMaterialCost += componentCost;
+                                                                priceCellContent = formatCurrency(unitPrice);
+                                                                costCellContent = formatCurrency(componentCost);
+                                                            } else {
+                                                                missingPriceCount++;
+                                                                row.classList.add('component-not-found');
+                                                            }
+
+                                                            row.insertCell().innerHTML = priceCellContent;
+                                                            row.insertCell().innerHTML = costCellContent;
+                                                        });
+
+                                                        componentsCountEl.textContent = components.length;
+                                                        totalMaterialCostEl.textContent = formatCurrency(overallMaterialCost);
+                                                        if (missingPriceCount > 0) {
+                                                            missingPricesCountEl.textContent = missingPriceCount;
+                                                            missingPricesWarningEl.classList.remove('hidden');
+                                                        } else {
+                                                            missingPricesWarningEl.classList.add('hidden');
+                                                        }
+                                                    }
+
+
+                                                    // Обработчики для Drag-and-Drop
+                                                    if (dropAreaModalEl) {
+                                                        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                                                            dropAreaModalEl.addEventListener(eventName, preventDefaults, false);
+                                                            document.body.addEventListener(eventName, preventDefaults, false); // Для всего документа, чтобы избежать случайного открытия файла браузером
+                                                        });
+                                                        ['dragenter', 'dragover'].forEach(eventName => {
+                                                            dropAreaModalEl.addEventListener(eventName, () => dropAreaModalEl.classList.add('border-sky-500', 'bg-sky-50'), false);
+                                                        });
+                                                        ['dragleave', 'drop'].forEach(eventName => {
+                                                            dropAreaModalEl.addEventListener(eventName, () => dropAreaModalEl.classList.remove('border-sky-500', 'bg-sky-50'), false);
+                                                        });
+                                                        dropAreaModalEl.addEventListener('drop', (e) => {
+                                                            const dt = e.dataTransfer;
+                                                            const files = dt.files;
+                                                            handleFileSelect(files);
+                                                        }, false);
+                                                    }
+
+                                                    if (fileInputModalEl) {
+                                                        fileInputModalEl.addEventListener('change', function () {
+                                                            handleFileSelect(this.files);
+                                                        });
+                                                    }
+
+                                                    if (removeFileBtnModalEl) {
+                                                        removeFileBtnModalEl.addEventListener('click', () => {
+                                                            currentTechCardFile = null;
+                                                            currentParsedData = null;
+                                                            fileInputModalEl.value = '';
+                                                            fileInfoModalEl.classList.add('hidden');
+                                                            parsedComponentsBlockEl.classList.add('hidden');
+                                                            saveDraftBtnModal.disabled = true;
+                                                            submitForApprovalBtnModal.disabled = true;
+                                                        });
+                                                    }
+
+                                                    function preventDefaults(e) {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                    }
+
+                                                    // Имитация действий кнопок
+                                                    if (saveDraftBtnModal) {
+                                                        saveDraftBtnModal.addEventListener('click', () => {
+                                                            if (!currentTechCardFile && !currentParsedData) {
+                                                                if (typeof showToastNotification === 'function') showToastNotification('Нечего сохранять. Загрузите файл техкарты.', 3000, 'error');
+                                                                else alert('Нечего сохранять. Загрузите файл техкарты.');
+                                                                return;
+                                                            }
+                                                            // Логика сохранения черновика (на сервер или в localStorage для демо)
+                                                            console.log("Сохранение черновика:", {
+                                                                fileName: currentTechCardFile ? currentTechCardFile.name : 'N/A',
+                                                                parsedData: currentParsedData,
+                                                                comment: editorCommentModalEl.value
+                                                            });
+                                                            if (typeof showToastNotification === 'function') showToastNotification('Техкарта сохранена как черновик!', 3000, 'success');
+                                                            else alert('Техкарта сохранена как черновик!');
+                                                            closeTechCardModal();
+                                                        });
+                                                    }
+
+                                                    if (submitForApprovalBtnModal) {
+                                                        submitForApprovalBtnModal.addEventListener('click', () => {
+                                                            if (!currentTechCardFile && !currentParsedData) {
+                                                                if (typeof showToastNotification === 'function') showToastNotification('Нечего отправлять. Загрузите и обработайте файл техкарты.', 3000, 'error');
+                                                                else alert('Нечего отправлять. Загрузите и обработайте файл техкарты.');
+                                                                return;
+                                                            }
+                                                            if (missingPricesCountEl.textContent > "0" && !confirm("Внимание! Для некоторых компонентов не найдены цены в справочнике. Себестоимость может быть неточной. Всё равно отправить на согласование?")) {
+                                                                return;
+                                                            }
+                                                            // Логика отправки на согласование
+                                                            console.log("Отправка на согласование:", {
+                                                                fileName: currentTechCardFile ? currentTechCardFile.name : 'N/A',
+                                                                parsedData: currentParsedData,
+                                                                comment: editorCommentModalEl.value
+                                                            });
+                                                            if (typeof showToastNotification === 'function') showToastNotification('Техкарта отправлена на согласование!', 3000, 'success');
+                                                            else alert('Техкарта отправлена на согласование!');
+                                                            closeTechCardModal();
+                                                        });
+                                                    }
+
+
+                                                    // Общая инициализация страницы (если нужно)
+                                                    document.addEventListener('DOMContentLoaded', () => {
+                                                        if (typeof updateCartCountersOnAllPages === 'function') { // Из cart-logic.js
+                                                            updateCartCountersOnAllPages();
+                                                        }
+                                                    });
+
+    </script>
+</body>
+</html>

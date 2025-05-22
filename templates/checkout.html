@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        .logo-img {
+            max-height: 50px;
+        }
+        /* Стили для полей формы */
+        .form-input {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+
+        .form-radio-label {
+            @apply ml-2 block text-sm text-gray-900;
+        }
+
+        .form-radio {
+            @apply h-4 w-4 text-sky-600 border-gray-300 focus:ring-sky-500;
+        }
+
+        .error-message {
+            @apply text-red-500 text-xs mt-1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-checkout">0</span>
+                    </a>
+                    <a href="login.html" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-checkout">0</span>
+                    </a>
+                    <button id="mobile-menu-button-checkout" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-checkout" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="index.html#about" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block bg-sky-600 hover:bg-sky-700 text-white text-center px-4 py-3 text-sm font-medium transition-colors duration-150 mx-4 my-2 rounded-md">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center"><a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><a href="cart.html" class="text-gray-500 hover:text-sky-600">Корзина</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700 font-medium">Оформление заказа</span></li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Оформление заказа</h1>
+
+        <div id="checkout-form-wrapper" class="lg:flex lg:gap-8">
+            <form id="checkout-form" class="lg:w-2/3 bg-white p-6 md:p-8 rounded-lg shadow-lg mb-8 lg:mb-0">
+                <div class="space-y-6">
+                    <section>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">1. Контактная информация</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="full-name" class="form-label">Ф.И.О.<span class="text-red-500">*</span></label>
+                                <input type="text" name="full-name" id="full-name" class="form-input" required>
+                                <p class="error-message hidden" id="full-name-error">Пожалуйста, укажите ваше Ф.И.О.</p>
+                            </div>
+                            <div>
+                                <label for="phone" class="form-label">Телефон<span class="text-red-500">*</span></label>
+                                <input type="tel" name="phone" id="phone" class="form-input" placeholder="+996 (___) ___-__-__" required>
+                                <p class="error-message hidden" id="phone-error">Пожалуйста, укажите корректный номер телефона.</p>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="email" class="form-label">Email<span class="text-red-500">*</span></label>
+                                <input type="email" name="email" id="email" class="form-input" required>
+                                <p class="error-message hidden" id="email-error">Пожалуйста, укажите корректный email.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">2. Способ доставки</h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 border rounded-md hover:border-sky-500 transition-all">
+                                <input id="delivery-pickup" name="delivery-method" type="radio" value="pickup" class="form-radio" checked>
+                                <label for="delivery-pickup" class="form-radio-label cursor-pointer flex-grow">Самовывоз со склада (г. Бишкек, ул. Производственная, 1) - <span class="font-semibold text-green-600">Бесплатно</span></label>
+                            </div>
+                            <div class="flex items-center p-3 border rounded-md hover:border-sky-500 transition-all">
+                                <input id="delivery-courier" name="delivery-method" type="radio" value="courier" class="form-radio">
+                                <label for="delivery-courier" class="form-radio-label cursor-pointer flex-grow">Курьерская доставка по г. Бишкек - <span class="font-semibold" id="courier-cost-display">от 500 сом</span></label>
+                            </div>
+                        </div>
+                        <div id="address-fields" class="hidden mt-4 space-y-4 border-t pt-4">
+                            <h3 class="text-md font-medium text-gray-600">Адрес доставки:</h3>
+                            <div>
+                                <label for="city" class="form-label">Город<span class="text-red-500">*</span></label>
+                                <input type="text" name="city" id="city" class="form-input" value="Бишкек">
+                            </div>
+                            <div>
+                                <label for="street" class="form-label">Улица<span class="text-red-500">*</span></label>
+                                <input type="text" name="street" id="street" class="form-input">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="house" class="form-label">Дом<span class="text-red-500">*</span></label>
+                                    <input type="text" name="house" id="house" class="form-input">
+                                </div>
+                                <div>
+                                    <label for="apartment" class="form-label">Квартира/Офис</label>
+                                    <input type="text" name="apartment" id="apartment" class="form-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="address-comment" class="form-label">Комментарий к адресу (ориентиры, подъезд, этаж, домофон)</label>
+                                <textarea id="address-comment" name="address-comment" rows="2" class="form-input"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">3. Способ оплаты</h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 border rounded-md hover:border-sky-500 transition-all">
+                                <input id="payment-on-delivery" name="payment-method" type="radio" value="on_delivery" class="form-radio" checked>
+                                <label for="payment-on-delivery" class="form-radio-label cursor-pointer">Оплата при получении (наличными или картой)</label>
+                            </div>
+                            <div class="flex items-center p-3 border rounded-md hover:border-sky-500 transition-all">
+                                <input id="payment-online" name="payment-method" type="radio" value="online" class="form-radio">
+                                <label for="payment-online" class="form-radio-label cursor-pointer">Онлайн-оплата картой на сайте (Элкарт, Visa, Mastercard)</label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1" id="online-payment-note">При выборе онлайн-оплаты, после подтверждения заказа, вы будете перенаправлены на защищенную страницу платежной системы.</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">4. Комментарий к заказу</h2>
+                        <div>
+                            <label for="order-comment" class="form-label">Дополнительная информация или пожелания</label>
+                            <textarea id="order-comment" name="order-comment" rows="3" class="form-input"></textarea>
+                        </div>
+                    </section>
+                </div>
+            </form>
+
+            <aside id="checkout-summary" class="lg:w-1/3 bg-white p-6 rounded-lg shadow-lg h-fit sticky top-28">
+                <h2 class="text-xl font-semibold text-gray-700 mb-6 border-b pb-4">Ваш заказ</h2>
+                <div id="checkout-items-list" class="space-y-4 max-h-80 overflow-y-auto mb-6 pr-2">
+                    <p class="text-sm text-gray-500 text-center py-4" id="checkout-loading-items">Загрузка товаров...</p>
+                </div>
+                <div class="space-y-3 mb-6 text-sm border-t pt-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Товаров (<span id="checkout-summary-items-count">0</span>):</span>
+                        <span id="checkout-summary-subtotal" class="font-medium text-gray-800">0 сом</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Доставка:</span>
+                        <span id="checkout-summary-shipping" class="font-medium text-gray-800">0 сом</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center border-t pt-4 mb-6">
+                    <span class="text-lg font-semibold text-gray-800">Всего к оплате:</span>
+                    <span id="checkout-summary-total" class="text-2xl font-bold text-sky-600">0 сом</span>
+                </div>
+                <button type="submit" form="checkout-form" id="submit-order-button" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-150 flex items-center justify-center text-lg">
+                    Подтвердить заказ
+                </button>
+                <p class="text-xs text-gray-500 mt-3 text-center">Нажимая "Подтвердить заказ", вы соглашаетесь с <a href="#terms" class="text-sky-600 hover:underline">условиями обработки персональных данных и правилами продажи</a>.</p>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="index.html#about" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearCheckout"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script>
+        // --- ЭЛЕМЕНТЫ DOM для страницы оформления заказа ---
+        const checkoutForm = document.getElementById('checkout-form');
+        const deliveryMethodRadios = document.querySelectorAll('input[name="delivery-method"]');
+        const addressFieldsDiv = document.getElementById('address-fields');
+        const checkoutItemsListEl = document.getElementById('checkout-items-list');
+        const checkoutLoadingItemsEl = document.getElementById('checkout-loading-items');
+        const summaryItemsCountEl = document.getElementById('checkout-summary-items-count');
+        const summarySubtotalEl = document.getElementById('checkout-summary-subtotal');
+        const summaryShippingEl = document.getElementById('checkout-summary-shipping');
+        const summaryTotalEl = document.getElementById('checkout-summary-total');
+        const courierCostDisplay = document.getElementById('courier-cost-display');
+
+        const FIXED_COURIER_COST_SOM = 500; // Фиксированная стоимость курьерской доставки в сомах
+
+        // --- ФУНКЦИИ ДЛЯ СТРАНИЦЫ ОФОРМЛЕНИЯ ЗАКАЗА ---
+
+        function formatCurrency(amount) {
+            return `${amount.toLocaleString('ru-RU')} сом`; // Используем toLocaleString для разделения тысяч и добавляем "сом"
+        }
+
+        function renderCheckoutSummary() {
+            const cart = getCart(); // Функция из cart-logic.js
+            checkoutItemsListEl.innerHTML = '';
+
+            if (cart.length === 0) {
+                checkoutLoadingItemsEl.textContent = 'Ваша корзина пуста. Пожалуйста, добавьте товары.';
+                document.getElementById('submit-order-button').disabled = true;
+                document.getElementById('submit-order-button').classList.add('opacity-50', 'cursor-not-allowed');
+                summaryItemsCountEl.textContent = '0';
+                summarySubtotalEl.textContent = formatCurrency(0);
+                updateTotalWithShipping(); // Обновит доставку и итоговую сумму до 0
+                return;
+            }
+
+            document.getElementById('submit-order-button').disabled = false;
+            document.getElementById('submit-order-button').classList.remove('opacity-50', 'cursor-not-allowed');
+            checkoutLoadingItemsEl.classList.add('hidden');
+
+            let subtotal = 0;
+            let totalItems = 0;
+
+            cart.forEach(cartItem => {
+                // allMockProductsForCart должен быть доступен из cart-logic.js
+                const productInfo = allMockProductsForCart.find(p => p.id === cartItem.id);
+                if (!productInfo) return;
+
+                const itemTotalPrice = productInfo.price * cartItem.quantity;
+                subtotal += itemTotalPrice;
+                totalItems += cartItem.quantity;
+
+                const itemHTML = `
+                    <div class="flex items-center justify-between gap-3 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center gap-3">
+                            <img src="${productInfo.images[0].replace('600x500', '100x80')}" alt="${productInfo.name}" class="w-12 h-12 object-cover rounded">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">${productInfo.name}</p>
+                                <p class="text-xs text-gray-500">${cartItem.quantity} шт. x ${formatCurrency(productInfo.price)}</p>
+                            </div>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800 whitespace-nowrap">${formatCurrency(itemTotalPrice)}</p>
+                    </div>
+                `;
+                checkoutItemsListEl.innerHTML += itemHTML;
+            });
+
+            summaryItemsCountEl.textContent = totalItems;
+            summarySubtotalEl.textContent = formatCurrency(subtotal);
+
+            updateTotalWithShipping();
+        }
+
+        function updateTotalWithShipping() {
+            const cart = getCart();
+            let subtotal = 0;
+            if (cart.length > 0) {
+                cart.forEach(cartItem => {
+                    const productInfo = allMockProductsForCart.find(p => p.id === cartItem.id);
+                    if (productInfo) subtotal += productInfo.price * cartItem.quantity;
+                });
+            }
+
+            let shippingCost = 0;
+            const selectedDeliveryMethod = document.querySelector('input[name="delivery-method"]:checked').value;
+
+            if (selectedDeliveryMethod === 'courier' && cart.length > 0) { // Доставка платная только если есть товары
+                shippingCost = FIXED_COURIER_COST_SOM;
+                summaryShippingEl.textContent = formatCurrency(shippingCost);
+                if (courierCostDisplay) courierCostDisplay.textContent = formatCurrency(shippingCost);
+            } else {
+                summaryShippingEl.textContent = cart.length > 0 ? 'Бесплатно' : formatCurrency(0);
+                if (courierCostDisplay) courierCostDisplay.textContent = `от ${formatCurrency(FIXED_COURIER_COST_SOM)}`;
+            }
+
+            const total = subtotal + shippingCost;
+            summaryTotalEl.textContent = formatCurrency(total);
+        }
+
+
+        function toggleAddressFields() {
+            const selectedDeliveryMethod = document.querySelector('input[name="delivery-method"]:checked').value;
+            if (selectedDeliveryMethod === 'courier') {
+                addressFieldsDiv.classList.remove('hidden');
+                document.getElementById('city').required = true;
+                document.getElementById('street').required = true;
+                document.getElementById('house').required = true;
+            } else {
+                addressFieldsDiv.classList.add('hidden');
+                document.getElementById('city').required = false;
+                document.getElementById('street').required = false;
+                document.getElementById('house').required = false;
+            }
+            updateTotalWithShipping();
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = checkoutForm.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                const errorEl = document.getElementById(`${field.id}-error`);
+                const isFieldVisible = field.offsetParent !== null || (field.closest('#address-fields') && !field.closest('#address-fields').classList.contains('hidden'));
+
+                if (isFieldVisible && !field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('border-red-500');
+                    if (errorEl) errorEl.classList.remove('hidden');
+                } else {
+                    field.classList.remove('border-red-500');
+                    if (errorEl) errorEl.classList.add('hidden');
+                }
+
+                if (field.type === 'email' && isFieldVisible) {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(field.value.trim())) {
+                        isValid = false;
+                        field.classList.add('border-red-500');
+                        if (errorEl) {
+                            errorEl.textContent = 'Пожалуйста, укажите корректный email.';
+                            errorEl.classList.remove('hidden');
+                        }
+                    }
+                }
+                if (field.type === 'tel' && isFieldVisible) {
+                    const phonePattern = /^\+?[0-9\s\(\)-]{7,}$/;
+                    if (!phonePattern.test(field.value.trim())) {
+                        isValid = false;
+                        field.classList.add('border-red-500');
+                        if (errorEl) {
+                            errorEl.textContent = 'Пожалуйста, укажите корректный номер телефона.';
+                            errorEl.classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+            return isValid;
+        }
+
+        // --- ОБРАБОТЧИКИ СОБЫТИЙ ---
+        deliveryMethodRadios.forEach(radio => {
+            radio.addEventListener('change', toggleAddressFields);
+        });
+
+        checkoutForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (validateForm()) {
+                const formData = new FormData(checkoutForm);
+                const orderData = {};
+                formData.forEach((value, key) => {
+                    orderData[key] = value;
+                });
+                orderData.cart = getCart();
+
+                let subtotal = 0;
+                orderData.cart.forEach(cartItem => {
+                    const productInfo = allMockProductsForCart.find(p => p.id === cartItem.id);
+                    if (productInfo) subtotal += productInfo.price * cartItem.quantity;
+                });
+                let shippingCost = 0;
+                if (orderData['delivery-method'] === 'courier') shippingCost = FIXED_COURIER_COST_SOM;
+                orderData.totalAmount = subtotal + shippingCost;
+
+                console.log('Данные заказа для отправки:', orderData);
+
+                alert('Заказ успешно оформлен! Спасибо за покупку. Мы свяжемся с вами для подтверждения деталей.');
+
+                localStorage.removeItem('shoppingCart');
+                updateCartCountersOnAllPages();
+
+                // ИЗМЕНЕНИЕ: Перенаправление на thank-you.html с параметрами
+                const customerEmail = document.getElementById('email').value;
+                const generatedOrderId = `WS-${Math.floor(Math.random() * 100000) + 10000}`;
+                window.location.href = `thank-you.html?orderId=${generatedOrderId}&email=${encodeURIComponent(customerEmail)}`;
+
+            } else {
+                alert('Пожалуйста, заполните все обязательные поля корректно.');
+            }
+        });
+
+
+        // --- ИНИЦИАЛИЗАЦИЯ СТРАНИЦЫ ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckoutSummary();
+            toggleAddressFields();
+            updateCartCountersOnAllPages();
+
+            const mobileMenuButtonCheckout = document.getElementById('mobile-menu-button-checkout');
+            const mobileMenuCheckout = document.getElementById('mobile-menu-checkout');
+            if (mobileMenuButtonCheckout && mobileMenuCheckout) {
+                mobileMenuButtonCheckout.addEventListener('click', () => {
+                    mobileMenuCheckout.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearCheckoutEl = document.getElementById('currentYearCheckout');
+            if (currentYearCheckoutEl) {
+                currentYearCheckoutEl.textContent = new Date().getFullYear();
+            }
+        });
+
+    </script>
+</body>
+</html>

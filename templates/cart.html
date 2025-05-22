@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваша корзина - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .logo-img {
+            max-height: 50px;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .cart-item-actions button {
+            transition: background-color 0.2s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="index.html#about" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-sky-600 font-semibold p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-cart">0</span>
+                    </a>
+                    <a href="login.html" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                    <a href="cart.html" class="text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-cart">0</span>
+                    </a>
+                    <button id="mobile-menu-button-cart" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-cart" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="index.html#about" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block bg-sky-600 hover:bg-sky-700 text-white text-center px-4 py-3 text-sm font-medium transition-colors duration-150 mx-4 my-2 rounded-md">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center">
+                    <a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a>
+                </li>
+                <li class="flex items-center">
+                    <svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                    <span class="text-gray-700 font-medium">Ваша корзина</span>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Ваша корзина</h1>
+
+        <div id="cart-content-area">
+            <div id="empty-cart-message" class="hidden bg-white p-8 rounded-lg shadow-lg text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-2">Ваша корзина пуста</h2>
+                <p class="text-gray-500 mb-6">Похоже, вы еще ничего не добавили. Начните покупки прямо сейчас!</p>
+                <a href="catalog.html" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-8 rounded-lg text-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105 duration-150">
+                    Перейти в каталог
+                </a>
+            </div>
+
+            <div id="cart-items-wrapper" class="lg:flex lg:gap-8">
+                <div id="cart-items-list" class="lg:w-2/3 space-y-6 mb-8 lg:mb-0">
+                </div>
+
+                <aside id="cart-summary" class="lg:w-1/3 bg-white p-6 rounded-lg shadow-lg h-fit sticky top-28">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-6 border-b pb-4">Итоги заказа</h2>
+                    <div class="space-y-3 mb-6 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Товаров (<span id="summary-items-count">0</span>):</span>
+                            <span id="summary-subtotal" class="font-medium text-gray-800">0 сом</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Скидка:</span>
+                            <span id="summary-discount" class="font-medium text-green-600">-0 сом</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Доставка:</span>
+                            <span id="summary-shipping" class="font-medium text-gray-800">Бесплатно</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center border-t pt-4 mb-6">
+                        <span class="text-lg font-semibold text-gray-800">Всего к оплате:</span>
+                        <span id="summary-total" class="text-2xl font-bold text-sky-600">0 сом</span>
+                    </div>
+                    <a href="checkout.html" id="checkout-button" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-150 flex items-center justify-center text-lg">
+                        Оформить заказ
+                    </a>
+                    <button id="clear-cart-button" class="w-full mt-3 bg-gray-200 hover:bg-gray-300 text-gray-600 font-medium py-2 px-4 rounded-md transition-colors duration-150 text-sm">
+                        Очистить корзину
+                    </button>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="index.html#about" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearCart"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script> 
+    <script>
+        // --- ЭЛЕМЕНТЫ DOM для страницы корзины ---
+        const cartItemsListEl = document.getElementById('cart-items-list');
+        const emptyCartMessageEl = document.getElementById('empty-cart-message');
+        const cartItemsWrapperEl = document.getElementById('cart-items-wrapper');
+        const summaryItemsCountEl = document.getElementById('summary-items-count');
+        const summarySubtotalEl = document.getElementById('summary-subtotal');
+        const summaryDiscountEl = document.getElementById('summary-discount');
+        const summaryShippingEl = document.getElementById('summary-shipping');
+        const summaryTotalEl = document.getElementById('summary-total');
+        const clearCartButton = document.getElementById('clear-cart-button');
+        const checkoutButton = document.getElementById('checkout-button');
+
+        // --- ФУНКЦИИ КОРЗИНЫ (локальные для cart.html, используют глобальные из cart-logic.js) ---
+
+        // getCart() и saveCart() теперь в cart-logic.js
+
+        function updateCartItemQuantity(productId, newQuantity) {
+            let cart = getCart(); // Из cart-logic.js
+            console.log(`[cart.html] updateCartItemQuantity START: productId=${productId}, newQuantity=${newQuantity}, currentCart=`, JSON.parse(JSON.stringify(cart)));
+            const itemIndex = cart.findIndex(item => item.id === productId);
+
+            if (itemIndex > -1) {
+                if (newQuantity > 0) {
+                    cart[itemIndex].quantity = newQuantity;
+                } else {
+                    // Если количество 0 или меньше, удаляем товар.
+                    // Это может быть вызвано уменьшением до 0 через кнопку "-" или прямым вводом.
+                    console.log(`[cart.html] updateCartItemQuantity: удаление товара ${productId}, так как новое количество ${newQuantity}`);
+                    cart.splice(itemIndex, 1);
+                }
+                console.log(`[cart.html] updateCartItemQuantity: корзина перед saveCart=`, JSON.parse(JSON.stringify(cart)));
+                saveCart(cart); // Из cart-logic.js (вызовет обновление счетчиков в шапке)
+                renderCartPage(); // Перерисовываем всю страницу корзины
+            } else {
+                console.warn(`[cart.html] updateCartItemQuantity: товар с ID ${productId} не найден в корзине.`);
+            }
+        }
+
+        function removeCartItem(productId) {
+            let cart = getCart(); // Из cart-logic.js
+            console.log(`[cart.html] removeCartItem START: productId=${productId}, currentCart=`, JSON.parse(JSON.stringify(cart)));
+            cart = cart.filter(item => item.id !== productId);
+            console.log(`[cart.html] removeCartItem: корзина перед saveCart=`, JSON.parse(JSON.stringify(cart)));
+            saveCart(cart); // Из cart-logic.js
+            renderCartPage();
+        }
+
+        function clearEntireCart() {
+            console.log("[cart.html] clearEntireCart вызвана");
+            saveCart([]); // Из cart-logic.js
+            renderCartPage();
+        }
+
+        function formatCurrency(amount) { // Убедимся, что функция форматирования есть
+            return `${amount.toLocaleString('ru-RU')} сом`;
+        }
+
+        function renderCartPage() {
+            console.log("[cart.html] renderCartPage START"); // DEBUG
+            const cart = getCart(); // Из cart-logic.js
+            cartItemsListEl.innerHTML = '';
+
+            if (cart.length === 0) {
+                emptyCartMessageEl.classList.remove('hidden');
+                cartItemsWrapperEl.classList.add('hidden');
+                summaryItemsCountEl.textContent = '0';
+                summarySubtotalEl.textContent = formatCurrency(0);
+                summaryTotalEl.textContent = formatCurrency(0);
+                console.log("[cart.html] Корзина пуста, отображаем сообщение."); // DEBUG
+                return;
+            }
+
+            emptyCartMessageEl.classList.add('hidden');
+            cartItemsWrapperEl.classList.remove('hidden');
+
+            let subtotal = 0;
+            let totalItems = 0;
+
+            cart.forEach(cartItem => {
+                // allMockProductsForCart должен быть доступен из cart-logic.js
+                const productInfo = allMockProductsForCart.find(p => p.id === cartItem.id);
+                if (!productInfo) {
+                    console.warn(`[cart.html] Информация о товаре с ID ${cartItem.id} не найдена в allMockProductsForCart.`);
+                    return;
+                }
+
+                const itemTotalPrice = productInfo.price * cartItem.quantity;
+                subtotal += itemTotalPrice;
+                totalItems += cartItem.quantity;
+
+                const cartItemHTML = `
+                    <div class="cart-item bg-white p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-start sm:items-center gap-4" data-product-id="${productInfo.id}">
+                        <img src="${productInfo.images[0].replace('600x500', '150x120')}" alt="${productInfo.name}" class="w-24 h-24 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0">
+                        <div class="flex-grow">
+                            <a href="product-detail.html?id=${productInfo.id}" class="text-lg font-semibold text-gray-800 hover:text-sky-600">${productInfo.name}</a>
+                            <p class="text-sm text-gray-500">Артикул: ${productInfo.sku}</p>
+                            <p class="text-sm text-sky-600 font-medium mt-1">${formatCurrency(productInfo.price)} / шт.</p>
+                        </div>
+                        <div class="cart-item-actions flex items-center gap-2 mt-2 sm:mt-0">
+                            <button class="decrease-item-qty px-2 py-1 border rounded-md hover:bg-gray-200">-</button>
+                            <input type="number" value="${cartItem.quantity}" min="1" class="item-qty-input w-12 text-center border-gray-300 rounded-md text-sm p-1.5">
+                            <button class="increase-item-qty px-2 py-1 border rounded-md hover:bg-gray-200">+</button>
+                        </div>
+                        <div class="text-md font-semibold text-gray-800 w-full sm:w-auto text-right sm:text-left mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap">
+                            ${formatCurrency(itemTotalPrice)}
+                        </div>
+                        <button class="remove-item-btn text-red-500 hover:text-red-700 p-1 rounded-md mt-2 sm:mt-0 sm:ml-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                cartItemsListEl.innerHTML += cartItemHTML;
+            });
+
+            summaryItemsCountEl.textContent = totalItems;
+            summarySubtotalEl.textContent = formatCurrency(subtotal);
+            // Пока скидки и доставка не реализованы динамически
+            summaryDiscountEl.textContent = `-${formatCurrency(0)}`;
+            summaryShippingEl.textContent = 'Бесплатно'; // Или ваша логика расчета доставки
+            summaryTotalEl.textContent = formatCurrency(subtotal); // Пока total = subtotal
+
+            console.log(`[cart.html] renderCartPage END: totalItems=${totalItems}, subtotal=${subtotal}`); // DEBUG
+            addCartItemActionListeners();
+        }
+
+        function addCartItemActionListeners() {
+            cartItemsListEl.querySelectorAll('.cart-item').forEach(itemRow => {
+                const productId = parseInt(itemRow.dataset.productId);
+
+                itemRow.querySelector('.decrease-item-qty').addEventListener('click', () => {
+                    const qtyInput = itemRow.querySelector('.item-qty-input');
+                    let newQuantity = parseInt(qtyInput.value) - 1;
+                    // if (newQuantity < 1) newQuantity = 1; // Удаление теперь обрабатывается в updateCartItemQuantity
+                    updateCartItemQuantity(productId, newQuantity);
+                });
+
+                itemRow.querySelector('.increase-item-qty').addEventListener('click', () => {
+                    const qtyInput = itemRow.querySelector('.item-qty-input');
+                    const newQuantity = parseInt(qtyInput.value) + 1;
+                    updateCartItemQuantity(productId, newQuantity);
+                });
+
+                itemRow.querySelector('.item-qty-input').addEventListener('change', (e) => {
+                    let newQuantity = parseInt(e.target.value);
+                    if (isNaN(newQuantity) || newQuantity < 1) {
+                        // Если ввели некорректное значение, можно либо вернуть предыдущее, либо установить 1
+                        // Для простоты, если пользователь вводит < 1, товар будет удален при вызове updateCartItemQuantity
+                        if (isNaN(newQuantity)) newQuantity = 0; // Чтобы точно удалить, если не число
+                    }
+                    updateCartItemQuantity(productId, newQuantity);
+                });
+
+                itemRow.querySelector('.remove-item-btn').addEventListener('click', () => {
+                    removeCartItem(productId);
+                });
+            });
+        }
+
+        if (clearCartButton) {
+            clearCartButton.addEventListener('click', clearEntireCart);
+        }
+
+
+        // --- ИНИЦИАЛИЗАЦИЯ СТРАНИЦЫ КОРЗИНЫ ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCartPage();
+            // updateCartCountersOnAllPages() вызывается из cart-logic.js при его загрузке,
+            // а также после каждой операции saveCart().
+            // Поэтому отдельный вызов здесь не строго обязателен, но не повредит для инициализации.
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+
+            const mobileMenuButtonCart = document.getElementById('mobile-menu-button-cart');
+            const mobileMenuCart = document.getElementById('mobile-menu-cart');
+            if (mobileMenuButtonCart && mobileMenuCart) {
+                mobileMenuButtonCart.addEventListener('click', () => {
+                    mobileMenuCart.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearCartEl = document.getElementById('currentYearCart');
+            if (currentYearCartEl) {
+                currentYearCartEl.textContent = new Date().getFullYear();
+            }
+        });
+
+    </script>
+</body>
+</html>

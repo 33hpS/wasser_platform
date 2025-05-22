@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в Админ-панель - МебельПрайсПро</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Более мягкий фон */
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .login-card {
+            background-color: white;
+            padding: 2.5rem; /* Увеличил паддинги */
+            border-radius: 12px; /* Более скругленные углы */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.04); /* Улучшенная тень */
+            width: 100%;
+            max-width: 420px; /* Немного шире */
+        }
+        .form-input {
+            @apply w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 sm:text-sm transition-shadow duration-150 ease-in-out;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1.5; /* Увеличил отступ снизу */
+        }
+        .btn-primary {
+            @apply w-full font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-150 ease-in-out bg-sky-600 hover:bg-sky-700 text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2;
+        }
+        .logo-text {
+            font-size: 1.75rem; /* Размер лого */
+            font-weight: 700;
+            color: #1e293b; /* Темно-серый */
+        }
+        .logo-text span {
+            color: #f97316; /* Оранжевый акцент */
+        }
+        .flash-message {
+            @apply p-3 rounded-md text-sm mb-4;
+        }
+        .flash-success { @apply bg-green-100 text-green-700; }
+        .flash-danger { @apply bg-red-100 text-red-700; }
+        .flash-warning { @apply bg-yellow-100 text-yellow-700; }
+        .flash-info { @apply bg-sky-100 text-sky-700; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="text-center mb-8">
+                <h1 class="logo-text">Мебель<span class="text-orange-500">Прайс</span>Админ</h1>
+                <p class="text-gray-500 text-sm mt-1">Вход в панель управления</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category if category in ['success', 'danger', 'warning', 'info'] else 'info' }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
+                {{ form.hidden_tag() if form and form.hidden_tag }} <div>
+                    <label for="username" class="form-label">Имя пользователя или Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </span>
+                        <input type="text" name="username" id="username" class="form-input pl-10" placeholder="admin / admin@example.com" required 
+                               value="{{ request.form.username if request and request.form else '' }}">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="form-label">Пароль</label>
+                        </div>
+                    <div class="relative">
+                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </span>
+                        <input type="password" name="password" id="password" class="form-input pl-10" placeholder="••••••••" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <button type="submit" class="btn-primary">
+                        Войти
+                    </button>
+                </div>
+            </form>
+            
+            <p class="mt-8 text-center text-sm text-gray-500">
+                Вернуться на <a href="{{ url_for('index') }}" class="font-medium text-sky-600 hover:text-sky-500">главный сайт</a>
+            </p>
+        </div>
+        <footer class="text-center text-sm text-gray-500 mt-8 pb-4">
+            &copy; {{ now().year }} МебельПрайсПро. Все права защищены.
+        </footer>
+    </div>
+    <script>
+        // Небольшой скрипт для фокуса на поле имени пользователя при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameInput = document.getElementById('username');
+            if (usernameInput) {
+                usernameInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

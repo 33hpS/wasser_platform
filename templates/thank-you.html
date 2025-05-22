@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спасибо за ваш заказ! - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .logo-img {
+            max-height: 50px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="about.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-thankyou">0</span>
+                    </a>
+                    <a href="login.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                     <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-thankyou">0</span>
+                    </a>
+                    <button id="mobile-menu-button-thankyou" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-thankyou" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="about.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center"><a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><a href="cart.html" class="text-gray-500 hover:text-sky-600">Корзина</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><a href="checkout.html" class="text-gray-500 hover:text-sky-600">Оформление заказа</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700 font-medium">Заказ оформлен</span></li>
+            </ol>
+        </nav>
+
+        <div class="bg-white p-8 md:p-12 rounded-lg shadow-xl text-center max-w-2xl mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-20 w-20 text-green-500 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Спасибо за ваш заказ!</h1>
+            <p class="text-gray-600 text-lg mb-2">Ваш заказ <strong id="order-number-placeholder">#WS-XXXXXX</strong> успешно оформлен.</p>
+            <p class="text-gray-600 mb-6">В ближайшее время наш менеджер свяжется с вами для подтверждения деталей заказа и уточнения информации по доставке.</p>
+            <p class="text-sm text-gray-500 mb-8">Вы также получите уведомление с деталями заказа на указанный вами email: <strong id="customer-email-placeholder">[email клиента]</strong>.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="catalog.html" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-6 rounded-lg text-md shadow-md hover:shadow-lg transition-transform transform hover:scale-105 duration-150">
+                    Продолжить покупки
+                </a>
+                <a href="index.html" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg text-md shadow-md hover:shadow-lg transition-transform transform hover:scale-105 duration-150">
+                    Вернуться на главную
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="about.html" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearThankYou"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Обновление счетчика корзины в шапке
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+            // Мобильное меню
+            const mobileMenuButtonThankYou = document.getElementById('mobile-menu-button-thankyou');
+            const mobileMenuThankYou = document.getElementById('mobile-menu-thankyou');
+            if (mobileMenuButtonThankYou && mobileMenuThankYou) {
+                mobileMenuButtonThankYou.addEventListener('click', () => {
+                    mobileMenuThankYou.classList.toggle('hidden');
+                });
+            }
+            
+            // Установка текущего года в подвале
+            const currentYearThankYouEl = document.getElementById('currentYearThankYou');
+            if (currentYearThankYouEl) {
+                currentYearThankYouEl.textContent = new Date().getFullYear();
+            }
+
+            // Отображение номера заказа и email (если они переданы через URL или localStorage)
+            // Это простая имитация, в реальном приложении данные будут приходить с сервера
+            const orderNumberPlaceholder = document.getElementById('order-number-placeholder');
+            const customerEmailPlaceholder = document.getElementById('customer-email-placeholder');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderIdFromUrl = urlParams.get('orderId');
+            const emailFromUrl = urlParams.get('email');
+
+            if (orderNumberPlaceholder) {
+                if (orderIdFromUrl) {
+                    orderNumberPlaceholder.textContent = `#${orderIdFromUrl}`;
+                } else {
+                    // Генерируем случайный номер заказа для примера, если он не передан
+                    const randomOrderNum = `WS-${Math.floor(Math.random() * 100000) + 10000}`;
+                    orderNumberPlaceholder.textContent = `#${randomOrderNum}`;
+                }
+            }
+
+            if (customerEmailPlaceholder) {
+                 if (emailFromUrl) {
+                    customerEmailPlaceholder.textContent = decodeURIComponent(emailFromUrl);
+                } else {
+                    // Пытаемся получить email из localStorage (если сохраняли на странице оформления)
+                    const savedEmail = localStorage.getItem('checkoutEmail');
+                    if (savedEmail) {
+                        customerEmailPlaceholder.textContent = savedEmail;
+                        localStorage.removeItem('checkoutEmail'); // Очищаем после использования
+                    } else {
+                        customerEmailPlaceholder.textContent = "[ваш email]";
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

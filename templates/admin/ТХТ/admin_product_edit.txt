@@ -1,0 +1,1464 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - МебельПрайсПро Админ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .admin-sidebar { transition: width 0.3s ease-in-out; }
+        .admin-content { transition: margin-left 0.3s ease-in-out; }
+        .form-input, .form-select, .form-textarea { @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm; }
+        .form-label { @apply block text-sm font-medium text-gray-700 mb-1; }
+        .btn { @apply font-medium py-2 px-4 rounded-md shadow-sm transition-colors duration-150 ease-in-out; }
+        .btn-primary { @apply bg-sky-600 hover:bg-sky-700 text-white; }
+        .btn-secondary { @apply bg-gray-200 hover:bg-gray-300 text-gray-800; }
+        .btn-success { @apply bg-green-500 hover:bg-green-600 text-white; }
+        .btn-warning { @apply bg-yellow-500 hover:bg-yellow-600 text-white; }
+        .btn-danger { @apply bg-red-500 hover:bg-red-600 text-white; }
+        .nav-item-count { @apply ml-auto text-xs bg-sky-500 text-white rounded-full px-1.5 py-0.5; }
+        
+        .image-uploader-preview-container { @apply relative group border border-gray-300 rounded-md overflow-hidden w-24 h-24; }
+        .image-uploader-preview { @apply w-full h-full object-cover cursor-grab; }
+        .image-uploader-preview.sortable-ghost { @apply opacity-50 border-2 border-sky-500; }
+        .image-uploader-preview.main-image-indicator { @apply border-2 border-sky-600 shadow-lg; }
+        .image-uploader-add { @apply w-24 h-24 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center text-gray-400 hover:border-sky-500 hover:text-sky-500 cursor-pointer; }
+        .image-upload-dropzone { @apply border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-sky-500 bg-gray-50 transition-colors duration-150 ease-in-out; }
+        .image-upload-dropzone.dragover { @apply border-sky-500 bg-sky-50 ring-2 ring-sky-500 ring-offset-1; }
+        
+        .markup-slider-container { @apply flex items-center space-x-3; }
+        .markup-slider { @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer; }
+        .markup-slider-green::-webkit-slider-thumb { @apply bg-green-500; }
+        .markup-slider-green::-moz-range-thumb { @apply bg-green-500; }
+        .markup-slider-yellow::-webkit-slider-thumb { @apply bg-yellow-500; }
+        .markup-slider-yellow::-moz-range-thumb { @apply bg-yellow-500; }
+        .markup-slider-orange::-webkit-slider-thumb { @apply bg-orange-500; }
+        .markup-slider-orange::-moz-range-thumb { @apply bg-orange-500; }
+        .markup-slider-red::-webkit-slider-thumb { @apply bg-red-500; }
+        .markup-slider-red::-moz-range-thumb { @apply bg-red-500; }
+        .markup-slider::-webkit-slider-thumb { @apply appearance-none w-5 h-5 rounded-full shadow-md cursor-pointer transition-colors; background-color: #3b82f6; }
+        .markup-slider::-moz-range-thumb { @apply w-5 h-5 rounded-full shadow-md cursor-pointer border-none transition-colors; background-color: #3b82f6; }
+        
+        .status-badge { @apply px-2 py-0.5 text-xs font-medium rounded-full inline-block; }
+        .status-approved { @apply bg-green-100 text-green-800; }
+        .status-pending-accountant { @apply bg-yellow-100 text-yellow-700; }
+        .status-pending-manager { @apply bg-orange-100 text-orange-700; }
+        .status-draft { @apply bg-gray-200 text-gray-800; }
+        .status-rejected { @apply bg-red-100 text-red-800; } /* Общий для всех отклоненных */
+        .status-archived { @apply bg-slate-100 text-slate-600; }
+        .status-not-found { @apply bg-gray-100 text-gray-500; }
+        .status-needs-prices { @apply bg-amber-100 text-amber-800; } 
+
+        /* Стили для модального окна техкарты */
+        .modal-overlay { @apply fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity; }
+        .modal-content { @apply bg-white rounded-lg shadow-xl transform transition-all sm:max-w-3xl w-full p-6; } 
+        .modal-table th { @apply px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50; }
+        .modal-table td { @apply px-3 py-2 whitespace-nowrap text-sm text-gray-600; }
+        .modal-table tbody tr:nth-child(even) { @apply bg-gray-50; }
+        .modal-component-not-found td { @apply bg-red-50 text-red-700; } /* Если компонент найден в БД, но цена 0 или не указана */
+        .modal-component-new td { @apply bg-yellow-50 text-yellow-700; } /* Если компонент не найден в БД (будет создан новый) */
+        .modal-price-placeholder { @apply font-semibold; }
+
+        #drop-area-modal {
+            @apply mt-2 p-6 border-2 border-dashed border-gray-300 rounded-md text-center cursor-pointer 
+                   hover:border-sky-500 hover:bg-sky-50 transition-colors duration-150 ease-in-out
+                   flex flex-col items-center justify-center min-h-[100px]; 
+        }
+        #drop-area-modal.dragover { 
+            @apply border-sky-500 bg-sky-100 ring-2 ring-sky-500 ring-offset-2; 
+        }
+        #drop-area-modal p { @apply text-sm text-gray-600 pointer-events-none; }
+        #drop-area-modal svg { @apply w-10 h-10 text-gray-400 mb-2 pointer-events-none; }
+        #file-info-modal { @apply text-sm text-gray-700 mt-2 font-medium; }
+
+        /* Уведомления (Toast) */
+        #notification-container { @apply fixed top-4 right-4 z-[1050] space-y-2; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .notification-item { animation: fadeIn 0.3s ease-out, slideIn 0.3s ease-out; }
+        .notification-item.fade-out { opacity: 0; transform: translateX(100%); transition: opacity 0.3s ease-in, transform 0.3s ease-in; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside id="admin-sidebar" class="admin-sidebar w-64 bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <a href="{{ url_for('admin_dashboard') }}" class="text-2xl font-semibold text-white">Мебель<span class="text-orange-400">Прайс</span>Админ</a>
+        </div>
+        <nav class="flex-grow px-3 py-4 space-y-1.5">
+            <a href="{{ url_for('admin_dashboard') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Дашборд
+            </a>
+            <a href="{{ url_for('admin_products') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-gray-900 text-sky-400"> <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                Товары
+            </a>
+            <a href="{{ url_for('admin_techcard_list') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.153 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM10.5 16.5h3.75m-3.75 0h3.75" /></svg>
+                Техкарты (Список)
+            </a>
+            <a href="{{ url_for('admin_approval_tasks') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                 <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Согласование Техкарт <span class="nav-item-count" id="nav-approval-count-sidebar">0</span>
+            </a>
+            <a href="{{ url_for('admin_raw_materials') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3M12 15h.008m-7.008 0h14.016m0 0A48.108 48.108 0 0012 15c-2.282 0-4.441.68-6.267 1.875M7.5 7.5h9M3.75 7.5A2.25 2.25 0 016 5.25h12a2.25 2.25 0 012.25 2.25m0 0A2.25 2.25 0 0019.5 6c-.023 0-.046.002-.069.004l-.01.002-.008.001-.002.001-.002 0a.002.002 0 01-.002 0l-.002.001-.008.001-.01.002A2.232 2.232 0 0019.5 6c-1.24 0-2.25.985-2.25 2.188V7.5M3.75 7.5c0 .067.003.132.008.196M12 15c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125h0c-.621 0-1.125.504-1.125 1.125v4.5c0 .621.504 1.125 1.125 1.125h0z" /></svg>
+                Сырьё и Цены
+            </a>
+             <a href="{{ url_for('admin_dealers_list') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345h5.518a.562.562 0 01.329 1.004l-4.243 2.97a.563.563 0 00-.178.643l2.125 5.111a.563.563 0 01-.83.632l-4.243-2.97a.563.563 0 00-.652 0l-4.243 2.97a.563.563 0 01-.83-.632l2.125-5.111a.563.563 0 00-.178-.643l-4.243-2.97a.562.562 0 01.329-1.004h5.518a.563.563 0 00.475-.345L11.48 3.5z" />
+                </svg>
+                Дилеры и Оптовики
+            </a>
+            <a href="{{ url_for('admin_users') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-sky-400">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                Пользователи
+            </a>
+            <a href="{{ url_for('index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-gray-700 text-red-400 hover:text-red-300 mt-auto">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+                Выход (на сайт)
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 md:hidden">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-3" id="page-title-main">{{ page_title }}</h1>
+                    </div>
+                     <div class="flex items-center">
+                        <span class="text-sm text-gray-600 mr-3">{{ current_user.username if current_user else 'Гость' }}</span> 
+                        <img class="h-8 w-8 rounded-full object-cover" 
+                             src="https://placehold.co/100x100/7dd3fc/0c4a6e?text={{ current_user.username[0].upper() if current_user and current_user.username else 'A' }}" 
+                             alt="[Фото пользователя]">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <div class="container mx-auto">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-md 
+                                {% if category == 'success' %} bg-green-100 text-green-700 
+                                {% elif category == 'danger' %} bg-red-100 text-red-700 
+                                {% elif category == 'warning' %} bg-yellow-100 text-yellow-700
+                                {% else %} bg-sky-100 text-sky-700 {% endif %}"
+                                 role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form id="product-form" method="POST" 
+                      action="{{ url_for('admin_edit_product', product_id=product.id) if product and product.id else url_for('admin_add_product') }}"
+                      enctype="multipart/form-data">
+                    {{ form.hidden_tag() if form }} <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 space-y-6">
+                           <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Основная информация</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="product-name" class="form-label">Наименование товара <span class="text-red-500">*</span></label>
+                                        <input type="text" name="name" id="product-name" class="form-input w-full" 
+                                               value="{{ product.name if product else (product_data.name if product_data else '') }}" required>
+                                    </div>
+                                    <div>
+                                        <label for="product-sku" class="form-label">Артикул (SKU) <span class="text-red-500">*</span></label>
+                                        <input type="text" name="sku" id="product-sku" class="form-input w-full" 
+                                               value="{{ product.sku if product else (product_data.sku if product_data else '') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Ценообразование и Наличие</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div>
+                                        <label for="product-cost-price" class="form-label">Себестоимость (сом)</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="number" name="cost_price" id="product-cost-price" class="form-input w-full" 
+                                                   step="0.01" min="0" placeholder="0.00" 
+                                                   value="{{ '%.2f'|format(product.cost_price|float) if product and product.cost_price is not none else (product_data.cost_price if product_data and product_data.cost_price is not none else '') }}">
+                                            <button type="button" id="fetch-cost-from-techcard" 
+                                                    class="btn btn-secondary text-xs whitespace-nowrap" 
+                                                    title="Подтянуть из утвержденной/обработанной техкарты"
+                                                    {% if not product or not product.id or not active_tech_card %}disabled{% endif %}>Авто (ТК)</button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Источник: <span id="cost-price-source">{% if product and product.cost_price_source %}{{ product.cost_price_source }}{% else %}Не указана{% endif %}</span></p>
+                                    </div>
+                                    <div>
+                                        <label for="product-markup-percentage" class="form-label">Розничная наценка (%)</label>
+                                        <div class="markup-slider-container">
+                                            <input type="range" name="markup_slider" id="product-markup-slider" min="0" max="200" 
+                                                   value="{{ product.markup_percentage if product and product.markup_percentage is not none else (product_data.markup_percentage if product_data else 50) }}" class="markup-slider flex-grow">
+                                            <input type="number" name="markup_percentage" id="product-markup-percentage" 
+                                                   value="{{ product.markup_percentage if product and product.markup_percentage is not none else (product_data.markup_percentage if product_data else 50) }}" class="form-input w-20 text-center" step="1" min="0" max="200">
+                                            <span>%</span>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label for="product-retail-price" class="form-label">Розничная цена (сом) <span class="text-red-500">*</span></label>
+                                        <input type="number" name="price" id="product-retail-price" class="form-input w-full font-semibold" 
+                                               step="0.01" min="0" required placeholder="0.00" 
+                                               value="{{ '%.2f'|format(product.price|float) if product and product.price is not none else (product_data.price if product_data and product_data.price is not none else '') }}">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="product-wholesale-markup-percentage" class="form-label">Оптовая наценка (%)</label>
+                                        <div class="markup-slider-container">
+                                            <input type="range" name="wholesale_markup_slider" id="product-wholesale-markup-slider" min="0" max="200" 
+                                                   value="{{ product.wholesale_markup_percentage if product and product.wholesale_markup_percentage is not none else (product_data.wholesale_markup_percentage if product_data else 30) }}" class="markup-slider flex-grow">
+                                            <input type="number" name="wholesale_markup_percentage" id="product-wholesale-markup-percentage" 
+                                                   value="{{ product.wholesale_markup_percentage if product and product.wholesale_markup_percentage is not none else (product_data.wholesale_markup_percentage if product_data else 30) }}" class="form-input w-20 text-center" step="1" min="0" max="200">
+                                            <span>%</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="product-wholesale-price" class="form-label">Оптовая цена (сом)</label>
+                                        <input type="number" name="wholesale_price" id="product-wholesale-price" class="form-input w-full" 
+                                               step="0.01" min="0" placeholder="0.00" 
+                                               value="{{ '%.2f'|format(product.wholesale_price|float) if product and product.wholesale_price is not none else (product_data.wholesale_price if product_data and product_data.wholesale_price is not none else '') }}" readonly>
+                                    </div>
+
+                                    <div>
+                                        <label for="product-dealer-markup-percentage" class="form-label">Дилерская наценка (%)</label>
+                                        <div class="markup-slider-container">
+                                            <input type="range" name="dealer_markup_slider" id="product-dealer-markup-slider" min="0" max="200" 
+                                                   value="{{ product.dealer_markup_percentage if product and product.dealer_markup_percentage is not none else (product_data.dealer_markup_percentage if product_data else 20) }}" class="markup-slider flex-grow">
+                                            <input type="number" name="dealer_markup_percentage" id="product-dealer-markup-percentage" 
+                                                   value="{{ product.dealer_markup_percentage if product and product.dealer_markup_percentage is not none else (product_data.dealer_markup_percentage if product_data else 20) }}" class="form-input w-20 text-center" step="1" min="0" max="200">
+                                            <span>%</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="product-dealer-price" class="form-label">Дилерская цена (сом)</label>
+                                        <input type="number" name="dealer_price" id="product-dealer-price" class="form-input w-full" 
+                                               step="0.01" min="0" placeholder="0.00" 
+                                               value="{{ '%.2f'|format(product.dealer_price|float) if product and product.dealer_price is not none else (product_data.dealer_price if product_data and product_data.dealer_price is not none else '') }}" readonly>
+                                    </div>
+                                    
+                                    <div class="md:col-span-2"> 
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                                            <div>
+                                                <label for="product-old-price" class="form-label">Старая розничная цена (сом)</label>
+                                                <input type="number" name="discounted_price" id="product-old-price" class="form-input w-full" 
+                                                    step="0.01" min="0" placeholder="0.00" 
+                                                    value="{{ '%.2f'|format(product.discounted_price|float) if product and product.discounted_price is not none else (product_data.discounted_price if product_data and product_data.discounted_price is not none else '') }}">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Расчетная розничная маржа:</label>
+                                                <p class="text-sm text-gray-700 mt-2"><span id="product-margin-amount" class="font-semibold">0.00 сом</span> (<span id="product-margin-percentage" class="font-semibold">0.00</span>%)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="product-availability" class="form-label">Наличие <span class="text-red-500">*</span></label>
+                                        <select id="product-availability" name="availability_status" class="form-select w-full" required>
+                                            <option value="in_stock" {% if (product and product.availability_status == 'in_stock') or (product_data and product_data.availability_status == 'in_stock') %}selected{% endif %}>В наличии</option>
+                                            <option value="on_order" {% if (product and product.availability_status == 'on_order') or (product_data and product_data.availability_status == 'on_order') %}selected{% endif %}>Под заказ</option>
+                                            <option value="out_of_stock" {% if (product and product.availability_status == 'out_of_stock') or (product_data and product_data.availability_status == 'out_of_stock') %}selected{% endif %}>Нет в наличии</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Описания</h3>
+                                <div>
+                                    <label for="product-short-description" class="form-label">Краткое описание / Ключевые особенности (каждый пункт с новой строки)</label>
+                                    <textarea name="short_description" id="product-short-description" rows="4" class="form-textarea w-full" placeholder="Например:&#10;- Современный дизайн&#10;- Влагостойкие материалы">{{ product.short_description if product else (product_data.short_description if product_data else '') }}</textarea>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="product-full-description" class="form-label">Полное описание</label>
+                                    <textarea name="description" id="product-full-description" rows="8" class="form-textarea w-full hidden">{{ product.description if product else (product_data.description if product_data else '') }}</textarea>
+                                    <div id="quill-editor-container" class="form-textarea w-full min-h-[200px]">
+                                        </div>
+                                    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                                    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg shadow" id="product-techcard-section">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-medium text-gray-900">Техническая карта и Состав</h3>
+                                    <button type="button" 
+                                            id="open-techcard-modal-btn"
+                                            class="btn btn-secondary btn-sm"
+                                            {% if not product or not product.id %}disabled title="Сначала сохраните товар, чтобы управлять техкартой."{% endif %}>
+                                        {% if active_tech_card %}Редактировать/Загрузить новую{% else %}Добавить техкарту{% endif %}
+                                    </button>
+                                </div>
+                                <div id="active-tech-card-summary">
+                                   {% include 'admin/_tech_card_summary_snippet.html' %}
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Технические характеристики</h3>
+                                <div id="specifications-container" class="space-y-3">
+                                    {% set specs_data = (product.specifications|fromjson if product and product.specifications else (product_data.specifications_json|fromjson if product_data and product_data.specifications_json else {})) %}
+                                    {% if specs_data and specs_data is mapping and specs_data|length > 0 %}
+                                        {% for spec_name, spec_value in specs_data.items() %}
+                                        <div class="flex items-center space-x-2 spec-row">
+                                            <input type="text" name="spec_name[]" placeholder="Название характеристики" class="form-input flex-1" value="{{ spec_name }}">
+                                            <input type="text" name="spec_value[]" placeholder="Значение" class="form-input flex-1" value="{{ spec_value }}">
+                                            <button type="button" class="text-red-500 hover:text-red-700 remove-spec-btn" title="Удалить характеристику">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                     <div class="flex items-center space-x-2 spec-row">
+                                        <input type="text" name="spec_name[]" placeholder="Название характеристики (напр. Ширина)" class="form-input flex-1">
+                                        <input type="text" name="spec_value[]" placeholder="Значение (напр. 750 мм)" class="form-input flex-1">
+                                        <button type="button" class="text-red-500 hover:text-red-700 remove-spec-btn" title="Удалить характеристику">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <button type="button" id="add-spec-btn" class="mt-3 btn btn-secondary text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline -ml-1 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                                    Добавить характеристику
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-1 space-y-6">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Организация</h3>
+                                <div>
+                                    <label for="product-category" class="form-label">Категория товара <span class="text-red-500">*</span></label>
+                                    <select id="product-category" name="category_id" class="form-select w-full" required>
+                                        <option value="">Выберите категорию</option>
+                                        {% for category_item in categories %} 
+                                        <option value="{{ category_item.id }}" 
+                                                {% if product and product.category_id == category_item.id %}selected
+                                                {% elif product_data and product_data.category_id and product_data.category_id|int == category_item.id %}selected
+                                                {% endif %}>
+                                            {{ category_item.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="product-status" class="form-label">Статус товара</label>
+                                    <select id="product-status" name="is_published" class="form-select w-full">
+                                        <option value="true" {% if (product and product.is_published) or (product_data and product_data.is_published == 'true') %}selected{% endif %}>Опубликован</option>
+                                        <option value="false" {% if (product and not product.is_published) or (product_data and product_data.is_published == 'false') or (not product and not product_data) %}selected{% endif %}>Черновик</option>
+                                    </select>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="product-weight" class="form-label">Вес (кг)</label>
+                                    <input type="number" name="weight" id="product-weight" class="form-input w-full" 
+                                           step="0.01" min="0" value="{{ product.weight if product and product.weight is not none else (product_data.weight if product_data else '') }}">
+                                </div>
+                                <div class="mt-4">
+                                    <label for="product-dimensions" class="form-label">Габариты (ДxШxВ см)</label>
+                                    <input type="text" name="dimensions" id="product-dimensions" class="form-input w-full" 
+                                           placeholder="например, 120x60x75" value="{{ product.dimensions if product else (product_data.dimensions if product_data else '') }}">
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Изображения товара</h3>
+                                <div id="image-upload-dropzone-area" class="image-upload-dropzone mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <p class="text-gray-500 text-sm">Перетащите файлы сюда или <span class="text-sky-600 font-semibold">нажмите для выбора</span></p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF, WEBP</p>
+                                </div>
+                                <div id="image-previews" class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-3">
+                                    {% if product and product.images %}
+                                        {% for image in product.images|sort(attribute='order_index') %}
+                                            <div class="image-uploader-preview-container product-image-item" data-image-id="{{ image.id }}" data-image-filename="{{ image.image_url.split('/')[-1] }}">
+                                                <img src="{{ url_for('static', filename=image.image_url) }}" alt="{{ image.alt_text or 'Изображение товара' }}" 
+                                                     class="image-uploader-preview {% if image.is_main %}main-image-indicator{% endif %}">
+                                                <button type="button" class="absolute top-0 right-0 m-1 p-0.5 bg-red-600 hover:bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity remove-image-btn" title="Удалить изображение" data-image-id="{{ image.id }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                                </button>
+                                                {% if not image.is_main %}
+                                                <button type="button" class="absolute bottom-0 left-0 m-1 p-0.5 bg-sky-600 hover:bg-sky-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity set-main-image-btn" title="Сделать главным">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </div>
+                                <input type="file" name="product_images_upload[]" id="image-upload-input" multiple accept="image/*" class="hidden">
+                                {% set main_image_filename_val = '' %}
+                                {% if product and product.images %}
+                                    {% set main_image_obj = (product.images|selectattr('is_main', 'true')|first) %}
+                                    {% if main_image_obj %}
+                                        {% set main_image_filename_val = main_image_obj.image_url.split('/')[-1] %}
+                                    {% elif product.images|sort(attribute='order_index')|first %}
+                                         {% set main_image_filename_val = (product.images|sort(attribute='order_index')|first).image_url.split('/')[-1] %}
+                                    {% endif %}
+                                {% endif %}
+                                <input type="hidden" name="main_image_filename" id="main-image-filename-input" value="{{ main_image_filename_val }}">
+                                <input type="hidden" name="image_order" id="image-order-input" value="">
+                                <p class="text-xs text-gray-500">Первое изображение является главным. Перетащите для изменения порядка. Нажмите на звездочку, чтобы сделать изображение главным.</p>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">SEO-Настройки</h3>
+                                <div>
+                                    <label for="seo-title" class="form-label">SEO Title</label>
+                                    <input type="text" name="seo_title" id="seo-title" class="form-input w-full" value="{{ product.seo_title if product else (product_data.seo_title if product_data else '') }}">
+                                </div>
+                                <div class="mt-4">
+                                    <label for="seo-description" class="form-label">Meta Description</label>
+                                    <textarea name="seo_description" id="seo-description" rows="3" class="form-textarea w-full">{{ product.seo_description if product else (product_data.seo_description if product_data else '') }}</textarea>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="seo-keywords" class="form-label">Meta Keywords (через запятую)</label>
+                                    <input type="text" name="seo_keywords" id="seo-keywords" class="form-input w-full" value="{{ product.seo_keywords if product else (product_data.seo_keywords if product_data else '') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-300 flex justify-end space-x-3">
+                        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary">Отмена</a>
+                        <button type="submit" class="btn btn-success">
+                            {% if product and product.id %}Сохранить товар{% else %}Добавить товар{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <div id="techCardModal" class="fixed inset-0 z-[100] overflow-y-auto hidden" aria-labelledby="modal-title-techcard" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="modal-overlay fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeTechCardModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div class="modal-content inline-block align-bottom sm:align-middle sm:my-8 text-left">
+                <div>
+                    <div class="flex justify-between items-center pb-3 border-b mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800" id="modal-title-techcard">
+                            Обработка Техкарты
+                        </h3>
+                        <button type="button" onclick="closeTechCardModal()" class="text-gray-400 hover:text-gray-600">
+                            <span class="sr-only">Закрыть</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <div id="modal-product-info-techcard" class="text-sm text-gray-600 mb-4">
+                        </div>
+                    
+                    <input type="hidden" id="modal-product-id-techcard" name="modal_product_id_techcard_val" value=""> 
+                    <input type="hidden" id="modal-tech-card-id" name="modal_tech_card_id_val" value=""> 
+                    
+                    <div id="upload-block-modal" class="mb-6">
+                        <label class="form-label" for="techcard-file-input-modal">Файл техкарты (XLSX/XLS):</label>
+                        <div id="drop-area-modal" class="techcard-dropzone"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-400 mb-2 pointer-events-none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                            </svg>
+                            <p class="pointer-events-none">Перетащите XLSX/XLS файл сюда или
+                                <span class="font-medium text-sky-600 hover:text-sky-500 cursor-pointer" onclick="document.getElementById('techcard-file-input-modal').click()">выберите файл</span>
+                            </p>
+                            <input type="file" name="tech_card_excel_file_modal_input" id="techcard-file-input-modal" class="hidden" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+                        </div>
+                        <div id="file-info-modal" class="mt-2 text-sm text-gray-700 hidden">
+                            Выбран файл: <span class="font-medium" id="loaded-file-name-modal"></span> (<span id="loaded-file-size-modal"></span>)
+                            <button type="button" id="remove-file-btn-modal" class="text-red-500 hover:text-red-700 ml-2 text-xs font-semibold">(удалить)</button>
+                        </div>
+                    </div>
+
+                    <div id="parsed-components-block-modal" class="mb-6 hidden">
+                        <h4 class="text-md font-semibold text-gray-700 mb-2">Предварительный просмотр компонентов:</h4>
+                        <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-md">
+                            <table class="min-w-full divide-y divide-gray-200 text-sm modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>№</th><th>Артикул (файл)</th><th>Наименование (файл)</th>
+                                        <th>Кол-во</th><th>Ед.изм.</th><th>Цена сырья (БД)</th><th>Стоимость</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parsed-components-table-body-modal" class="bg-white divide-y divide-gray-200">
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <p class="text-sm">Количество позиций: <span class="font-semibold" id="components-count-modal">0</span></p>
+                            <p class="text-sm text-red-500 hidden" id="missing-prices-warning-modal">Внимание! Для <span id="missing-prices-count-modal">0</span> компонент(а/ов) не найдены цены в справочнике или равны нулю.</p>
+                            <p class="text-md mt-1">Общая себестоимость (материалы): <strong class="text-lg text-blue-700" id="total-material-cost-modal">0.00 сом</strong></p>
+                        </div>
+                         <div id="parser-warnings-modal" class="mt-2 text-xs text-yellow-600">
+                            </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="editor-comment-modal" class="form-label">Комментарий (необязательно):</label>
+                        <textarea id="editor-comment-modal" name="editor_comment_modal_val" class="form-textarea w-full" rows="3" placeholder="Например, укажите причину обновления или на что обратить внимание..."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                    <button type="button" onclick="closeTechCardModal()" class="btn btn-secondary w-full sm:w-auto">Отмена</button>
+                    <button type="button" id="save-draft-techcard-modal-btn" class="btn btn-warning w-full sm:w-auto" disabled>Сохранить черновик</button>
+                    <button type="button" id="submit-techcard-for-approval-modal-btn" class="btn btn-primary w-full sm:w-auto" disabled>Отправить на согласование</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="notification-container"></div>
+
+    <script>
+        // --- Глобальные переменные и константы для JS ---
+        const PRODUCT_ID_MAIN_PAGE = {{ product.id|tojson if product and product.id else 'null' }};
+        const PRODUCT_NAME_MAIN_PAGE = "{{ product.name | e if product else 'Новый товар' }}";
+        const PRODUCT_SKU_MAIN_PAGE = "{{ product.sku | e if product else '---' }}";
+        
+        // Данные для кнопки "Авто (ТК)" на основной странице
+        const TECH_CARD_COST_FROM_SERVER_MAIN_PAGE = parseFloat("{{ active_tech_card.total_cost if active_tech_card and active_tech_card.total_cost is not none else '0' }}");
+        const TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE = "{{ active_tech_card.status | e if active_tech_card else 'Нет данных' }}";
+        const LATEST_TECH_CARD_UPDATED_AT_MAIN_PAGE = "{{ active_tech_card.updated_at.strftime('%d.%m.%Y %H:%M') if active_tech_card and active_tech_card.updated_at else 'N/A' }}";
+        
+        // URL для AJAX запросов из модального окна
+        const PREVIEW_TECHCARD_URL_TEMPLATE = "{{ url_for('admin_preview_techcard_components', product_id=0) }}".replace('/0', '/<product_id_placeholder>');
+        const PROCESS_TECHCARD_MODAL_URL = "{{ url_for('admin_process_techcard_from_modal') }}"; 
+
+        // Константы статусов техкарты из Flask
+        const TECH_CARD_STATUS_DRAFT_JS = "{{ TECH_CARD_STATUS_DRAFT }}";
+        const TECH_CARD_STATUS_PENDING_ACCOUNTANT_JS = "{{ TECH_CARD_STATUS_PENDING_ACCOUNTANT }}";
+        const TECH_CARD_STATUS_APPROVED_JS = "{{ TECH_CARD_STATUS_APPROVED }}";
+        const TECH_CARD_STATUS_PROCESSED_JS = "{{ TECH_CARD_STATUS_PROCESSED }}";
+        const TECH_CARD_STATUS_PROCESSED_NEEDS_PRICES_JS = "{{ TECH_CARD_STATUS_PROCESSED_NEEDS_PRICES }}";
+        // Добавьте другие статусы, если они нужны в JS логике
+
+        // --- DOM элементы для уведомлений ---
+        const notificationContainerEl = document.getElementById('notification-container');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Инициализация сайдбара ---
+            const sidebar = document.getElementById('admin-sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('w-64'); // Полная ширина
+                    sidebar.classList.toggle('w-16'); // Свернутая ширина
+                    // Сохранение состояния сайдбара в localStorage
+                    if (sidebar.classList.contains('w-16')) {
+                        localStorage.setItem('sidebarCollapsed', 'true');
+                    } else {
+                        localStorage.removeItem('sidebarCollapsed');
+                    }
+                });
+                // Восстановление состояния сайдбара при загрузке страницы
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                     sidebar.classList.remove('w-64');
+                     sidebar.classList.add('w-16');
+                }
+            }
+            
+            // --- Инициализация Quill RTE (Rich Text Editor) ---
+            var quill = null;
+            if (document.getElementById('quill-editor-container')) {
+                quill = new Quill('#quill-editor-container', {
+                    theme: 'snow',
+                    modules: { 
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{'list': 'ordered'}, {'list': 'bullet'}],
+                            [{ 'align': [] }],
+                            ['link', 'image'], // Можно добавить 'video'
+                            ['clean']
+                        ]
+                    },
+                    placeholder: 'Введите полное описание товара здесь...'
+                });
+                const fullDescriptionTextarea = document.getElementById('product-full-description');
+                if (fullDescriptionTextarea && fullDescriptionTextarea.value) {
+                    try {
+                        // Пытаемся распарсить как JSON (Delta формат Quill)
+                        const deltaOrHtml = JSON.parse(fullDescriptionTextarea.value);
+                        if (typeof deltaOrHtml === 'object' && deltaOrHtml.ops) { 
+                            quill.setContents(deltaOrHtml); 
+                        } else { 
+                            // Если не Delta, считаем, что это HTML
+                            quill.clipboard.dangerouslyPasteHTML(0, deltaOrHtml); 
+                        }
+                    } catch (e) { 
+                        // Если не JSON, считаем, что это простой HTML или текст
+                        quill.clipboard.dangerouslyPasteHTML(0, fullDescriptionTextarea.value); 
+                    }
+                }
+                // При отправке формы, сохраняем содержимое Quill в скрытое textarea
+                const productFormForQuill = document.getElementById('product-form');
+                if (productFormForQuill) {
+                    productFormForQuill.addEventListener('submit', function() {
+                        if (quill && fullDescriptionTextarea) { 
+                            // Сохраняем как JSON (Delta формат) для лучшей совместимости
+                            fullDescriptionTextarea.value = JSON.stringify(quill.getContents()); 
+                        }
+                    });
+                }
+            }
+
+            // --- Логика управления ценами ---
+            const costPriceInput = document.getElementById('product-cost-price');
+            const costPriceSourceEl = document.getElementById('cost-price-source');
+            const fetchCostBtn = document.getElementById('fetch-cost-from-techcard');
+            
+            const markupSlider = document.getElementById('product-markup-slider');
+            const markupPercentageInput = document.getElementById('product-markup-percentage');
+            const retailPriceInput = document.getElementById('product-retail-price');
+            
+            const wholesaleMarkupSlider = document.getElementById('product-wholesale-markup-slider');
+            const wholesaleMarkupPercentageInput = document.getElementById('product-wholesale-markup-percentage');
+            const wholesalePriceInput = document.getElementById('product-wholesale-price');
+            
+            const dealerMarkupSlider = document.getElementById('product-dealer-markup-slider');
+            const dealerMarkupPercentageInput = document.getElementById('product-dealer-markup-percentage');
+            const dealerPriceInput = document.getElementById('product-dealer-price');
+            
+            const marginAmountEl = document.getElementById('product-margin-amount');
+            const marginPercentageEl = document.getElementById('product-margin-percentage');
+            
+            function calculateAllPrices() {
+                const cost = parseFloat(costPriceInput.value) || 0;
+
+                // Розничная цена
+                const retailMarkup = parseFloat(markupPercentageInput.value) || 0;
+                if (cost > 0 && retailMarkup >= 0) { 
+                    retailPriceInput.value = (cost * (1 + retailMarkup / 100)).toFixed(2);
+                } else if (!(cost === 0 && retailPriceInput.value && parseFloat(retailPriceInput.value) > 0)) {
+                     // Если себестоимость 0, но розничная цена введена вручную, не перезаписываем ее.
+                     // Иначе, если розничная цена не введена или 0, ставим ее равной себестоимости (или пустой, если себестоимость 0).
+                     if (!retailPriceInput.value || parseFloat(retailPriceInput.value) === 0) {
+                         retailPriceInput.value = cost > 0 ? cost.toFixed(2) : ""; 
+                     }
+                }
+                
+                // Оптовая цена
+                const wholesaleMarkup = parseFloat(wholesaleMarkupPercentageInput.value) || 0;
+                if (cost > 0 && wholesaleMarkup >= 0) { 
+                    wholesalePriceInput.value = (cost * (1 + wholesaleMarkup / 100)).toFixed(2);
+                } else { 
+                    wholesalePriceInput.value = cost > 0 ? cost.toFixed(2) : "";
+                }
+
+                // Дилерская цена
+                const dealerMarkup = parseFloat(dealerMarkupPercentageInput.value) || 0;
+                if (cost > 0 && dealerMarkup >= 0) { 
+                    dealerPriceInput.value = (cost * (1 + dealerMarkup / 100)).toFixed(2);
+                } else { 
+                    dealerPriceInput.value = cost > 0 ? cost.toFixed(2) : "";
+                }
+                updateMargin();
+            }
+
+            function updateMarkupFromRetail() {
+                const cost = parseFloat(costPriceInput.value) || 0;
+                const retail = parseFloat(retailPriceInput.value) || 0;
+
+                if (cost > 0 && retail >= cost) {
+                    const markup = ((retail - cost) / cost) * 100;
+                    markupPercentageInput.value = markup.toFixed(0); // Округляем до целого для слайдера
+                    if(markupSlider) markupSlider.value = markup.toFixed(0);
+                    updateSliderColor(markupSlider, markup);
+                } else if (cost > 0 && retail < cost && retail > 0) { 
+                    // Если розничная цена ниже себестоимости (но не 0), ставим наценку 0
+                    if(markupPercentageInput) markupPercentageInput.value = "0"; 
+                    if(markupSlider) markupSlider.value = "0";
+                    updateSliderColor(markupSlider, 0);
+                } else if (cost === 0 && retail > 0) { 
+                    // Если себестоимость 0, а розничная цена есть, наценка максимальная (или иное поведение)
+                    if(markupPercentageInput) markupPercentageInput.value = "200"; // Пример максимальной наценки
+                    if(markupSlider) markupSlider.value = "200";
+                    updateSliderColor(markupSlider, 200);
+                } else if (markupSlider) { 
+                    // Если розничная цена 0 или некорректна, берем значение из слайдера
+                    if(markupPercentageInput) markupPercentageInput.value = markupSlider.value; 
+                    updateSliderColor(markupSlider, parseFloat(markupSlider.value));
+                }
+                // Важно: после обновления наценки из розничной цены, нужно пересчитать все цены,
+                // чтобы оптовая и дилерская тоже обновились, если они зависят от себестоимости и своих наценок.
+                // Но если розничная цена введена вручную, она не должна меняться от этого вызова.
+                // calculateAllPrices(); // Этот вызов может перезаписать retailPriceInput, если он был изменен вручную.
+                // Вместо этого, только обновим маржу и зависимые цены (опт, дилер), если они не заблокированы.
+                const wholesaleMarkup = parseFloat(wholesaleMarkupPercentageInput.value) || 0;
+                if (cost > 0 && wholesaleMarkup >= 0) { wholesalePriceInput.value = (cost * (1 + wholesaleMarkup / 100)).toFixed(2);} 
+                else { wholesalePriceInput.value = cost > 0 ? cost.toFixed(2) : "";}
+                const dealerMarkup = parseFloat(dealerMarkupPercentageInput.value) || 0;
+                if (cost > 0 && dealerMarkup >= 0) { dealerPriceInput.value = (cost * (1 + dealerMarkup / 100)).toFixed(2);}
+                else { dealerPriceInput.value = cost > 0 ? cost.toFixed(2) : "";}
+                updateMargin();
+            }
+
+            function updateMargin() {
+                const cost = parseFloat(costPriceInput.value) || 0;
+                const retail = parseFloat(retailPriceInput.value) || 0;
+                let marginAmount = 0; 
+                let marginPercentage = 0;
+
+                if (retail > 0) { // Маржу считаем, только если есть розничная цена
+                    marginAmount = retail - cost;
+                    if (cost > 0) { 
+                        marginPercentage = (marginAmount / cost) * 100;
+                    } else if (retail > 0 && cost === 0) {
+                        marginPercentage = Infinity; // Бесконечная маржа, если себестоимость 0, а цена есть
+                    }
+                }
+                if (marginAmountEl) marginAmountEl.textContent = formatCurrency(marginAmount);
+                if (marginPercentageEl) marginPercentageEl.textContent = isFinite(marginPercentage) ? marginPercentage.toFixed(2) : (marginPercentage === Infinity ? "∞" : "0.00");
+            }
+            
+            function updateSliderColor(sliderElement, value) {
+                if (!sliderElement) return;
+                sliderElement.classList.remove('markup-slider-green', 'markup-slider-yellow', 'markup-slider-orange', 'markup-slider-red');
+                if (value < 0) { // Убыток
+                    sliderElement.classList.add('markup-slider-red');
+                } else if (value <= 30) { // Низкая наценка
+                    sliderElement.classList.add('markup-slider-orange');
+                } else if (value <= 70) { // Средняя наценка
+                    sliderElement.classList.add('markup-slider-yellow');
+                } else { // Высокая наценка
+                    sliderElement.classList.add('markup-slider-green');
+                }
+            }
+
+            // Обработчики для полей цен и наценок
+            if (fetchCostBtn) { 
+                fetchCostBtn.addEventListener('click', () => {
+                    if (TECH_CARD_COST_FROM_SERVER_MAIN_PAGE !== null && TECH_CARD_COST_FROM_SERVER_MAIN_PAGE >= 0 &&
+                        (TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE === TECH_CARD_STATUS_APPROVED_JS || 
+                         TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE === TECH_CARD_STATUS_PROCESSED_JS)) {
+                        costPriceInput.value = TECH_CARD_COST_FROM_SERVER_MAIN_PAGE.toFixed(2);
+                        if(costPriceSourceEl) costPriceSourceEl.textContent = `Из техкарты (${TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE}, от ${LATEST_TECH_CARD_UPDATED_AT_MAIN_PAGE})`;
+                        calculateAllPrices(); // Пересчитываем все цены на основе новой себестоимости
+                    } else {
+                        let alertMessage = 'Активная (утвержденная/обработанная) техкарта с корректной себестоимостью не найдена для этого товара, или себестоимость равна нулю.';
+                        if (TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE === TECH_CARD_STATUS_PROCESSED_NEEDS_PRICES_JS) {
+                            alertMessage = 'Себестоимость по техкарте не может быть подставлена, так как не для всех компонентов сырья указаны цены. Пожалуйста, проверьте цены на сырье и переобработайте техкарту.';
+                        } else if (TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE && TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE !== 'Нет данных') {
+                                alertMessage = `Текущий статус техкарты "${TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE}" не позволяет автоматически рассчитать себестоимость. Требуется статус "${TECH_CARD_STATUS_APPROVED_JS}" или "${TECH_CARD_STATUS_PROCESSED_JS}" с корректной себестоимостью.`;
+                        }
+                        showNotification(alertMessage, 'warning');
+                        if(costPriceSourceEl) costPriceSourceEl.textContent = 'Техкарта не найдена/неприменима';
+                    }
+                });
+            }
+
+            if (costPriceInput) {
+                costPriceInput.addEventListener('input', () => { 
+                    if(costPriceSourceEl) costPriceSourceEl.textContent = 'Введено вручную'; 
+                    calculateAllPrices(); 
+                });
+            }
+
+            // Общий обработчик для слайдера и инпута наценки
+            function setupMarkupSlider(sliderEl, inputEl) {
+                if (sliderEl && inputEl) {
+                    const update = (source) => {
+                        const value = parseFloat(source.value);
+                        const clampedValue = Math.max(0, Math.min(200, isNaN(value) ? 0 : value));
+                        if (source.type === 'range') {
+                            inputEl.value = clampedValue.toFixed(0);
+                        } else {
+                            sliderEl.value = clampedValue;
+                        }
+                        updateSliderColor(sliderEl, clampedValue);
+                        calculateAllPrices();
+                    };
+                    sliderEl.addEventListener('input', (e) => update(e.target));
+                    inputEl.addEventListener('input', (e) => update(e.target));
+                    // Инициализация цвета слайдера при загрузке
+                    updateSliderColor(sliderEl, parseFloat(sliderEl.value));
+                }
+            }
+            setupMarkupSlider(markupSlider, markupPercentageInput);
+            setupMarkupSlider(wholesaleMarkupSlider, wholesaleMarkupPercentageInput);
+            setupMarkupSlider(dealerMarkupSlider, dealerMarkupPercentageInput);
+            
+            if (retailPriceInput) {
+                retailPriceInput.addEventListener('input', updateMarkupFromRetail);
+            }
+            
+            // Первоначальный расчет всех цен и маржи при загрузке страницы
+            calculateAllPrices();
+
+            // --- Логика управления изображениями ---
+            const imageDropZoneArea = document.getElementById('image-upload-dropzone-area');
+            const imageUploadInput = document.getElementById('image-upload-input');
+            const imagePreviewsContainer = document.getElementById('image-previews');
+            const mainImageFilenameInput = document.getElementById('main-image-filename-input');
+            const imageOrderInput = document.getElementById('image-order-input'); // Для порядка изображений
+
+            function handleImageFiles(files) {
+                Array.from(files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            // Создаем элемент предпросмотра для нового файла
+                            createImagePreviewElement(e.target.result, file.name, null, file);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        showNotification(`Файл ${file.name} не является изображением.`, 'warning');
+                    }
+                });
+                updateImageOrderInput(); // Обновляем порядок после добавления
+            }
+
+            function createImagePreviewElement(src, filename, imageId = null, fileObject = null) {
+                const previewWrapper = document.createElement('div');
+                previewWrapper.className = 'image-uploader-preview-container product-image-item';
+                if (imageId) previewWrapper.dataset.imageId = imageId;
+                previewWrapper.dataset.imageFilename = filename; // Всегда храним имя файла
+                if (fileObject) previewWrapper.dataset.isNew = "true"; // Пометка для новых файлов
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Предпросмотр';
+                img.className = 'image-uploader-preview';
+
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.title = 'Удалить изображение';
+                removeButton.className = 'absolute top-0 right-0 m-1 p-0.5 bg-red-600 hover:bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity remove-image-btn';
+                if (imageId) removeButton.dataset.imageId = imageId; // Для существующих изображений
+                removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+
+                const setMainButton = document.createElement('button');
+                setMainButton.type = 'button';
+                setMainButton.title = 'Сделать главным';
+                setMainButton.className = 'absolute bottom-0 left-0 m-1 p-0.5 bg-sky-600 hover:bg-sky-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity set-main-image-btn';
+                setMainButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>';
+
+                previewWrapper.appendChild(img);
+                previewWrapper.appendChild(removeButton);
+                previewWrapper.appendChild(setMainButton);
+                imagePreviewsContainer.appendChild(previewWrapper);
+                
+                updateMainImageIndicatorAndInput(); // Обновляем индикатор и скрытое поле
+            }
+
+            function updateMainImageIndicatorAndInput() {
+                const allPreviewItems = imagePreviewsContainer.querySelectorAll('.product-image-item');
+                let mainImageFilename = "";
+
+                allPreviewItems.forEach((itemWrapper, index) => {
+                    const imgElement = itemWrapper.querySelector('.image-uploader-preview');
+                    const setMainBtn = itemWrapper.querySelector('.set-main-image-btn');
+                    
+                    imgElement.classList.remove('main-image-indicator');
+                    if (setMainBtn) setMainBtn.style.display = 'block'; // Показываем кнопку "сделать главным"
+
+                    if (index === 0 && !mainImageFilename) { // Если это первое изображение и главное еще не найдено
+                        imgElement.classList.add('main-image-indicator');
+                        mainImageFilename = itemWrapper.dataset.imageFilename || '';
+                        if (setMainBtn) setMainBtn.style.display = 'none'; // Скрываем кнопку, если уже главное
+                    }
+                });
+
+                // Если после перебора первое изображение стало главным, обновляем input
+                if (mainImageFilenameInput) mainImageFilenameInput.value = mainImageFilename;
+
+                // Если есть изображение с флагом is_main (например, пришло с сервера), оно должно быть главным
+                const explicitlyMain = Array.from(allPreviewItems).find(item => item.querySelector('.image-uploader-preview.main-image-indicator'));
+                if (explicitlyMain) {
+                     if (mainImageFilenameInput) mainImageFilenameInput.value = explicitlyMain.dataset.imageFilename || '';
+                     allPreviewItems.forEach(item => {
+                         item.querySelector('.image-uploader-preview').classList.remove('main-image-indicator');
+                         const btn = item.querySelector('.set-main-image-btn');
+                         if (btn) btn.style.display = 'block';
+                     });
+                     explicitlyMain.querySelector('.image-uploader-preview').classList.add('main-image-indicator');
+                     const mainBtn = explicitlyMain.querySelector('.set-main-image-btn');
+                     if (mainBtn) mainBtn.style.display = 'none';
+                } else if (allPreviewItems.length > 0 && mainImageFilenameInput && !mainImageFilenameInput.value) {
+                    // Если главного нет, но есть изображения, делаем первое главным
+                    allPreviewItems[0].querySelector('.image-uploader-preview').classList.add('main-image-indicator');
+                    const firstBtn = allPreviewItems[0].querySelector('.set-main-image-btn');
+                    if (firstBtn) firstBtn.style.display = 'none';
+                    mainImageFilenameInput.value = allPreviewItems[0].dataset.imageFilename || '';
+                }
+                 updateImageOrderInput();
+            }
+            
+            function updateImageOrderInput() {
+                const orderedFilenames = Array.from(imagePreviewsContainer.querySelectorAll('.product-image-item'))
+                                           .map(item => item.dataset.imageFilename);
+                if (imageOrderInput) imageOrderInput.value = JSON.stringify(orderedFilenames);
+            }
+
+
+            if (imageDropZoneArea && imageUploadInput && imagePreviewsContainer) {
+                imageDropZoneArea.addEventListener('click', () => imageUploadInput.click());
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    imageDropZoneArea.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, false);
+                });
+                imageDropZoneArea.addEventListener('dragenter', () => imageDropZoneArea.classList.add('dragover'));
+                imageDropZoneArea.addEventListener('dragover', () => imageDropZoneArea.classList.add('dragover')); // На случай если dragleave сработало случайно
+                imageDropZoneArea.addEventListener('dragleave', () => imageDropZoneArea.classList.remove('dragover'));
+                imageDropZoneArea.addEventListener('drop', (event) => {
+                    imageDropZoneArea.classList.remove('dragover');
+                    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+                        // Важно: нужно создать новый DataTransfer объект для input'а
+                        const dataTransfer = new DataTransfer();
+                        Array.from(event.dataTransfer.files).forEach(file => dataTransfer.items.add(file));
+                        imageUploadInput.files = dataTransfer.files;
+                        handleImageFiles(imageUploadInput.files); // Обрабатываем файлы
+                    }
+                });
+
+                imageUploadInput.addEventListener('change', (event) => {
+                    if (event.target.files && event.target.files.length > 0) {
+                        handleImageFiles(event.target.files);
+                    }
+                });
+
+                imagePreviewsContainer.addEventListener('click', (event) => {
+                    const removeBtn = event.target.closest('.remove-image-btn');
+                    const setMainBtn = event.target.closest('.set-main-image-btn');
+
+                    if (removeBtn) {
+                        const imageItemWrapper = removeBtn.closest('.product-image-item');
+                        const imageId = imageItemWrapper.dataset.imageId;
+                        if (imageId) { // Если это существующее изображение (из БД)
+                            // Добавляем input для отправки ID удаляемого изображения на сервер
+                            const hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'deleted_image_ids[]';
+                            hiddenInput.value = imageId;
+                            document.getElementById('product-form').appendChild(hiddenInput);
+                        }
+                        imageItemWrapper.remove();
+                        updateMainImageIndicatorAndInput();
+                    } else if (setMainBtn) {
+                        const imageItemWrapper = setMainBtn.closest('.product-image-item');
+                        // Перемещаем элемент в начало контейнера, чтобы он стал первым
+                        imagePreviewsContainer.insertBefore(imageItemWrapper, imagePreviewsContainer.firstChild);
+                        updateMainImageIndicatorAndInput();
+                    }
+                });
+
+                // Инициализация SortableJS для перетаскивания изображений
+                if (imagePreviewsContainer.children.length > 0) {
+                    new Sortable(imagePreviewsContainer, {
+                        animation: 150,
+                        ghostClass: 'sortable-ghost', // Класс для "призрака" перетаскиваемого элемента
+                        onEnd: function (evt) {
+                            // После завершения перетаскивания обновляем индикатор главного изображения и порядок
+                            updateMainImageIndicatorAndInput();
+                        }
+                    });
+                }
+                // Первоначальное обновление индикатора и порядка при загрузке
+                updateMainImageIndicatorAndInput();
+            }
+            
+            // --- Логика управления Техническими характеристиками ---
+            const specsContainer = document.getElementById('specifications-container');
+            const addSpecBtn = document.getElementById('add-spec-btn');
+
+            if (addSpecBtn && specsContainer) {
+                addSpecBtn.addEventListener('click', () => {
+                    const newSpecRow = document.createElement('div');
+                    newSpecRow.className = 'flex items-center space-x-2 spec-row';
+                    newSpecRow.innerHTML = `
+                        <input type="text" name="spec_name[]" placeholder="Название характеристики" class="form-input flex-1">
+                        <input type="text" name="spec_value[]" placeholder="Значение" class="form-input flex-1">
+                        <button type="button" class="text-red-500 hover:text-red-700 remove-spec-btn" title="Удалить характеристику">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                    `;
+                    specsContainer.appendChild(newSpecRow);
+                });
+            }
+            if (specsContainer) {
+                specsContainer.addEventListener('click', function (event) {
+                    const removeBtn = event.target.closest('.remove-spec-btn');
+                    if (removeBtn) {
+                        const rowToRemove = removeBtn.closest('.spec-row');
+                        // Не удаляем последнюю строку, а очищаем ее поля
+                        if (specsContainer.querySelectorAll('.spec-row').length > 1) {
+                            rowToRemove.remove();
+                        } else {
+                            rowToRemove.querySelector('input[name="spec_name[]"]').value = '';
+                            rowToRemove.querySelector('input[name="spec_value[]"]').value = '';
+                        }
+                    }
+                });
+            }
+            
+            // --- Логика для модального окна Техкарты ---
+            const openTechCardModalBtnEl = document.getElementById('open-techcard-modal-btn'); 
+            const techCardModalEl = document.getElementById('techCardModal'); 
+            const modalTitleTechCardEl = document.getElementById('modal-title-techcard');
+            const modalProductInfoTechCardEl = document.getElementById('modal-product-info-techcard');
+            const modalProductIdTechCardInputEl = document.getElementById('modal-product-id-techcard');
+            const modalTechCardIdInputEl = document.getElementById('modal-tech-card-id');
+            const uploadBlockModalEl = document.getElementById('upload-block-modal'); // Убедитесь, что этот ID есть в HTML
+            
+            const dropAreaModalEl = document.getElementById('drop-area-modal');
+            const fileInputModalEl = document.getElementById('techcard-file-input-modal');
+            const fileInfoModalEl = document.getElementById('file-info-modal');
+            const loadedFileNameModalEl = document.getElementById('loaded-file-name-modal');
+            const loadedFileSizeModalEl = document.getElementById('loaded-file-size-modal');
+            const removeFileBtnModalEl = document.getElementById('remove-file-btn-modal');
+            
+            const parsedComponentsBlockModalEl = document.getElementById('parsed-components-block-modal');
+            const parsedComponentsTableBodyModalEl = document.getElementById('parsed-components-table-body-modal');
+            const componentsCountModalEl = document.getElementById('components-count-modal');
+            const missingPricesWarningModalEl = document.getElementById('missing-prices-warning-modal');
+            const missingPricesCountModalEl = document.getElementById('missing-prices-count-modal');
+            const totalMaterialCostModalEl = document.getElementById('total-material-cost-modal');
+            const editorCommentModalEl = document.getElementById('editor-comment-modal');
+            const saveDraftBtnModalEl = document.getElementById('save-draft-techcard-modal-btn');
+            const submitForApprovalBtnModalEl = document.getElementById('submit-techcard-for-approval-modal-btn');
+            const parserWarningsModalEl = document.getElementById('parser-warnings-modal');
+
+
+            let currentTechCardFileInModal = null; // Хранит объект File выбранного файла
+            let currentProductIdForModal = PRODUCT_ID_MAIN_PAGE; // ID текущего продукта для модального окна
+            let currentTechCardIdForModal = null; // ID существующей техкарты, если редактируем
+
+            window.openTechCardModal = function() {
+                if (!techCardModalEl) { 
+                    console.error("Модальное окно техкарты не найдено в DOM!"); 
+                    showNotification("Ошибка: Модальное окно техкарты не найдено.", "error");
+                    return; 
+                }
+                if (!PRODUCT_ID_MAIN_PAGE) {
+                    showNotification("Сначала сохраните товар, чтобы добавить или управлять техкартой.", "warning");
+                    return;
+                }
+                
+                currentProductIdForModal = PRODUCT_ID_MAIN_PAGE;
+                if(modalProductIdTechCardInputEl) modalProductIdTechCardInputEl.value = currentProductIdForModal;
+                
+                // Пытаемся получить данные об активной техкарте (если она есть на странице)
+                // Это упрощенный вариант, в идеале эти данные должны приходить с сервера или быть в JS-объекте
+                let existingTcId = null;
+                let existingTcData = null;
+                {% if active_tech_card and active_tech_card.id %}
+                    existingTcId = {{ active_tech_card.id }};
+                    existingTcData = {
+                        fileName: "{{ active_tech_card.file_url.split('/')[-1] if active_tech_card and active_tech_card.file_url else '' }}",
+                        // Компоненты лучше загружать AJAX-ом при открытии, если их много,
+                        // или если мы хотим всегда актуальные данные.
+                        // Пока что, если есть активная карта, модал откроется для "редактирования",
+                        // что означает загрузку нового файла или изменение статуса/комментария.
+                        // Предпросмотр компонентов будет работать при выборе нового файла.
+                        totalCost: {{ active_tech_card.total_cost if active_tech_card and active_tech_card.total_cost is not none else 'null' }},
+                        editorComment: "{{ active_tech_card.description|e if active_tech_card and active_tech_card.description else '' }}"
+                        // Статус и другие поля активной техкарты уже отображаются на основной странице.
+                    };
+                {% endif %}
+                
+                currentTechCardIdForModal = existingTcId; 
+                if(modalTechCardIdInputEl) modalTechCardIdInputEl.value = existingTcId || '';
+
+                if(modalProductInfoTechCardEl) modalProductInfoTechCardEl.innerHTML = `Товар: <strong class="font-medium">${PRODUCT_NAME_MAIN_PAGE}</strong> (Артикул: <strong class="font-medium">${PRODUCT_SKU_MAIN_PAGE}</strong>)`;
+
+                // Сброс состояния модального окна
+                currentTechCardFileInModal = null;
+                if(fileInputModalEl) fileInputModalEl.value = ''; 
+                if(fileInfoModalEl) fileInfoModalEl.classList.add('hidden');
+                if(parsedComponentsBlockModalEl) parsedComponentsBlockModalEl.classList.add('hidden');
+                if(editorCommentModalEl) editorCommentModalEl.value = existingTcData ? (existingTcData.editorComment || '') : '';
+                if(dropAreaModalEl) dropAreaModalEl.classList.remove('border-red-500'); // Сброс индикации ошибки dropzone
+                if(parserWarningsModalEl) parserWarningsModalEl.innerHTML = '';
+
+
+                if (!existingTcId) { // Если нет существующей активной техкарты, это всегда загрузка новой
+                    if(modalTitleTechCardEl) modalTitleTechCardEl.textContent = `Загрузка новой техкарты для: ${PRODUCT_NAME_MAIN_PAGE}`;
+                    if(uploadBlockModalEl) uploadBlockModalEl.classList.remove('hidden'); 
+                    if(saveDraftBtnModalEl) saveDraftBtnModalEl.disabled = true; // Кнопки активны только после выбора файла
+                    if(submitForApprovalBtnModalEl) submitForApprovalBtnModalEl.disabled = true;
+                } else { // Если есть существующая активная техкарта
+                    if(modalTitleTechCardEl) modalTitleTechCardEl.textContent = `Обновление техкарты для: ${PRODUCT_NAME_MAIN_PAGE}`;
+                    if (existingTcData && existingTcData.fileName) { 
+                        // Показываем информацию о текущем файле, если он есть
+                        currentTechCardFileInModal = { name: existingTcData.fileName, isExisting: true }; 
+                        if(loadedFileNameModalEl) loadedFileNameModalEl.textContent = existingTcData.fileName;
+                        if(loadedFileSizeModalEl) loadedFileSizeModalEl.textContent = ''; // Размер для существующего файла не так важен
+                        if(fileInfoModalEl) fileInfoModalEl.classList.remove('hidden');
+                        if(uploadBlockModalEl) uploadBlockModalEl.classList.remove('hidden'); 
+                        // Кнопки сохранения статуса/комментария должны быть активны, даже если файл не меняется
+                        if(saveDraftBtnModalEl) saveDraftBtnModalEl.disabled = false;
+                        if(submitForApprovalBtnModalEl) submitForApprovalBtnModalEl.disabled = false;
+                    } else { 
+                        // Если есть ID техкарты, но нет файла (маловероятно, но возможно)
+                         if(uploadBlockModalEl) uploadBlockModalEl.classList.remove('hidden');
+                         if(saveDraftBtnModalEl) saveDraftBtnModalEl.disabled = true;
+                         if(submitForApprovalBtnModalEl) submitForApprovalBtnModalEl.disabled = true;
+                    }
+                }
+                techCardModalEl.classList.remove('hidden');
+            }
+
+            window.closeTechCardModal = function() {
+                if (techCardModalEl) techCardModalEl.classList.add('hidden');
+            }
+            
+            if(openTechCardModalBtnEl && !openTechCardModalBtnEl.disabled) { 
+                openTechCardModalBtnEl.addEventListener('click', openTechCardModal);
+            }
+
+
+            function handleFileSelectInModal(files) {
+                if (files.length === 0) return;
+                const file = files[0];
+                if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+                    showNotification("Пожалуйста, выберите файл в формате XLSX или XLS.", "warning");
+                    if(fileInputModalEl) fileInputModalEl.value = ''; // Сбрасываем input
+                    if(dropAreaModalEl) dropAreaModalEl.classList.add('border-red-500');
+                    return;
+                }
+                if(dropAreaModalEl) dropAreaModalEl.classList.remove('border-red-500');
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    showNotification("Файл слишком большой. Максимальный размер 10МБ.", "warning");
+                    if(fileInputModalEl) fileInputModalEl.value = '';
+                    return;
+                }
+                currentTechCardFileInModal = file; // Сохраняем объект File
+                if(loadedFileNameModalEl) loadedFileNameModalEl.textContent = file.name;
+                if(loadedFileSizeModalEl) loadedFileSizeModalEl.textContent = `${(file.size / 1024).toFixed(2)} KB`;
+                if(fileInfoModalEl) fileInfoModalEl.classList.remove('hidden');
+                if(parserWarningsModalEl) parserWarningsModalEl.innerHTML = ''; // Очищаем старые предупреждения парсера
+                
+                const formData = new FormData();
+                formData.append('tech_card_excel_file_for_preview', file); 
+                // currentProductIdForModal должен быть установлен при открытии модала
+                if (currentProductIdForModal) { 
+                    formData.append('product_id', currentProductIdForModal);
+                } else {
+                    showNotification("ID продукта не определен. Невозможно выполнить предпросмотр.", "error");
+                    return;
+                }
+                
+                let previewUrl = PREVIEW_TECHCARD_URL_TEMPLATE.replace('<product_id_placeholder>', currentProductIdForModal);
+
+                fetch(previewUrl, { 
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRFToken': '{{ csrf_token() if csrf_token else "" }}' } // Если используете CSRF
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayParsedComponentsInModal(data.components, data.total_calculated_cost);
+                        if(parsedComponentsBlockModalEl) parsedComponentsBlockModalEl.classList.remove('hidden');
+                        if(saveDraftBtnModalEl) saveDraftBtnModalEl.disabled = false;
+                        if(submitForApprovalBtnModalEl) submitForApprovalBtnModalEl.disabled = false;
+                        if (data.warnings && data.warnings.length > 0 && parserWarningsModalEl) {
+                            parserWarningsModalEl.innerHTML = '<strong>Предупреждения парсера:</strong><ul>' + 
+                                data.warnings.map(w => `<li>${w}</li>`).join('') + '</ul>';
+                        }
+                    } else {
+                        showNotification('Ошибка предпросмотра: ' + (data.message || 'Не удалось обработать файл.'), 'error');
+                        if(removeFileBtnModalEl) removeFileBtnModalEl.click(); // Сбрасываем файл
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка AJAX при предпросмотре техкарты:', error);
+                    showNotification('Сетевая ошибка или ошибка сервера при предпросмотре техкарты.', 'error');
+                    if(removeFileBtnModalEl) removeFileBtnModalEl.click();
+                });
+            }
+
+            function displayParsedComponentsInModal(components, totalCalculatedCost = null) {
+                if (!parsedComponentsTableBodyModalEl) return;
+                parsedComponentsTableBodyModalEl.innerHTML = ''; // Очищаем старые компоненты
+                let missingPriceCount = 0;
+
+                if (!components || components.length === 0) {
+                    parsedComponentsTableBodyModalEl.innerHTML = '<tr><td colspan="7" class="text-center py-4">Компоненты не найдены в файле или не были распознаны.</td></tr>';
+                    if(componentsCountModalEl) componentsCountModalEl.textContent = 0;
+                    if(totalMaterialCostModalEl) totalMaterialCostModalEl.textContent = formatCurrency(0);
+                    if(missingPricesWarningModalEl) missingPricesWarningModalEl.classList.add('hidden');
+                    return;
+                }
+
+                components.forEach((comp, index) => {
+                    const row = parsedComponentsTableBodyModalEl.insertRow();
+                    row.insertCell().textContent = comp.num || (index + 1);
+                    row.insertCell().textContent = comp.articleFromFile || '-';
+                    row.insertCell().textContent = comp.nameFromFile || '-';
+                    row.insertCell().textContent = parseFloat(comp.quantity).toFixed(3); 
+                    row.insertCell().textContent = comp.unitFromFile || '-';
+
+                    let priceCellContent = '<span class="text-gray-400">N/A</span>';
+                    let costCellContent = '<span class="text-gray-400">N/A</span>';
+                    
+                    // Логика отображения цен и статуса компонента (найден в БД, новый, и т.д.)
+                    if (comp.foundInDB) {
+                        row.classList.remove('modal-component-new');
+                        if (comp.rawMaterialPriceDB !== null && comp.rawMaterialPriceDB > 0) {
+                            priceCellContent = formatCurrency(comp.rawMaterialPriceDB);
+                            costCellContent = formatCurrency(comp.componentCost);
+                        } else {
+                            priceCellContent = `<span class="text-orange-600 font-semibold">${comp.rawMaterialPriceDB === 0 ? 'Цена 0!' : 'Цена?'}</span>`;
+                            costCellContent = formatCurrency(0); // Если цена 0, стоимость 0
+                            missingPriceCount++;
+                            row.classList.add('modal-component-not-found'); 
+                        }
+                    } else { // Новый компонент (isNew = true)
+                        row.classList.add('modal-component-new');
+                        if (comp.rawMaterialPriceDB !== null && comp.rawMaterialPriceDB > 0) { // Цена из Excel для нового
+                             priceCellContent = `${formatCurrency(comp.rawMaterialPriceDB)} (новая)`;
+                             costCellContent = formatCurrency(comp.componentCost); // Стоимость по цене из Excel
+                        } else {
+                             priceCellContent = `<span class="text-orange-600 font-semibold">Цена? (новая)</span>`;
+                             costCellContent = formatCurrency(0);
+                             missingPriceCount++;
+                        }
+                    }
+                    
+                    row.insertCell().innerHTML = priceCellContent;
+                    row.insertCell().innerHTML = costCellContent;
+                });
+
+                if(componentsCountModalEl) componentsCountModalEl.textContent = components.length;
+                if(totalMaterialCostModalEl) totalMaterialCostModalEl.textContent = formatCurrency(totalCalculatedCost !== null ? totalCalculatedCost : 0);
+                
+                if (missingPriceCount > 0) {
+                    if(missingPricesCountModalEl) missingPricesCountModalEl.textContent = missingPriceCount;
+                    if(missingPricesWarningModalEl) missingPricesWarningModalEl.classList.remove('hidden');
+                } else {
+                    if(missingPricesWarningModalEl) missingPricesWarningModalEl.classList.add('hidden');
+                }
+            }
+
+            // Drag & Drop для файла техкарты в модальном окне
+            if (dropAreaModalEl) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropAreaModalEl.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false);
+                });
+                dropAreaModalEl.addEventListener('dragenter', () => dropAreaModalEl.classList.add('dragover'));
+                dropAreaModalEl.addEventListener('dragover', () => dropAreaModalEl.classList.add('dragover'));
+                dropAreaModalEl.addEventListener('dragleave', () => dropAreaModalEl.classList.remove('dragover'));
+                dropAreaModalEl.addEventListener('drop', (e) => {
+                    dropAreaModalEl.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files && files.length > 0) {
+                        if(fileInputModalEl) fileInputModalEl.files = files; // Присваиваем файлы стандартному input
+                        handleFileSelectInModal(files); 
+                    }
+                }, false);
+            }
+
+            if (fileInputModalEl) {
+                fileInputModalEl.addEventListener('change', function () { handleFileSelectInModal(this.files); });
+            }
+
+            if (removeFileBtnModalEl) {
+                removeFileBtnModalEl.addEventListener('click', () => {
+                    currentTechCardFileInModal = null;
+                    if(fileInputModalEl) fileInputModalEl.value = ''; // Сбрасываем input
+                    if(fileInfoModalEl) fileInfoModalEl.classList.add('hidden');
+                    if(parsedComponentsBlockModalEl) parsedComponentsBlockModalEl.classList.add('hidden');
+                    if(parserWarningsModalEl) parserWarningsModalEl.innerHTML = '';
+                    // Если не было существующей техкарты, дизейблим кнопки
+                    if (!currentTechCardIdForModal) {
+                        if(saveDraftBtnModalEl) saveDraftBtnModalEl.disabled = true;
+                        if(submitForApprovalBtnModalEl) submitForApprovalBtnModalEl.disabled = true;
+                    }
+                    // Если была существующая, кнопки остаются активными для смены статуса/комментария
+                    if(dropAreaModalEl) dropAreaModalEl.classList.remove('border-red-500');
+                });
+            }
+            
+            // Отправка данных техкарты из модального окна
+            function submitTechCardFromModal(status) {
+                // Если нет нового файла И нет существующей техкарты для обновления статуса, то ошибка
+                if (!currentTechCardFileInModal && !currentTechCardIdForModal) { 
+                     showNotification('Загрузите файл техкарты или выберите существующую для изменения статуса.', 'warning'); return;
+                }
+                // currentProductIdForModal должен быть установлен
+                if (!currentProductIdForModal) {
+                    showNotification('ID товара не определен. Сохраните товар перед добавлением техкарты.', 'error'); return;
+                }
+
+                const formData = new FormData();
+                // Добавляем файл, только если он новый (не isExisting)
+                if (currentTechCardFileInModal && !currentTechCardFileInModal.isExisting) { 
+                    formData.append('tech_card_excel_file_modal', currentTechCardFileInModal);
+                }
+                formData.append('product_id', currentProductIdForModal);
+                if (currentTechCardIdForModal) { // Если редактируем существующую (даже если файл новый, ID старой нужен для логики обновления)
+                    formData.append('tech_card_id', currentTechCardIdForModal);
+                }
+                formData.append('comment', editorCommentModalEl.value);
+                formData.append('status', status); 
+
+                fetch(PROCESS_TECHCARD_MODAL_URL, { 
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRFToken': '{{ csrf_token() if csrf_token else "" }}' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message || 'Техкарта успешно обработана!', 'success');
+                        closeTechCardModal();
+                        
+                        // Обновляем информацию на основной странице
+                        if (costPriceInput && data.new_cost_price !== undefined) {
+                            costPriceInput.value = parseFloat(data.new_cost_price).toFixed(2);
+                        }
+                        if (costPriceSourceEl && data.cost_price_source) {
+                            costPriceSourceEl.textContent = data.cost_price_source;
+                        }
+                        if (typeof calculateAllPrices === 'function') { // Пересчитываем все цены
+                            calculateAllPrices(); 
+                        }
+                        
+                        const summaryDiv = document.getElementById('active-tech-card-summary');
+                        if(summaryDiv && data.tech_card_info_html) {
+                            summaryDiv.innerHTML = data.tech_card_info_html;
+                            // Обновляем состояние кнопки "Авто (ТК)"
+                            if (fetchCostBtn) {
+                                const newTcStatus = data.tech_card_status; // Статус новой активной карты
+                                const newTcCost = data.new_cost_price;
+                                fetchCostBtn.disabled = !(newTcStatus === TECH_CARD_STATUS_APPROVED_JS || newTcStatus === TECH_CARD_STATUS_PROCESSED_JS);
+                                // Обновляем глобальные переменные для кнопки "Авто (ТК)"
+                                window.TECH_CARD_COST_FROM_SERVER_MAIN_PAGE = parseFloat(newTcCost || '0');
+                                window.TECH_CARD_STATUS_FROM_SERVER_MAIN_PAGE = newTcStatus || 'Нет данных';
+                                // LATEST_TECH_CARD_UPDATED_AT_MAIN_PAGE тоже нужно бы обновить, если приходит с сервера
+                            }
+                        } else { 
+                             // Если нет блока для обновления или HTML не пришел, можно перезагрузить страницу
+                             // window.location.reload(); 
+                             // Но лучше, чтобы сервер всегда возвращал HTML для обновления
+                             showNotification("Информация о техкарте на странице может быть неактуальна. Обновите страницу.", "info");
+                        }
+                        // Обновляем текст кнопки открытия модала
+                         if (openTechCardModalBtnEl && data.tech_card_id) {
+                            openTechCardModalBtnEl.innerHTML = 'Редактировать/Загрузить новую';
+                        }
+
+                    } else {
+                        showNotification('Ошибка обработки техкарты: ' + (data.message || 'Неизвестная ошибка.'), 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка AJAX при обработке техкарты:', error);
+                    showNotification('Сетевая ошибка или ошибка сервера при обработке техкарты.', 'error');
+                });
+            }
+
+            if(saveDraftBtnModalEl) {
+                saveDraftBtnModalEl.addEventListener('click', () => {
+                    submitTechCardFromModal(TECH_CARD_STATUS_DRAFT_JS);
+                });
+            }
+            if(submitForApprovalBtnModalEl) {
+                submitForApprovalBtnModalEl.addEventListener('click', () => {
+                    // Проверка на отсутствующие цены перед отправкой на согласование
+                    if (missingPricesWarningModalEl && !missingPricesWarningModalEl.classList.contains('hidden')) {
+                        if (!confirm("Внимание! Для некоторых компонентов не найдены цены в справочнике или равны нулю. Себестоимость может быть неточной. Всё равно отправить на согласование?")) {
+                            return;
+                        }
+                    }
+                    submitTechCardFromModal(TECH_CARD_STATUS_PENDING_ACCOUNTANT_JS); // Или другой статус по умолчанию для согласования
+                });
+            }
+            
+            // --- Обработка отправки основной формы товара ---
+            const productForm = document.getElementById('product-form');
+            if (productForm) { 
+                productForm.addEventListener('submit', function (event) {
+                    // 1. Сохраняем содержимое Quill
+                    if (quill && document.getElementById('product-full-description')) { 
+                        document.getElementById('product-full-description').value = JSON.stringify(quill.getContents()); 
+                    }
+
+                    // 2. Собираем данные о характеристиках
+                    const specNames = Array.from(document.querySelectorAll('input[name="spec_name[]"]')).map(input => input.value.trim());
+                    const specValues = Array.from(document.querySelectorAll('input[name="spec_value[]"]')).map(input => input.value.trim());
+                    const specificationsObject = {};
+                    specNames.forEach((name, index) => {
+                        if (name && specValues[index]) { // Сохраняем только если есть и имя, и значение
+                            specificationsObject[name] = specValues[index];
+                        }
+                    });
+                    // Добавляем скрытое поле с JSON характеристик
+                    let specsJsonInput = document.querySelector('input[name="specifications_json"]');
+                    if (!specsJsonInput) {
+                        specsJsonInput = document.createElement('input');
+                        specsJsonInput.type = 'hidden';
+                        specsJsonInput.name = 'specifications_json';
+                        productForm.appendChild(specsJsonInput);
+                    }
+                    specsJsonInput.value = JSON.stringify(specificationsObject);
+
+                    // 3. Собираем порядок изображений (уже делается в updateImageOrderInput)
+                    // Убедимся, что imageOrderInput существует и содержит актуальные данные
+                    if (!imageOrderInput.value && imagePreviewsContainer.children.length > 0) {
+                        updateImageOrderInput(); // На всякий случай
+                    }
+                }); 
+            }
+        
+        }); // Конец DOMContentLoaded
+
+        // --- Вспомогательные функции JS (глобальные в этом скрипте) ---
+        function formatCurrency(amount) {
+            if (amount === null || typeof amount === 'undefined' || isNaN(amount)) return "0.00 сом";
+            // Используем toLocaleString для форматирования с пробелами и запятой, затем заменяем на точку для единообразия
+            let formatted = parseFloat(amount).toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return formatted.replace(',', '.') + " сом"; // Убедимся, что разделитель - точка
+        }
+
+        function showNotification(message, type = 'info', duration = 3500) {
+            if (!notificationContainerEl) {
+                console.warn("Контейнер уведомлений #notification-container не найден.");
+                alert(message); // Фоллбэк на alert
+                return;
+            }
+
+            const notif = document.createElement('div');
+            notif.className = `notification-item max-w-xs px-4 py-3 rounded-lg shadow-xl text-white text-sm font-medium transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 
+                type === 'warning' ? 'bg-yellow-500' : 'bg-sky-500' // Добавлен тип warning
+            }`;
+            notif.innerHTML = `
+                <i class="fas ${
+                    type === 'success' ? 'fa-check-circle' : 
+                    type === 'error' ? 'fa-exclamation-triangle' : 
+                    type === 'warning' ? 'fa-exclamation-circle' : 'fa-info-circle'
+                } mr-2"></i><span>${message}</span>
+            `;
+            notificationContainerEl.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.classList.add('fade-out');
+                setTimeout(() => notif.remove(), 300); // Время на анимацию исчезновения
+            }, duration);
+        }
+
+    </script>
+</body>
+</html>

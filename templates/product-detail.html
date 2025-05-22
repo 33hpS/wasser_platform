@@ -1,0 +1,962 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка товара... - Wasser - Мебель для ванной</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .logo-img {
+            max-height: 50px;
+        }
+        .thumbnail-active {
+            border-color: #0284c7; /* sky-600 */
+            box-shadow: 0 0 0 2px #0284c7;
+        }
+        .tab-button.active {
+            border-color: #0284c7; /* sky-600 */
+            color: #0284c7;
+            font-weight: 600;
+        }
+        .tab-button:not(.active) {
+            border-color: transparent;
+            color: #4b5563; /* gray-600 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .key-feature-icon svg {
+            width: 1.5rem; /* 24px */
+            height: 1.5rem; /* 24px */
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #1f2937; /* gray-800 для фона, пока видео не загрузится */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); /* shadow-md */
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .form-input, .form-textarea {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1;
+        }
+        .social-share-button {
+            @apply inline-flex items-center justify-center w-10 h-10 rounded-full text-gray-600 hover:text-white transition-colors duration-200;
+        }
+        .social-share-button svg {
+            @apply w-5 h-5;
+        }
+        .rating-stars span {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .rating-stars span:hover,
+        .rating-stars span.hovered {
+            color: #fbbf24; /* amber-400 */
+        }
+        .rating-stars span.selected {
+            color: #f59e0b; /* amber-500 */
+        }
+        #imageModalTitle {
+            @apply text-lg font-semibold text-gray-800 p-3 text-center border-b mb-2;
+        }
+        #add-to-wishlist-button.in-wishlist .wishlist-icon svg {
+            fill: #ef4444; /* red-500 */
+            stroke: #ef4444;
+        }
+        #add-to-wishlist-button.in-wishlist {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="about.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">О фабрике</a>
+                    <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-detail">0</span>
+                    </a>
+                    <a href="login.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                     <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-detail">0</span>
+                    </a>
+                    <button id="mobile-menu-button-detail" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-detail" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="about.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main id="product-detail-main-content" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div id="product-not-found" class="hidden text-center py-10">
+            <h1 class="text-3xl font-bold text-red-600 mb-4">Товар не найден</h1>
+            <p class="text-gray-600 mb-6">К сожалению, товар с указанным ID отсутствует в нашем каталоге.</p>
+            <a href="catalog.html" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-6 rounded-md">Вернуться в каталог</a>
+        </div>
+
+        <div id="product-content-wrapper" class="hidden">
+            <nav class="text-sm mb-6" aria-label="Breadcrumb">
+                <ol class="list-none p-0 inline-flex space-x-2" id="breadcrumb-list">
+                    <li class="flex items-center">
+                        <a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                        <a href="catalog.html" class="text-gray-500 hover:text-sky-600">Каталог</a>
+                    </li>
+                    <li class="flex items-center" id="breadcrumb-category-placeholder"></li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                        <span class="text-gray-700 font-medium" id="breadcrumb-product-name">Название Товара</span>
+                    </li>
+                </ol>
+            </nav>
+
+            <section class="bg-white p-6 md:p-8 rounded-lg shadow-lg mb-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="product-gallery">
+                        <div class="main-image mb-4 rounded-lg overflow-hidden shadow">
+                            <img id="main-product-image" src="https://placehold.co/600x500/e0f2fe/0c4a6e?text=Загрузка..." alt="Основное изображение товара" class="w-full h-auto object-cover cursor-pointer">
+                        </div>
+                        <div id="thumbnail-container" class="grid grid-cols-4 gap-2"></div>
+                        <div id="video-review-container" class="mt-6 hidden">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">Видеообзор</h3>
+                            <div class="video-container">
+                                <iframe id="product-video-iframe" width="560" height="315" src="" title="Видеообзор товара" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-info">
+                        <h1 id="product-name" class="text-3xl font-bold text-gray-800 mb-2">Загрузка...</h1>
+                        <p class="text-sm text-gray-500 mb-1">Артикул: <span id="product-sku"></span></p>
+                        <div class="flex items-center mb-4">
+                            <div id="product-rating-stars" class="flex items-center"></div>
+                            <a href="#reviews" id="reviews-link" class="ml-2 text-sm text-sky-600 hover:underline">(<span id="product-reviews-count-text">0</span> отзывов)</a>
+                        </div>
+
+                        <div class="price-section mb-6">
+                            <span id="product-price" class="text-4xl font-bold text-sky-600"></span>
+                            <span id="product-old-price" class="text-xl text-gray-400 line-through ml-2 hidden"></span>
+                            <span id="product-discount-badge" class="ml-3 bg-red-500 text-white text-sm font-semibold px-2.5 py-0.5 rounded hidden"></span>
+                        </div>
+
+                        <div id="product-availability" class="mb-6 text-sm"></div>
+                        <div id="product-options-placeholder" class="mb-6"></div>
+
+                        <div class="actions flex flex-col sm:flex-row gap-3 mb-3">
+                            <div class="quantity-selector flex items-center border border-gray-300 rounded-md">
+                                <button id="decrease-quantity" class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-l-md focus:outline-none">-</button>
+                                <input id="quantity-input" type="number" value="1" min="1" class="w-12 text-center border-0 focus:ring-0 text-sm">
+                                <button id="increase-quantity" class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-r-md focus:outline-none">+</button>
+                            </div>
+                            <button id="add-to-cart-button" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-150 flex items-center justify-center text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                                В корзину
+                            </button>
+                        </div>
+                        <button id="buy-one-click-button" class="w-full sm:w-auto bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-150 flex items-center justify-center text-sm mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            Купить в 1 клик
+                        </button>
+                         <button id="add-to-wishlist-button" class="wishlist-toggle-button w-full sm:w-auto border border-gray-300 hover:border-sky-500 hover:text-sky-600 text-gray-600 font-medium py-3 px-6 rounded-md transition-colors duration-150 flex items-center justify-center text-sm mb-6" data-product-id="">
+                            <span class="wishlist-icon mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </span>
+                            <span class="wishlist-button-text">В список желаний</span>
+                        </button>
+
+                        <div id="key-features-section" class="mt-6 pt-6 border-t border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Ключевые характеристики</h3>
+                            <div id="key-features-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5"></div>
+                        </div>
+
+                        <div class="short-description mt-8 pt-6 border-t border-gray-200">
+                            <h4 class="text-md font-semibold mb-2 text-gray-700">Кратко о товаре:</h4>
+                            <ul id="product-short-desc-list" class="list-disc list-inside text-sm text-gray-600 space-y-1"></ul>
+                        </div>
+                        
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <h4 class="text-md font-semibold mb-3 text-gray-700">Поделиться:</h4>
+                            <div id="social-share-buttons" class="flex space-x-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 md:p-8 rounded-lg shadow-lg mb-12">
+                <div class="border-b border-gray-200 mb-6">
+                    <nav id="tab-buttons-container" class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <button class="tab-button py-3 px-1 border-b-2 text-sm font-medium active" data-tab="description">Описание</button>
+                        <button class="tab-button py-3 px-1 border-b-2 text-sm font-medium" data-tab="specifications">Характеристики</button>
+                        <button class="tab-button py-3 px-1 border-b-2 text-sm font-medium" data-tab="reviews">Отзывы (<span id="reviews-count">0</span>)</button>
+                        <button class="tab-button py-3 px-1 border-b-2 text-sm font-medium" data-tab="delivery_payment">Доставка и оплата</button>
+                    </nav>
+                </div>
+
+                <div id="tab-content-container">
+                    <div id="tab-description" class="tab-content active prose max-w-none prose-sm sm:prose-base">
+                        <div id="product-full-description"></div>
+                    </div>
+                    <div id="tab-specifications" class="tab-content">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Технические характеристики</h3>
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <tbody id="product-specs-table" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                    <div id="tab-reviews" class="tab-content">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-semibold text-gray-700">Отзывы покупателей</h3>
+                            <button id="show-add-review-form-button" class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium py-2 px-4 rounded-md">Оставить отзыв</button>
+                        </div>
+                        <form id="add-review-form" class="hidden bg-gray-50 p-4 rounded-md space-y-4 mb-6">
+                            <h4 class="text-md font-semibold text-gray-700">Ваш отзыв</h4>
+                            <div>
+                                <label for="review-name" class="form-label">Ваше имя<span class="text-red-500">*</span></label>
+                                <input type="text" id="review-name" class="form-input" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Ваша оценка<span class="text-red-500">*</span></label>
+                                <div id="review-rating-stars" class="rating-stars flex space-x-1 text-2xl text-gray-300">
+                                    <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+                                </div>
+                                <input type="hidden" id="review-rating-value" name="rating" required>
+                            </div>
+                            <div>
+                                <label for="review-text" class="form-label">Текст отзыва<span class="text-red-500">*</span></label>
+                                <textarea id="review-text" rows="4" class="form-textarea" required></textarea>
+                            </div>
+                            <div class="flex justify-end space-x-3">
+                                <button type="button" id="cancel-review-button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-md">Отмена</button>
+                                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 px-4 rounded-md">Отправить отзыв</button>
+                            </div>
+                        </form>
+                        <div id="reviews-list" class="space-y-6"></div>
+                    </div>
+                    <div id="tab-delivery_payment" class="tab-content prose max-w-none prose-sm sm:prose-base">
+                        <h4>Условия доставки</h4>
+                        <p>Мы осуществляем доставку по всей России. Стоимость и сроки доставки зависят от вашего региона и выбранного способа.</p>
+                        <ul>
+                            <li><strong>Курьерская доставка по Москве и МО:</strong> 1-2 рабочих дня, от 500 ₽.</li>
+                            <li><strong>Доставка транспортной компанией по России:</strong> от 3 рабочих дней, стоимость рассчитывается индивидуально.</li>
+                            <li><strong>Самовывоз:</strong> Вы можете забрать заказ самостоятельно с нашего склада (адрес и время работы уточняйте у менеджера).</li>
+                        </ul>
+                        <h4>Способы оплаты</h4>
+                        <p>Вы можете оплатить ваш заказ следующими способами:</p>
+                        <ul>
+                            <li>Онлайн-оплата банковской картой на сайте (Visa, Mastercard, Мир).</li>
+                            <li>Оплата наличными или картой курьеру при получении (для Москвы и МО).</li>
+                            <li>Безналичный расчет для юридических лиц.</li>
+                        </ul>
+                         <p>Подробную информацию вы можете найти на странице <a href="delivery.html" class="text-sky-600 hover:underline">"Доставка и оплата"</a>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Вам также могут понравиться</h2>
+                <div id="related-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                </div>
+            </section>
+        </div> 
+    </main>
+
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-[100] hidden">
+        <div class="bg-white p-2 rounded-lg shadow-xl max-w-3xl max-h-[90vh] relative" onclick="event.stopPropagation()">
+            <h3 id="imageModalTitle" class="text-lg font-semibold text-gray-800 p-3 text-center border-b mb-2">Просмотр изображения</h3>
+            <img id="modalImage" src="" alt="Увеличенное изображение товара" class="max-w-full max-h-[calc(85vh-60px)] object-contain rounded">
+            <button class="absolute top-2 right-2 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none" onclick="closeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </div>
+
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="about.html" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>© <span id="currentYearDetail"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script src="../js/wishlist-logic.js"></script>
+    <script>
+        // --- SVG ИКОНКИ ---
+        const svgIcons = {
+            width: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>',
+            height: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m0 0l-6.75-6.75M12 19.5l6.75-6.75" /></svg>',
+            depth: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>',
+            color: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a15.995 15.995 0 00-4.764 4.648l-3.876 5.814a1.151 1.151 0 001.597 1.597l5.814-3.875a15.996 15.996 0 004.649-4.763m-3.42-3.42a15.995 15.995 0 004.764-4.648" /></svg>',
+            material: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5V18M15 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 010 1.954l-7.108 4.061A1.125 1.125 0 013 16.811z" /></svg>',
+            weight: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52c2.625.364 5.25.815 7.5 1.33m-15-1.33c2.25-.515 4.875-.966 7.5-1.33m-7.5 1.33c-.99.203-1.99.377-3 .52m0 0c-1.125.226-2.25.483-3.375.764m14.25-4.185c-.226-.078-.46-.156-.697-.232m0 0c-.239-.078-.48-.155-.724-.232m0 0c-.24-.077-.483-.154-.728-.231m0 0c-.244-.077-.49-.153-.735-.23m0 0c-.245-.077-.492-.153-.74-.229M3.75 4.97c-.99.203-1.99.377-3 .52m0 0c-1.125.226-2.25.483-3.375.764m14.25-4.185c.226-.078.46-.156.697-.232m0 0c.239-.078.48-.155.724-.232m0 0c.24-.077.483-.154.728-.231m0 0c.244-.077.49-.153.735-.23m0 0c.245-.077.492-.153-.74-.229" /></svg>',
+            volume: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3M10.5 15h3M20.25 7.5V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V7.5m18 0v12.75a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 20.25V7.5m18 0h-2.25m-13.5 0H3.75" /></svg>'
+        };
+        const socialIcons = {
+            vk: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.162 18.994c.607-.061 1.229-.124 1.86-.189.517-.054.96-.232.96-.815 0-.402-.204-.604-.689-.604-.459 0-.91.031-1.363.031-.727 0-1.45-.043-2.176-.043-.059 0-.118.001-.177.001-1.398 0-2.959-.022-4.141.29C6.004 18.01 5.003 19 4.401 19c-.186 0-.372 0-.559-.001-.495-.004-.854-.147-.954-.638-.059-.29.059-.519.297-.694.273-.202.58-.334.895-.481 1.162-.536 2.257-1.19 3.298-1.903.345-.236.684-.479 1.02-.728.081-.061.16-.123.242-.184.066-.048.035-.149-.015-.211-.29-.358-.583-.715-.877-1.071-.483-.584-.969-1.165-1.46-1.74-.144-.171-.289-.341-.438-.508-.112-.126-.238-.244-.376-.352-.388-.308-.327-.569.088-.738.345-.141.703-.183 1.055-.183.818 0 1.636.002 2.454.002.366 0 .732.004 1.097-.001.511-.006.753-.273.89-.732.16-.536.323-1.071.479-1.608.228-.786.449-1.575.693-2.359a.617.617 0 0 1 .59-.479c.183 0 .366.001.549.001.423 0 .583.189.699.586.332 1.135.666 2.269.998 3.404.103.353.182.713.28 1.066.112.404.086.663-.209.889-.252.192-.501.388-.752.582-.041.032-.08.066-.12.099-.082.066-.036.18.032.255.311.335.619.673.93 1.008.543.585 1.082 1.174 1.624 1.76.13.141.262.28.393.421.233.253.54.334.872.22.34-.117.534-.358.779-.538.193-.143.387-.284.58-.428.35-.262.7-.526 1.051-.788.184-.136.379-.259.592-.333.272-.094.527.004.636.281.11.276.005.525-.199.696-.169.14-.338.28-.507.42-.54.447-1.086.888-1.627 1.333-.537.441-1.069.89-1.597 1.341-.264.226-.529.451-.792.677-.341.293-.668.601-.897.993-.133.228-.063.47.148.618.18.126.368.187.575.209.747.076 1.492.102 2.236.118.313.006.626.006.939.006.255 0 .51.002.764-.002.695-.01.96.233.96.778 0 .42-.204.621-.689.621-.464 0-.916-.032-1.37-.032-.727 0-1.452.042-2.178.042h-.176c-1.194 0-2.636.048-3.958-.025a2.568 2.568 0 0 1-.706-.088c-.01 0-.019-.002-.028-.002Z"/></svg>',
+            telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12a12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.13-.03.266-.13.371l-2.663 2.533-2.88 2.728a.295.295 0 0 1-.22.093c-.107.006-.213-.03-.29-.104l-1.028-1.002-.99-1.185c-.105-.124-.076-.3.068-.395a.292.292 0 0 1 .303-.057c.066.027.124.081.162.151l.756.91.903.862 2.32-2.198c.242-.229 4.21-3.978 4.32-4.088zM9.96 15.893c.03.12.08.232.15.328a.493.493 0 0 0 .342.145.493.493 0 0 0 .342-.145c.07-.096.12-.208.15-.328l.39-1.898-1.372-1.31L9.96 15.893z"/></svg>',
+            whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.001 2.003C6.478 2.003 2 6.481 2 12.003c0 1.75.443 3.403 1.255 4.852L2 22.003l5.305-1.373a9.928 9.928 0 0 0 4.696 1.188h.001c5.522 0 9.999-4.478 9.999-9.999c0-5.522-4.477-9.999-9.999-9.999zm0 0M8.138 6.959c.22-.006.428.043.612.15.2.117.352.28.463.494.13.244.198.513.198.79v.015c0 .07-.004.138-.012.204l-.03.156c-.03.128-.078.25-.14.363l-.195.348c-.18.31-.39.606-.63.885l-.045.045c-.09.09-.173.188-.248.293c-.105.15-.18.308-.225.473a5.19 5.19 0 0 0-.105 1.373v.218a3.17 3.17 0 0 0 .51.96c.203.315.48.585.825.795c.405.248.855.405 1.335.465h.135c.195 0 .39-.03.578-.09a2.955 2.955 0 0 0 1.05-.578l.045-.045c.06-.06.12-.12.173-.188a.492.492 0 0 1 .188-.128c.075-.03.15-.045.225-.045h.225c.21 0 .405.075.555.218l1.328 1.298c.12.12.195.278.21.458a.72.72 0 0 1-.06.51c-.12.285-.33.533-.608.728a3.405 3.405 0 0 1-1.065.548c-.375.105-.765.158-1.17.158c-1.11 0-2.153-.293-3.083-.855c-1.02-.615-1.86-1.425-2.49-2.385c-.57-.885-.885-1.89-.9-2.978a6.195 6.195 0 0 1 .21-1.665c.135-.45.36-.855.66-1.2a3.33 3.33 0 0 1 .983-.953c.195-.12.405-.203.623-.248zm0 0"/></svg>'
+        };
+
+        // --- ЛОКАЛЬНЫЙ МАССИВ ТОВАРОВ ДЛЯ ЭТОЙ СТРАНИЦЫ ---
+        const allMockProducts = [
+            { id: 1, name: 'Тумба "Modern" 75см', sku: 'WS-MOD75-ANT', category: { name: "Тумбы с раковиной", slug: "tumbi" }, price: 28500, oldPrice: 32000, availability: 'В наличии', weightKg: 25.5, volumeM3: 0.15, images: ['https://placehold.co/600x500/e0f2fe/0c4a6e?text=Тумба+Modern+Вид+1', 'https://placehold.co/600x500/c7d2fe/3730a3?text=Тумба+Modern+Вид+2', 'https://placehold.co/600x500/ddd6fe/5b21b6?text=Тумба+Modern+Вид+3'], videoUrl: "https://www.youtube.com/embed/your_video_id_1", keyFeatures: [{ name: "Ширина", value: "750 мм", iconSVG: svgIcons.width }, { name: "Высота", value: "520 мм", iconSVG: svgIcons.height }, { name: "Цвет", value: "Антрацит", iconSVG: svgIcons.color }, { name: "Вес", value: "25.5 кг", iconSVG: svgIcons.weight }], shortDescription: ["Современный дизайн", "Влагостойкие материалы", "2 ящика"], fullDescription: "<p>Полное описание тумбы Modern 75см. Идеальное решение для вашей ванной комнаты, сочетающее стиль и практичность.</p>", specifications: [{ name: "Ширина", value: "75 см" }, { name: "Материал", value: "МДФ" }], reviews: [{ author: "Елена", rating: 5, text: "Отлично!", date: "2024-05-10" }, { author: "Иван", rating: 4, text: "Хорошо", date: "2024-05-12" }] },
+            { id: 2, name: 'Зеркало "Orion" с LED', sku: 'WS-ZER-ORL', category: { name: "Зеркала", slug: "zerkala" }, price: 12900, oldPrice: null, availability: 'В наличии', weightKg: 8.0, volumeM3: 0.05, images: ['https://placehold.co/600x500/fef9c3/713f12?text=Зеркало+Orion+LED'], videoUrl: null, keyFeatures: [{ name: "Размер", value: "80x60 см", iconSVG: svgIcons.width }, { name: "Подсветка", value: "LED", iconSVG: svgIcons.color }, { name: "Вес", value: "8 кг", iconSVG: svgIcons.weight }], shortDescription: ["Сенсорное включение", "Яркая подсветка"], fullDescription: "<p>Описание зеркала Orion. Добавьте света и стиля в вашу ванную.</p>", specifications: [{ name: "Размер", value: "80x60 см" }], reviews: [] },
+            { id: 3, name: 'Пенал "Linea Slim"', sku: 'WS-PEN-LIN', category: { name: "Пеналы", slug: "penali" }, price: 17300, oldPrice: 18500, availability: 'Под заказ (7 дней)', weightKg: 15.2, volumeM3: 0.1, images: ['https://placehold.co/600x500/ecfccb/365314?text=Пенал+Linea+Slim'], videoUrl: null, keyFeatures: [{ name: "Высота", value: "150 см", iconSVG: svgIcons.height }, { name: "Цвет", value: "Дуб крафт", iconSVG: svgIcons.color }, { name: "Вес", value: "15.2 кг", iconSVG: svgIcons.weight }], shortDescription: ["Подвесной", "Компактный"], fullDescription: "<p>Описание пенала Linea Slim. Максимум хранения при минимуме занимаемого пространства.</p>", specifications: [{ name: "Высота", value: "150 см" }], reviews: [{ author: "Анна", rating: 5, text: "Очень вместительный!", date: "2024-04-20" }] },
+        ];
+        const productsSource = allMockProducts;
+
+        // --- ЭЛЕМЕНТЫ DOM ---
+        const mainProductImageEl = document.getElementById('main-product-image');
+        const thumbnailContainerEl = document.getElementById('thumbnail-container');
+        const productNameEl = document.getElementById('product-name');
+        const productSkuEl = document.getElementById('product-sku');
+        const productRatingStarsEl = document.getElementById('product-rating-stars');
+        const productReviewsCountTextEl = document.getElementById('product-reviews-count-text');
+        const productPriceEl = document.getElementById('product-price');
+        const productOldPriceEl = document.getElementById('product-old-price');
+        const productDiscountBadgeEl = document.getElementById('product-discount-badge');
+        const productAvailabilityEl = document.getElementById('product-availability');
+        const keyFeaturesGridEl = document.getElementById('key-features-grid');
+        const productShortDescListEl = document.getElementById('product-short-desc-list');
+        const productFullDescriptionEl = document.getElementById('product-full-description');
+        const productSpecsTableEl = document.getElementById('product-specs-table')?.getElementsByTagName('tbody')[0];
+        const reviewsListEl = document.getElementById('reviews-list');
+        const reviewsCountEl = document.getElementById('reviews-count');
+        const breadcrumbCategoryPlaceholder = document.getElementById('breadcrumb-category-placeholder');
+        const breadcrumbProductNameEl = document.getElementById('breadcrumb-product-name');
+        const relatedProductsGridEl = document.getElementById('related-products-grid');
+        const productContentWrapper = document.getElementById('product-content-wrapper');
+        const productNotFoundEl = document.getElementById('product-not-found');
+        const buyOneClickButtonEl = document.getElementById('buy-one-click-button');
+        const videoReviewContainer = document.getElementById('video-review-container');
+        const productVideoIframe = document.getElementById('product-video-iframe');
+        const showAddReviewFormButton = document.getElementById('show-add-review-form-button');
+        const addReviewForm = document.getElementById('add-review-form');
+        const cancelReviewButton = document.getElementById('cancel-review-button');
+        const reviewRatingStarsContainer = document.getElementById('review-rating-stars');
+        const reviewRatingValueInput = document.getElementById('review-rating-value');
+        const socialShareButtonsContainer = document.getElementById('social-share-buttons');
+        const decreaseQuantityBtnEl = document.getElementById('decrease-quantity');
+        const increaseQuantityBtnEl = document.getElementById('increase-quantity');
+        const quantityInputEl = document.getElementById('quantity-input');
+        const addToCartButtonEl = document.getElementById('add-to-cart-button');
+        const addToWishlistButtonEl = document.getElementById('add-to-wishlist-button');
+        const tabButtonsContainer = document.getElementById('tab-buttons-container');
+        const tabContents = document.querySelectorAll('#tab-content-container .tab-content');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const imageModalTitle = document.getElementById('imageModalTitle');
+        const reviewsLink = document.getElementById('reviews-link');
+
+        let currentProduct = null;
+
+        // --- ФУНКЦИИ ДЛЯ СТРАНИЦЫ ТОВАРА ---
+        function loadProductData(product) {
+            console.log("[DEBUG] loadProductData вызвана с товаром:", product);
+            currentProduct = product;
+
+            if (!product) {
+                console.log("[DEBUG] Товар не найден, показываем сообщение 'Товар не найден'.");
+                if (productContentWrapper) productContentWrapper.classList.add('hidden');
+                if (productNotFoundEl) productNotFoundEl.classList.remove('hidden');
+                document.title = "Товар не найден - Wasser";
+                return;
+            }
+            console.log("[DEBUG] Товар найден, отображаем контент.");
+            if (productContentWrapper) productContentWrapper.classList.remove('hidden');
+            if (productNotFoundEl) productNotFoundEl.classList.add('hidden');
+
+            document.title = `${product.name} - Wasser - Мебель для ванной`;
+            if (productNameEl) productNameEl.textContent = product.name;
+            if (breadcrumbProductNameEl) breadcrumbProductNameEl.textContent = product.name;
+            if (productSkuEl) productSkuEl.textContent = product.sku || 'Не указан';
+
+            if (product.category && product.category.name && product.category.slug && breadcrumbCategoryPlaceholder) {
+                breadcrumbCategoryPlaceholder.innerHTML = `
+                    <svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                    <a href="catalog.html?category=${product.category.slug}" class="text-gray-500 hover:text-sky-600">${product.category.name}</a>
+                 `;
+            } else if (breadcrumbCategoryPlaceholder) {
+                breadcrumbCategoryPlaceholder.innerHTML = '';
+            }
+
+            if (productRatingStarsEl && productReviewsCountTextEl && product.reviews) {
+                let totalRating = 0;
+                product.reviews.forEach(r => totalRating += r.rating);
+                const avgRating = product.reviews.length > 0 ? Math.round(totalRating / product.reviews.length) : 0;
+                productRatingStarsEl.innerHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    productRatingStarsEl.innerHTML += `<svg class="w-5 h-5 ${i <= avgRating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                }
+                productReviewsCountTextEl.textContent = product.reviews.length;
+                const reviewsCountTabEl = document.getElementById('reviews-count');
+                if (reviewsCountTabEl) reviewsCountTabEl.textContent = product.reviews.length;
+            }
+
+
+            if (productPriceEl) productPriceEl.textContent = `${product.price.toLocaleString('ru-RU')} сом`;
+            if (product.oldPrice && product.oldPrice > product.price) {
+                if (productOldPriceEl) productOldPriceEl.textContent = `${product.oldPrice.toLocaleString('ru-RU')} сом`;
+                if (productOldPriceEl) productOldPriceEl.classList.remove('hidden');
+                const discount = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+                if (productDiscountBadgeEl) productDiscountBadgeEl.textContent = `-${discount}%`;
+                if (productDiscountBadgeEl) productDiscountBadgeEl.classList.remove('hidden');
+            } else {
+                if (productOldPriceEl) productOldPriceEl.classList.add('hidden');
+                if (productDiscountBadgeEl) productDiscountBadgeEl.classList.add('hidden');
+            }
+
+            let availabilityHTML = '';
+            if (product.availability && product.availability.toLowerCase().includes('в наличии')) {
+                availabilityHTML = `<span class="font-semibold text-green-600">${product.availability}</span>`;
+            } else if (product.availability && product.availability.toLowerCase().includes('под заказ')) {
+                availabilityHTML = `<span class="font-semibold text-yellow-600">${product.availability}</span>`;
+            } else {
+                availabilityHTML = `<span class="font-semibold text-red-600">${product.availability || 'Нет данных'}</span>`;
+            }
+            if (productAvailabilityEl) productAvailabilityEl.innerHTML = availabilityHTML;
+
+            if (product.images && product.images.length > 0) {
+                if (mainProductImageEl) {
+                    mainProductImageEl.src = product.images[0];
+                    mainProductImageEl.alt = product.name;
+                }
+                if (thumbnailContainerEl) {
+                    thumbnailContainerEl.innerHTML = '';
+                    product.images.forEach((imgSrc, index) => {
+                        const thumb = document.createElement('img');
+                        const thumbSrc = imgSrc.includes('placehold.co') ? imgSrc.replace(/(\d+)x(\d+)/, '150x120') : imgSrc;
+                        thumb.src = thumbSrc;
+                        thumb.alt = `${product.name} - фото ${index + 1}`;
+                        thumb.className = 'thumbnail w-full h-24 object-cover rounded-md border-2 border-transparent hover:border-sky-500 cursor-pointer';
+                        if (index === 0) {
+                            thumb.classList.add('thumbnail-active');
+                        }
+                        thumb.dataset.largeSrc = imgSrc;
+                        thumbnailContainerEl.appendChild(thumb);
+                    });
+                }
+            }
+
+            if (product.videoUrl && videoReviewContainer && productVideoIframe) {
+                // Преобразование обычной ссылки YouTube в embed ссылку
+                let embedUrl = product.videoUrl;
+                if (product.videoUrl.includes("watch?v=")) {
+                    embedUrl = product.videoUrl.replace("watch?v=", "embed/");
+                } else if (product.videoUrl.includes("youtu.be/")) {
+                    const videoId = product.videoUrl.split("youtu.be/")[1].split("?")[0];
+                    embedUrl = `https://www.youtube.com/embed/VIDEO_ID`;
+                }
+                productVideoIframe.src = embedUrl;
+                videoReviewContainer.classList.remove('hidden');
+            } else if (videoReviewContainer) {
+                videoReviewContainer.classList.add('hidden');
+            }
+
+            if (keyFeaturesGridEl && product.keyFeatures && product.keyFeatures.length > 0) {
+                keyFeaturesGridEl.innerHTML = '';
+                product.keyFeatures.forEach(feature => {
+                    const featureDiv = document.createElement('div');
+                    featureDiv.className = 'flex items-start space-x-3 p-3 bg-slate-50 rounded-md';
+                    featureDiv.innerHTML = `
+                        <div class="flex-shrink-0 w-6 h-6 text-sky-700 key-feature-icon">
+                            ${feature.iconSVG || '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>'} 
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">${feature.name}</p>
+                            <p class="text-sm text-gray-600">${feature.value}</p>
+                        </div>
+                    `;
+                    keyFeaturesGridEl.appendChild(featureDiv);
+                });
+            }
+
+            if (productShortDescListEl && product.shortDescription && product.shortDescription.length > 0) {
+                productShortDescListEl.innerHTML = '';
+                product.shortDescription.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    productShortDescListEl.appendChild(li);
+                });
+            }
+
+            if (productFullDescriptionEl) productFullDescriptionEl.innerHTML = product.fullDescription || "<p>Подробное описание для этого товара пока отсутствует.</p>";
+
+            if (productSpecsTableEl && product.specifications && product.specifications.length > 0) {
+                productSpecsTableEl.innerHTML = '';
+                product.specifications.forEach(spec => {
+                    const row = productSpecsTableEl.insertRow();
+                    const cell1 = row.insertCell();
+                    cell1.className = 'px-4 py-2 font-medium text-gray-600';
+                    cell1.textContent = spec.name + ':';
+                    const cell2 = row.insertCell();
+                    cell2.className = 'px-4 py-2 text-gray-800';
+                    cell2.textContent = spec.value;
+                });
+            }
+
+            if (reviewsListEl && reviewsCountEl) {
+                reviewsCountEl.textContent = product.reviews ? product.reviews.length : 0;
+                reviewsListEl.innerHTML = '';
+                if (product.reviews && product.reviews.length > 0) {
+                    product.reviews.forEach(review => {
+                        let starsHTML = '';
+                        for (let i = 1; i <= 5; i++) {
+                            starsHTML += `<svg class="w-4 h-4 ${i <= review.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                        }
+                        const reviewHTML = `
+                            <div class="review-item border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                                <div class="flex items-center mb-2">
+                                    <span class="font-semibold text-gray-800">${review.author}</span>
+                                    <span class="text-xs text-gray-500 ml-2">${new Date(review.date).toLocaleDateString('ru-RU')}</span>
+                                    <div class="ml-auto flex items-center">${starsHTML}</div>
+                                </div>
+                                <p class="text-sm text-gray-600">${review.text}</p>
+                            </div>`;
+                        reviewsListEl.innerHTML += reviewHTML;
+                    });
+                } else {
+                    reviewsListEl.innerHTML = '<p class="text-sm text-gray-500">Отзывов пока нет. Будьте первым!</p>';
+                }
+            }
+            generateSocialShareButtons(product);
+            loadRelatedProducts(product.id, product.category ? product.category.slug : null);
+            updateProductDetailWishlistButtonUI(product.id);
+        }
+
+        function generateSocialShareButtons(product) {
+            if (!socialShareButtonsContainer || !product) return;
+            socialShareButtonsContainer.innerHTML = '';
+
+            const pageUrl = window.location.href;
+            const title = encodeURIComponent(`Посмотрите: ${product.name} от Wasser!`);
+            const imageUrl = product.images && product.images.length > 0 ? encodeURIComponent(product.images[0]) : '';
+
+            const shares = [
+                { name: 'VK', url: `https://vk.com/share.php?url=${pageUrl}&title=${title}&image=${imageUrl}`, icon: socialIcons.vk, color: 'bg-sky-500 hover:bg-sky-600' },
+                { name: 'Telegram', url: `https://t.me/share/url?url=${pageUrl}&text=${title}`, icon: socialIcons.telegram, color: 'bg-sky-400 hover:bg-sky-500' },
+                { name: 'WhatsApp', url: `https://api.whatsapp.com/send?text=${title}%20${pageUrl}`, icon: socialIcons.whatsapp, color: 'bg-green-500 hover:bg-green-600' }
+            ];
+
+            shares.forEach(share => {
+                const button = document.createElement('a');
+                button.href = share.url;
+                button.target = '_blank';
+                button.rel = 'noopener noreferrer';
+                button.className = `social-share-button ${share.color}`;
+                button.title = `Поделиться в ${share.name}`;
+                button.innerHTML = share.icon;
+                socialShareButtonsContainer.appendChild(button);
+            });
+        }
+
+        function loadRelatedProducts(currentProductId, currentProductCategorySlug) {
+            if (!relatedProductsGridEl) return;
+            relatedProductsGridEl.innerHTML = '';
+
+            const related = productsSource.filter(p => {
+                return p.id !== currentProductId && (currentProductCategorySlug ? (p.category && p.category.slug === currentProductCategorySlug) : true);
+            }).slice(0, 4);
+
+            if (related.length === 0) {
+                relatedProductsGridEl.innerHTML = '<p class="col-span-full text-sm text-gray-500">Похожие товары не найдены.</p>';
+                return;
+            }
+
+            related.forEach(product => {
+                const cardHTML = `
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                        <a href="product-detail.html?id=${product.id}" class="block">
+                            <div class="relative">
+                                <img src="${product.images[0].replace('600x500', '400x300')}" alt="${product.name}" class="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-md font-semibold mb-1 text-gray-800 group-hover:text-sky-600 truncate">${product.name}</h3>
+                                <p class="text-lg font-bold text-sky-600">${product.price.toLocaleString('ru-RU')} сом</p>
+                            </div>
+                        </a>
+                    </div>`;
+                relatedProductsGridEl.innerHTML += cardHTML;
+            });
+        }
+
+        function updateProductDetailWishlistButtonUI(productId) {
+            const button = document.getElementById('add-to-wishlist-button');
+            if (!button || typeof isProductInWishlist !== 'function') {
+                console.warn("[DEBUG] Кнопка 'add-to-wishlist-button' или функция isProductInWishlist не определены для UI обновления.");
+                return;
+            }
+            const inWishlist = isProductInWishlist(productId);
+            const wishlistIconEl = button.querySelector('.wishlist-icon');
+            const wishlistTextEl = button.querySelector('.wishlist-button-text');
+
+            console.log(`[DEBUG] updateProductDetailWishlistButtonUI for ${productId}, inWishlist: ${inWishlist}`);
+
+            if (inWishlist) {
+                button.classList.add('in-wishlist');
+                if (wishlistTextEl) wishlistTextEl.textContent = 'В избранном';
+                button.title = 'Удалить из списка желаний';
+                if (wishlistIconEl) wishlistIconEl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>';
+            } else {
+                button.classList.remove('in-wishlist');
+                if (wishlistTextEl) wishlistTextEl.textContent = 'В список желаний';
+                button.title = 'Добавить в список желаний';
+                if (wishlistIconEl) wishlistIconEl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>';
+            }
+            button.dataset.productId = productId;
+        }
+
+        function addProductDetailPageEventListeners(product) {
+            console.log("[DEBUG] addProductDetailPageEventListeners для товара ID:", product ? product.id : 'undefined');
+            if (!product || typeof product.id === 'undefined') {
+                console.error("[DEBUG] Товар не определен или не имеет ID в addProductDetailPageEventListeners");
+                return;
+            }
+
+            // Кнопка "В корзину"
+            if (addToCartButtonEl) {
+                const newAddToCartBtn = addToCartButtonEl.cloneNode(true);
+                addToCartButtonEl.parentNode.replaceChild(newAddToCartBtn, addToCartButtonEl);
+
+                newAddToCartBtn.addEventListener('click', () => {
+                    const quantity = quantityInputEl ? (parseInt(quantityInputEl.value) || 1) : 1;
+                    console.log(`[DEBUG] Клик "В корзину": ID ${product.id}, Кол-во ${quantity}`);
+                    if (typeof addToCart === 'function') {
+                        addToCart(product.id, quantity);
+                    } else {
+                        console.error("Функция addToCart не определена.");
+                    }
+                });
+            } else {
+                console.warn("[DEBUG] Кнопка 'add-to-cart-button' не найдена.");
+            }
+
+            // Кнопка "Купить в 1 клик"
+            if (buyOneClickButtonEl) {
+                const newBuyOneClickBtn = buyOneClickButtonEl.cloneNode(true);
+                buyOneClickButtonEl.parentNode.replaceChild(newBuyOneClickBtn, buyOneClickButtonEl);
+
+                newBuyOneClickBtn.addEventListener('click', () => {
+                    console.log(`[DEBUG] Клик "Купить в 1 клик": ID ${product.id}`);
+                    alert(`Заказ "Купить в 1 клик" для товара "${product.name}" оформлен (имитация)! Мы скоро свяжемся с вами.`);
+                });
+            } else {
+                console.warn("[DEBUG] Кнопка 'buy-one-click-button' не найдена.");
+            }
+
+            // Кнопка "В список желаний"
+            const currentAddToWishlistButtonEl = document.getElementById('add-to-wishlist-button');
+            if (currentAddToWishlistButtonEl) {
+                const newWishlistBtn = currentAddToWishlistButtonEl.cloneNode(true);
+                currentAddToWishlistButtonEl.parentNode.replaceChild(newWishlistBtn, currentAddToWishlistButtonEl);
+
+                newWishlistBtn.addEventListener('click', function () {
+                    const productId = parseInt(this.dataset.productId);
+                    console.log(`[DEBUG] Клик "В список желаний": ID ${productId}`);
+                    if (!isNaN(productId) && typeof toggleWishlist === 'function') {
+                        toggleWishlist(productId);
+                        updateProductDetailWishlistButtonUI(productId);
+                    } else {
+                        console.error("Ошибка: productId не определен для кнопки списка желаний или функция toggleWishlist не найдена.");
+                    }
+                });
+            } else {
+                console.warn("[DEBUG] Кнопка 'add-to-wishlist-button' не найдена при навешивании обработчика.");
+            }
+
+            // Обработчики для кнопок "+" и "-" количества
+            if (decreaseQuantityBtnEl && quantityInputEl) {
+                decreaseQuantityBtnEl.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInputEl.value);
+                    if (currentValue > 1) {
+                        quantityInputEl.value = currentValue - 1;
+                    }
+                });
+            } else {
+                console.warn("[DEBUG] Кнопка '-' или поле количества не найдены.");
+            }
+
+            if (increaseQuantityBtnEl && quantityInputEl) {
+                increaseQuantityBtnEl.addEventListener('click', () => {
+                    if (quantityInputEl) { // Дополнительная проверка
+                        quantityInputEl.value = parseInt(quantityInputEl.value) + 1;
+                    }
+                });
+            } else {
+                console.warn("[DEBUG] Кнопка '+' или поле количества не найдены.");
+            }
+            if (quantityInputEl) {
+                quantityInputEl.addEventListener('change', () => {
+                    if (parseInt(quantityInputEl.value) < 1 || isNaN(parseInt(quantityInputEl.value))) {
+                        quantityInputEl.value = 1;
+                    }
+                });
+            }
+        }
+
+        // --- ИНИЦИАЛИЗАЦИЯ СТРАНИЦЫ ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+            console.log("[DEBUG] DOMContentLoaded: productId из URL:", productId);
+
+            let productToLoad = null;
+            if (productId && productsSource && Array.isArray(productsSource)) {
+                productToLoad = productsSource.find(p => p.id === productId);
+                console.log("[DEBUG] DOMContentLoaded: Найден товар для загрузки:", productToLoad);
+            } else {
+                console.warn("[DEBUG] DOMContentLoaded: Массив productsSource не определен или не является массивом, или productId отсутствует.");
+            }
+
+            loadProductData(productToLoad);
+
+            if (productToLoad) {
+                addProductDetailPageEventListeners(productToLoad);
+            } else {
+                console.warn("[DEBUG] DOMContentLoaded: productToLoad is null, обработчики для кнопок товара не будут добавлены.");
+            }
+
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+            // Обработчики для формы отзыва
+            if (showAddReviewFormButton) {
+                showAddReviewFormButton.addEventListener('click', () => {
+                    if (addReviewForm) addReviewForm.classList.remove('hidden');
+                    showAddReviewFormButton.classList.add('hidden');
+                });
+            }
+            if (cancelReviewButton) {
+                cancelReviewButton.addEventListener('click', () => {
+                    if (addReviewForm) {
+                        addReviewForm.classList.add('hidden');
+                        addReviewForm.reset();
+                    }
+                    if (reviewRatingValueInput) reviewRatingValueInput.value = "";
+                    const reviewStarsContainer = document.getElementById('review-rating-stars'); // Получаем контейнер звезд для формы
+                    if (reviewStarsContainer) {
+                        Array.from(reviewStarsContainer.children).forEach(star => { // Используем Array.from для итерации
+                            star.classList.remove('text-yellow-400', 'hovered', 'selected');
+                            star.classList.add('text-gray-300');
+                        });
+                    }
+                    if (showAddReviewFormButton) showAddReviewFormButton.classList.remove('hidden');
+                });
+            }
+            if (addReviewForm) {
+                addReviewForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('review-name').value;
+                    const rating = document.getElementById('review-rating-value').value;
+                    const text = document.getElementById('review-text').value;
+                    if (name && rating && text) {
+                        alert(`Отзыв отправлен (имитация):\nИмя: ${name}\nОценка: ${rating}\nТекст: ${text}`);
+                        addReviewForm.reset();
+                        addReviewForm.classList.add('hidden');
+                        if (showAddReviewFormButton) showAddReviewFormButton.classList.remove('hidden');
+                        if (reviewRatingValueInput) reviewRatingValueInput.value = "";
+                        const reviewStarsContainer = document.getElementById('review-rating-stars');
+                        if (reviewStarsContainer) {
+                            Array.from(reviewStarsContainer.children).forEach(star => {
+                                star.classList.remove('text-yellow-400', 'hovered', 'selected');
+                                star.classList.add('text-gray-300');
+                            });
+                        }
+                    } else {
+                        alert('Пожалуйста, заполните все поля отзыва и укажите оценку.');
+                    }
+                });
+            }
+            const reviewStarsInteractiveContainer = document.getElementById('review-rating-stars'); // Для интерактивности звезд
+            if (reviewStarsInteractiveContainer) {
+                const stars = Array.from(reviewStarsInteractiveContainer.children);
+                stars.forEach(star => {
+                    star.addEventListener('mouseover', () => {
+                        const hoverValue = parseInt(star.dataset.value);
+                        stars.forEach((s, i) => {
+                            s.classList.toggle('hovered', i < hoverValue);
+                        });
+                    });
+                    star.addEventListener('mouseout', () => {
+                        stars.forEach(s => s.classList.remove('hovered'));
+                    });
+                    star.addEventListener('click', () => {
+                        const rating = parseInt(star.dataset.value);
+                        if (reviewRatingValueInput) reviewRatingValueInput.value = rating;
+                        stars.forEach((s, i) => {
+                            s.classList.toggle('selected', i < rating);
+                            s.classList.toggle('text-yellow-400', i < rating);
+                            s.classList.toggle('text-gray-300', i >= rating);
+                        });
+                    });
+                });
+            }
+
+            // --- Общая логика (мобильное меню, год и т.д.) ---
+            const mobileMenuButtonDetail = document.getElementById('mobile-menu-button-detail');
+            const mobileMenuDetail = document.getElementById('mobile-menu-detail');
+            if (mobileMenuButtonDetail && mobileMenuDetail) {
+                mobileMenuButtonDetail.addEventListener('click', () => {
+                    mobileMenuDetail.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearDetailEl = document.getElementById('currentYearDetail');
+            if (currentYearDetailEl) {
+                currentYearDetailEl.textContent = new Date().getFullYear();
+            }
+
+            if (reviewsLink) {
+                reviewsLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const reviewsTabButton = document.querySelector('.tab-button[data-tab="reviews"]');
+                    if (reviewsTabButton) {
+                        reviewsTabButton.click();
+                        setTimeout(() => {
+                            const reviewsSection = document.getElementById('tab-reviews');
+                            if (reviewsSection) {
+                                reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 100);
+                    }
+                });
+            }
+
+            if (thumbnailContainerEl) {
+                thumbnailContainerEl.addEventListener('click', function (event) {
+                    const targetThumbnail = event.target.closest('.thumbnail');
+                    if (targetThumbnail && mainProductImageEl) {
+                        mainProductImageEl.src = targetThumbnail.dataset.largeSrc;
+                        mainProductImageEl.alt = targetThumbnail.alt.replace('миниатюра', 'основное изображение');
+                        thumbnailContainerEl.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('thumbnail-active'));
+                        targetThumbnail.classList.add('thumbnail-active');
+                    }
+                });
+            }
+
+            if (mainProductImageEl) {
+                mainProductImageEl.addEventListener('click', function () {
+                    openModal(this.src, this.alt);
+                });
+            }
+
+            if (tabButtonsContainer) {
+                tabButtonsContainer.addEventListener('click', function (event) {
+                    const targetButton = event.target.closest('.tab-button');
+                    if (!targetButton) return;
+                    const tabId = targetButton.dataset.tab;
+                    if (tabContents) {
+                        tabContents.forEach(content => content.classList.remove('active'));
+                    }
+                    if (tabButtonsContainer) {
+                        tabButtonsContainer.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+                    }
+                    const targetContent = document.getElementById(`tab-${tabId}`);
+                    if (targetContent) targetContent.classList.add('active');
+                    targetButton.classList.add('active');
+                });
+            }
+        });
+
+        function openModal(src, altText = "Увеличенное изображение товара") {
+            if (modalImage && imageModal && imageModalTitle) {
+                modalImage.src = src;
+                modalImage.alt = altText;
+                imageModalTitle.textContent = altText;
+                imageModal.classList.remove('hidden');
+            }
+        }
+
+        function closeModal() {
+            if (imageModal && modalImage) {
+                imageModal.classList.add('hidden');
+                modalImage.src = "";
+            }
+        }
+    </script>
+</body>
+</html>

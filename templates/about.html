@@ -1,0 +1,200 @@
+﻿                                                      <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О фабрике Wasser - Мебель для ванной (МебельПрайсПро)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .logo-img {
+            max-height: 50px;
+        }
+        .prose { /* Стили для текстового контента */
+           @apply max-w-none text-gray-700;
+        }
+        .prose h2 {
+            @apply text-2xl font-semibold text-gray-800 mb-4 mt-8 border-b pb-2;
+        }
+        .prose h3 {
+            @apply text-xl font-semibold text-gray-800 mb-3 mt-6;
+        }
+        .prose p {
+            @apply mb-4 leading-relaxed;
+        }
+        .prose ul {
+            @apply list-disc list-inside mb-4 pl-4 space-y-1;
+        }
+        .prose strong {
+            @apply font-semibold text-gray-800;
+        }
+        .feature-image {
+            @apply rounded-lg shadow-lg object-cover w-full h-64 sm:h-80 md:h-96;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center">
+                        <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mr-2">
+                        <span class="text-xl font-bold text-sky-600 hidden sm:inline">Мебель<span class="text-orange-500">Прайс</span>Про</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="catalog.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Каталог</a>
+                    <a href="about.html" class="text-sky-600 font-semibold px-3 py-2 rounded-md text-sm transition-colors duration-150">О фабрике</a> <a href="index.html#delivery" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Контакты</a>
+                    <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md relative transition-colors duration-150" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                        <span class="hidden md:inline absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-desktop-about">0</span>
+                    </a>
+                    <a href="login.html" class="text-gray-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+                </nav>
+                <div class="md:hidden flex items-center">
+                     <a href="cart.html" class="text-gray-600 hover:text-sky-600 p-2 rounded-md mr-2 relative" aria-label="Корзина">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5" id="cart-count-mobile-about">0</span>
+                    </a>
+                    <button id="mobile-menu-button-about" class="text-gray-600 hover:text-sky-600 focus:outline-none focus:text-sky-600 p-2" aria-label="Открыть меню">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-about" class="md:hidden hidden bg-white shadow-lg">
+            <a href="catalog.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Каталог</a>
+            <a href="about.html" class="block text-sky-600 bg-gray-100 px-4 py-3 text-sm font-medium transition-colors duration-150">О фабрике</a>
+            <a href="index.html#delivery" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Доставка и монтаж</a>
+            <a href="index.html#contact" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Контакты</a>
+            <a href="login.html" class="block text-gray-600 hover:bg-gray-100 hover:text-sky-600 px-4 py-3 text-sm font-medium transition-colors duration-150">Вход / Регистрация</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex space-x-2">
+                <li class="flex items-center"><a href="index.html" class="text-gray-500 hover:text-sky-600">Главная</a></li>
+                <li class="flex items-center"><svg class="h-5 w-5 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700 font-medium">О фабрике</span></li>
+            </ol>
+        </nav>
+
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-xl">
+            <article class="prose">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">О фабрике мебели для ванных комнат Wasser</h1>
+                
+                <p class="text-lg text-center text-gray-600 mb-10">Мы создаем не просто мебель, мы создаем комфорт и стиль для вашей ванной комнаты, используя передовые немецкие технологии и многолетний опыт.</p>
+
+                <img src="https://placehold.co/1200x400/bfdbfe/1e3a8a?text=Производство+Wasser" alt="Изображение производства фабрики Wasser" class="feature-image mb-10">
+
+                <h2>Наша история</h2>
+                <p>Фабрика Wasser была основана в [Год основания] году в городе Бишкек группой энтузиастов, стремящихся привнести на рынок Кыргызстана качественно новый уровень мебели для ванных комнат. С самого начала мы сделали ставку на инновационные решения, долговечные материалы и современный дизайн. За годы работы мы прошли путь от небольшой мастерской до современного производственного комплекса, оснащенного высокоточным оборудованием.</p>
+                <p>Ключевым моментом в нашем развитии стало внедрение немецких технологий контроля качества и производственных процессов, что позволило нам значительно повысить стандарты выпускаемой продукции и завоевать доверие клиентов.</p>
+
+                <h2>Миссия и ценности</h2>
+                <p><strong>Наша миссия</strong> – делать повседневную жизнь людей комфортнее и эстетичнее, предлагая стильную, функциональную и надежную мебель для ванных комнат, доступную широкому кругу потребителей.</p>
+                <p><strong>Наши ценности:</strong></p>
+                <ul>
+                    <li><strong>Качество:</strong> Мы используем только проверенные, экологически чистые и влагостойкие материалы, а также надежную фурнитуру от ведущих европейских и мировых производителей.</li>
+                    <li><strong>Инновации:</strong> Постоянное совершенствование технологий, поиск новых дизайнерских решений и улучшение функциональности нашей продукции.</li>
+                    <li><strong>Клиентоориентированность:</strong> Мы стремимся понять и удовлетворить потребности каждого клиента, предлагая индивидуальные решения и высокий уровень сервиса.</li>
+                    <li><strong>Ответственность:</strong> Мы несем ответственность за каждый произведенный нами предмет мебели и предоставляем гарантию на всю нашу продукцию.</li>
+                    <li><strong>Профессионализм:</strong> Наша команда – это опытные дизайнеры, конструкторы, технологи и мастера, влюбленные в свое дело.</li>
+                </ul>
+
+                <div class="grid md:grid-cols-2 gap-8 my-10 items-center">
+                    <div>
+                        <h2>Производство и технологии</h2>
+                        <p>В основе нашего производства лежат передовые немецкие технологии и строгий контроль на каждом этапе – от раскроя материалов до сборки и упаковки готовой продукции. Мы используем современное оборудование, которое позволяет добиваться высокой точности обработки деталей и безупречного качества поверхностей.</p>
+                        <p>Особое внимание уделяется влагозащите: все торцы деталей обрабатываются специальными кромками, а поверхности покрываются несколькими слоями высококачественной эмали или ламината, устойчивых к воздействию влаги, пара и перепадов температур.</p>
+                    </div>
+                    <img src="https://placehold.co/600x400/93c5fd/0c4a6e?text=Технологии+Wasser" alt="Изображение технологического процесса" class="rounded-lg shadow-md object-cover w-full h-64">
+                </div>
+                
+                <h2>Контроль качества</h2>
+                <p>Система менеджмента качества на фабрике Wasser соответствует высоким стандартам. Каждый этап производства подвергается тщательному контролю: от проверки поступающих материалов до инспекции готовых изделий перед отправкой клиенту. Это позволяет нам гарантировать долговечность, надежность и безупречный внешний вид нашей мебели.</p>
+
+                <h2>Наша команда (Пример)</h2>
+                <p>За успехом Wasser стоит команда профессионалов – дизайнеры, инженеры, мастера и менеджеры, которые каждый день работают над тем, чтобы вы получали лучшую мебель для вашей ванной. Мы гордимся нашими специалистами и их вкладом в развитие компании.</p>
+                <p class="mt-10 text-center text-gray-600"><strong>Wasser – немецкие технологии для вашего идеального утра!</strong></p>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="https://i.imgur.com/hoPLTBN.png" alt="Wasser German Technology Logo" class="logo-img mb-4 filter brightness-0 invert">
+                    <p class="text-sm">Фабрика мебели для ванных комнат Wasser. Немецкие технологии для вашего комфорта и стиля. г. Бишкек.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Информация</h4>
+                    <ul class="space-y-2">
+                        <li><a href="catalog.html" class="hover:text-sky-400 transition-colors duration-150">Каталог товаров</a></li>
+                        <li><a href="about.html" class="hover:text-sky-400 transition-colors duration-150">О фабрике</a></li>
+                        <li><a href="index.html#delivery" class="hover:text-sky-400 transition-colors duration-150">Доставка и монтаж</a></li>
+                        <li><a href="index.html#contact" class="hover:text-sky-400 transition-colors duration-150">Контакты</a></li>
+                        <li><a href="#privacy" class="hover:text-sky-400 transition-colors duration-150">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Свяжитесь с нами</h4>
+                    <p class="mb-2">Телефон: <a href="tel:+996555123456" class="hover:text-sky-400 transition-colors duration-150">+996 (555) 123-456</a> (пример)</p>
+                    <p class="mb-2">Email: <a href="mailto:info@wasser.kg" class="hover:text-sky-400 transition-colors duration-150">info@wasser.kg</a> (пример)</p>
+                    <p>Адрес: г. Бишкек, ул. Производственная, д. 1 (пример)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; <span id="currentYearAbout"></span> Wasser (МебельПрайсПро). Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/cart-logic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Обновление счетчика корзины в шапке
+            if (typeof updateCartCountersOnAllPages === 'function') {
+                updateCartCountersOnAllPages();
+            }
+
+            // Мобильное меню
+            const mobileMenuButtonAbout = document.getElementById('mobile-menu-button-about');
+            const mobileMenuAbout = document.getElementById('mobile-menu-about');
+            if (mobileMenuButtonAbout && mobileMenuAbout) {
+                mobileMenuButtonAbout.addEventListener('click', () => {
+                    mobileMenuAbout.classList.toggle('hidden');
+                });
+            }
+            
+            // Установка текущего года в подвале
+            const currentYearAboutEl = document.getElementById('currentYearAbout');
+            if (currentYearAboutEl) {
+                currentYearAboutEl.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>

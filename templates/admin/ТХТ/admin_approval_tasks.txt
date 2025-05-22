@@ -1,0 +1,62 @@
+﻿{% extends "admin/admin_base.html" %} {% block title %}Задачи на согласование - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h2 class="text-2xl font-semibold text-gray-800">Задачи на согласование Техкарт (<span id="total-tasks-count">{{ tasks|length }}</span>)</h2>
+        </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 table">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">ID Задачи</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Товар</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Артикул</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Статус</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Инициатор</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Дата поступления</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">Действия</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% if tasks %}
+                    {% for task in tasks %}
+                    <tr>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{{ task.id }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">{{ task.tech_card.product.name if task.tech_card and task.tech_card.product else task.product_name or 'N/A' }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{{ task.tech_card.product.sku if task.tech_card and task.tech_card.product else task.product_sku or 'N/A' }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                            <span class="status-badge 
+                                {% if task.status == 'Ожидает бухгалтера' %}bg-yellow-100 text-yellow-800
+                                {% elif task.status == 'Ожидает руководителя' %}bg-blue-100 text-blue-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ task.status }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{{ task.created_by_user.username if task.created_by_user else 'Система' }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{{ task.created_at.strftime('%d.%m.%Y %H:%M') if task.created_at else '-' }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                            <a href="{{ url_for('admin_approval_task_detail', task_id=task.id) }}" class="btn btn-primary btn-sm">
+                                Рассмотреть
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-gray-500">Нет задач на согласование.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Скрипты для страницы списка задач, если нужны
+</script>
+{% endblock %}

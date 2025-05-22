@@ -1,0 +1,68 @@
+﻿{% if active_tech_card %}
+    <p class="text-sm text-gray-700">РђРєС‚РёРІРЅР°СЏ С‚РµС…РєР°СЂС‚Р°: <span class="font-semibold">{{ active_tech_card.name }} (v{{ active_tech_card.version }})</span></p>
+    <p class="text-sm text-gray-700">РЎС‚Р°С‚СѓСЃ: 
+        <span class="font-semibold status-badge 
+            {% if active_tech_card.status == TECH_CARD_STATUS_APPROVED %}status-approved
+            {% elif active_tech_card.status == TECH_CARD_STATUS_PENDING_ACCOUNTANT %}status-pending-accountant
+            {% elif active_tech_card.status == TECH_CARD_STATUS_PENDING_MANAGER %}status-pending-manager
+            {% elif active_tech_card.status == TECH_CARD_STATUS_PROCESSED %}status-approved 
+            {% elif active_tech_card.status == TECH_CARD_STATUS_PROCESSED_NEEDS_PRICES %}status-needs-prices
+            {% elif active_tech_card.status == TECH_CARD_STATUS_DRAFT %}status-draft
+            {% elif active_tech_card.status == TECH_CARD_STATUS_REJECTED_ACCOUNTANT or active_tech_card.status == TECH_CARD_STATUS_REJECTED_MANAGER %}status-rejected
+            {% elif active_tech_card.status == TECH_CARD_STATUS_ARCHIVED %}status-archived
+            {% else %}status-not-found{% endif %}">
+            {{ active_tech_card.status }}
+        </span>
+    </p>
+    <p class="text-xs text-gray-500">РЎРµР±РµСЃС‚РѕРёРјРѕСЃС‚СЊ РїРѕ РЅРµР№: 
+        <span class="font-semibold">
+            {{ '%.2f СЃРѕРј'|format(active_tech_card.total_cost|float) if active_tech_card.total_cost is not none else 'N/A' }}
+        </span>
+    </p>
+    {% if active_tech_card.file_url %}
+    <p class="text-xs text-gray-500">Р¤Р°Р№Р»: {{ active_tech_card.file_url.split('/')[-1] }}</p>
+    {% endif %}
+    {% if active_tech_card.updated_at %}
+    <p class="text-xs text-gray-500">РћР±РЅРѕРІР»РµРЅР°: {{ active_tech_card.updated_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    {% endif %}
+    
+    {% if tech_card_components and tech_card_components|length > 0 %}
+        <h4 class="text-md font-medium text-gray-800 mt-4 mb-2">РљРѕРјРїРѕРЅРµРЅС‚С‹ Р°РєС‚РёРІРЅРѕР№ С‚РµС…РєР°СЂС‚С‹:</h4>
+        <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-md">
+            <table class="min-w-full divide-y divide-gray-200 table-auto"> <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">в„–</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">РђСЂС‚РёРєСѓР»</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">РќР°РёРјРµРЅРѕРІР°РЅРёРµ</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">РљРѕР»-РІРѕ</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Р•Рґ.</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Р¦РµРЅР°</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">РЎСѓРјРјР°</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for component in tech_card_components %}
+                    <tr>
+                        <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{{ loop.index }}</td>
+                        <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{{ component.raw_material_item.sku or '-' }}</td>
+                        <td class="px-3 py-2 text-sm text-gray-600">{{ component.raw_material_item.name }}</td> <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{{ "%.3f"|format(component.quantity|float) }}</td>
+                        <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{{ component.raw_material_item.unit_of_measurement }}</td>
+                        <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">{{ "%.2f"|format(component.raw_material_item.price|float) if component.raw_material_item.price is not none else 'N/A' }}</td>
+                        <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-600">
+                            {% if component.raw_material_item.price is not none and component.quantity is not none %}
+                                {{ "%.2f"|format((component.quantity * component.raw_material_item.price)|float) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-sm text-gray-500 mt-2">РљРѕРјРїРѕРЅРµРЅС‚С‹ РґР»СЏ СЌС‚РѕР№ С‚РµС…РєР°СЂС‚С‹ РЅРµ Р·Р°РіСЂСѓР¶РµРЅС‹ РёР»Рё РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚.</p>
+    {% endif %}
+ {% else %}
+    <p class="text-sm text-gray-500">РђРєС‚РёРІРЅР°СЏ С‚РµС…РєР°СЂС‚Р° РґР»СЏ СЌС‚РѕРіРѕ С‚РѕРІР°СЂР° РЅРµ РЅР°Р№РґРµРЅР° РёР»Рё РµС‰Рµ РЅРµ РѕР±СЂР°Р±РѕС‚Р°РЅР°. РќР°Р¶РјРёС‚Рµ РєРЅРѕРїРєСѓ "Р”РѕР±Р°РІРёС‚СЊ С‚РµС…РєР°СЂС‚Сѓ" РІС‹С€Рµ.</p>
+ {% endif %}
